@@ -1,0 +1,315 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 3
+   4              		.fpu fpv4-sp-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.file	"ParTest.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.rodata.xLEDs,"a",%progbits
+  20              		.align	2
+  23              	xLEDs:
+  24 0000 01       		.byte	1
+  25 0001 00       		.byte	0
+  26 0002 02       		.byte	2
+  27 0003 03       		.byte	3
+  28              		.section	.text.vParTestInitialise,"ax",%progbits
+  29              		.align	2
+  30              		.global	vParTestInitialise
+  31              		.thumb
+  32              		.thumb_func
+  34              	vParTestInitialise:
+  35              	.LFB111:
+  36              		.file 1 "lib/ParTest.c"
+   1:lib/ParTest.c **** /*
+   2:lib/ParTest.c ****     FreeRTOS V7.5.3 - Copyright (C) 2013 Real Time Engineers Ltd. 
+   3:lib/ParTest.c ****     All rights reserved
+   4:lib/ParTest.c **** 
+   5:lib/ParTest.c ****     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
+   6:lib/ParTest.c **** 
+   7:lib/ParTest.c ****     ***************************************************************************
+   8:lib/ParTest.c ****      *                                                                       *
+   9:lib/ParTest.c ****      *    FreeRTOS provides completely free yet professionally developed,    *
+  10:lib/ParTest.c ****      *    robust, strictly quality controlled, supported, and cross          *
+  11:lib/ParTest.c ****      *    platform software that has become a de facto standard.             *
+  12:lib/ParTest.c ****      *                                                                       *
+  13:lib/ParTest.c ****      *    Help yourself get started quickly and support the FreeRTOS         *
+  14:lib/ParTest.c ****      *    project by purchasing a FreeRTOS tutorial book, reference          *
+  15:lib/ParTest.c ****      *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
+  16:lib/ParTest.c ****      *                                                                       *
+  17:lib/ParTest.c ****      *    Thank you!                                                         *
+  18:lib/ParTest.c ****      *                                                                       *
+  19:lib/ParTest.c ****     ***************************************************************************
+  20:lib/ParTest.c **** 
+  21:lib/ParTest.c ****     This file is part of the FreeRTOS distribution.
+  22:lib/ParTest.c **** 
+  23:lib/ParTest.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  24:lib/ParTest.c ****     the terms of the GNU General Public License (version 2) as published by the
+  25:lib/ParTest.c ****     Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+  26:lib/ParTest.c **** 
+  27:lib/ParTest.c ****     >>! NOTE: The modification to the GPL is included to allow you to distribute
+  28:lib/ParTest.c ****     >>! a combined work that includes FreeRTOS without being obliged to provide
+  29:lib/ParTest.c ****     >>! the source code for proprietary components outside of the FreeRTOS
+  30:lib/ParTest.c ****     >>! kernel.
+  31:lib/ParTest.c **** 
+  32:lib/ParTest.c ****     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
+  33:lib/ParTest.c ****     WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  34:lib/ParTest.c ****     FOR A PARTICULAR PURPOSE.  Full license text is available from the following
+  35:lib/ParTest.c ****     link: http://www.freertos.org/a00114.html
+  36:lib/ParTest.c **** 
+  37:lib/ParTest.c ****     1 tab == 4 spaces!
+  38:lib/ParTest.c **** 
+  39:lib/ParTest.c ****     ***************************************************************************
+  40:lib/ParTest.c ****      *                                                                       *
+  41:lib/ParTest.c ****      *    Having a problem?  Start by reading the FAQ "My application does   *
+  42:lib/ParTest.c ****      *    not run, what could be wrong?"                                     *
+  43:lib/ParTest.c ****      *                                                                       *
+  44:lib/ParTest.c ****      *    http://www.FreeRTOS.org/FAQHelp.html                               *
+  45:lib/ParTest.c ****      *                                                                       *
+  46:lib/ParTest.c ****     ***************************************************************************
+  47:lib/ParTest.c **** 
+  48:lib/ParTest.c ****     http://www.FreeRTOS.org - Documentation, books, training, latest versions,
+  49:lib/ParTest.c ****     license and Real Time Engineers Ltd. contact details.
+  50:lib/ParTest.c **** 
+  51:lib/ParTest.c ****     http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
+  52:lib/ParTest.c ****     including FreeRTOS+Trace - an indispensable productivity tool, a DOS
+  53:lib/ParTest.c ****     compatible FAT file system, and our tiny thread aware UDP/IP stack.
+  54:lib/ParTest.c **** 
+  55:lib/ParTest.c ****     http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
+  56:lib/ParTest.c ****     Integrity Systems to sell under the OpenRTOS brand.  Low cost OpenRTOS
+  57:lib/ParTest.c ****     licenses offer ticketed support, indemnification and middleware.
+  58:lib/ParTest.c **** 
+  59:lib/ParTest.c ****     http://www.SafeRTOS.com - High Integrity Systems also provide a safety
+  60:lib/ParTest.c ****     engineered and independently SIL3 certified version for use in safety and
+  61:lib/ParTest.c ****     mission critical applications that require provable dependability.
+  62:lib/ParTest.c **** 
+  63:lib/ParTest.c ****     1 tab == 4 spaces!
+  64:lib/ParTest.c **** */
+  65:lib/ParTest.c **** 
+  66:lib/ParTest.c **** /*-----------------------------------------------------------
+  67:lib/ParTest.c ****  * Simple GPIO (parallel port) IO routines.
+  68:lib/ParTest.c ****  *-----------------------------------------------------------*/
+  69:lib/ParTest.c **** 
+  70:lib/ParTest.c **** /* Kernel includes. */
+  71:lib/ParTest.c **** #include "FreeRTOS.h"
+  72:lib/ParTest.c **** #include "task.h"
+  73:lib/ParTest.c **** 
+  74:lib/ParTest.c **** /* Standard demo include. */
+  75:lib/ParTest.c **** #include "partest.h"
+  76:lib/ParTest.c **** 
+  77:lib/ParTest.c **** /* Starter kit includes. */
+  78:lib/ParTest.c **** #include "stm32f4_discovery.h"
+  79:lib/ParTest.c **** 
+  80:lib/ParTest.c **** /* Only the LEDs on one of the two seven segment displays are used. */
+  81:lib/ParTest.c **** #define partstMAX_LEDS		4
+  82:lib/ParTest.c **** 
+  83:lib/ParTest.c **** static const Led_TypeDef xLEDs[ partstMAX_LEDS ] = { LED3, LED4, LED5, LED6 };
+  84:lib/ParTest.c **** 
+  85:lib/ParTest.c **** /*-----------------------------------------------------------*/
+  86:lib/ParTest.c **** 
+  87:lib/ParTest.c **** void vParTestInitialise( void )
+  88:lib/ParTest.c **** {
+  37              		.loc 1 88 0
+  38              		.cfi_startproc
+  39              		@ args = 0, pretend = 0, frame = 0
+  40              		@ frame_needed = 1, uses_anonymous_args = 0
+  41 0000 80B5     		push	{r7, lr}
+  42              	.LCFI0:
+  43              		.cfi_def_cfa_offset 8
+  44              		.cfi_offset 7, -8
+  45              		.cfi_offset 14, -4
+  46 0002 00AF     		add	r7, sp, #0
+  47              	.LCFI1:
+  48              		.cfi_def_cfa_register 7
+  89:lib/ParTest.c **** 	/* Initialise all four LEDs that are built onto the starter kit. */
+  90:lib/ParTest.c **** 	STM_EVAL_LEDInit( LED3 );
+  49              		.loc 1 90 0
+  50 0004 0120     		movs	r0, #1
+  51 0006 FFF7FEFF 		bl	STM_EVAL_LEDInit
+  91:lib/ParTest.c **** 	STM_EVAL_LEDInit( LED4 );
+  52              		.loc 1 91 0
+  53 000a 0020     		movs	r0, #0
+  54 000c FFF7FEFF 		bl	STM_EVAL_LEDInit
+  92:lib/ParTest.c **** 	STM_EVAL_LEDInit( LED5 );
+  55              		.loc 1 92 0
+  56 0010 0220     		movs	r0, #2
+  57 0012 FFF7FEFF 		bl	STM_EVAL_LEDInit
+  93:lib/ParTest.c **** 	STM_EVAL_LEDInit( LED6 );
+  58              		.loc 1 93 0
+  59 0016 0320     		movs	r0, #3
+  60 0018 FFF7FEFF 		bl	STM_EVAL_LEDInit
+  94:lib/ParTest.c **** }
+  61              		.loc 1 94 0
+  62 001c 80BD     		pop	{r7, pc}
+  63              		.cfi_endproc
+  64              	.LFE111:
+  66 001e 00BF     		.section	.text.vParTestSetLED,"ax",%progbits
+  67              		.align	2
+  68              		.global	vParTestSetLED
+  69              		.thumb
+  70              		.thumb_func
+  72              	vParTestSetLED:
+  73              	.LFB112:
+  95:lib/ParTest.c **** /*-----------------------------------------------------------*/
+  96:lib/ParTest.c **** 
+  97:lib/ParTest.c **** void vParTestSetLED( unsigned long ulLED, signed portBASE_TYPE xValue )
+  98:lib/ParTest.c **** {
+  74              		.loc 1 98 0
+  75              		.cfi_startproc
+  76              		@ args = 0, pretend = 0, frame = 8
+  77              		@ frame_needed = 1, uses_anonymous_args = 0
+  78 0000 80B5     		push	{r7, lr}
+  79              	.LCFI2:
+  80              		.cfi_def_cfa_offset 8
+  81              		.cfi_offset 7, -8
+  82              		.cfi_offset 14, -4
+  83 0002 82B0     		sub	sp, sp, #8
+  84              	.LCFI3:
+  85              		.cfi_def_cfa_offset 16
+  86 0004 00AF     		add	r7, sp, #0
+  87              	.LCFI4:
+  88              		.cfi_def_cfa_register 7
+  89 0006 7860     		str	r0, [r7, #4]
+  90 0008 3960     		str	r1, [r7]
+  99:lib/ParTest.c **** 	if( ulLED < partstMAX_LEDS )
+  91              		.loc 1 99 0
+  92 000a 7B68     		ldr	r3, [r7, #4]
+  93 000c 032B     		cmp	r3, #3
+  94 000e 17D8     		bhi	.L2
+ 100:lib/ParTest.c **** 	{
+ 101:lib/ParTest.c **** 		if( xValue == pdTRUE )
+  95              		.loc 1 101 0
+  96 0010 3B68     		ldr	r3, [r7]
+  97 0012 012B     		cmp	r3, #1
+  98 0014 0AD1     		bne	.L4
+ 102:lib/ParTest.c **** 		{
+ 103:lib/ParTest.c **** 			STM_EVAL_LEDOn( xLEDs[ ulLED ] );
+  99              		.loc 1 103 0
+ 100 0016 40F20003 		movw	r3, #:lower16:xLEDs
+ 101 001a C0F20003 		movt	r3, #:upper16:xLEDs
+ 102 001e 7A68     		ldr	r2, [r7, #4]
+ 103 0020 1344     		add	r3, r3, r2
+ 104 0022 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 105 0024 1846     		mov	r0, r3
+ 106 0026 FFF7FEFF 		bl	STM_EVAL_LEDOn
+ 107 002a 09E0     		b	.L2
+ 108              	.L4:
+ 104:lib/ParTest.c **** 		}
+ 105:lib/ParTest.c **** 		else
+ 106:lib/ParTest.c **** 		{
+ 107:lib/ParTest.c **** 			STM_EVAL_LEDOff( xLEDs[ ulLED ] );
+ 109              		.loc 1 107 0
+ 110 002c 40F20003 		movw	r3, #:lower16:xLEDs
+ 111 0030 C0F20003 		movt	r3, #:upper16:xLEDs
+ 112 0034 7A68     		ldr	r2, [r7, #4]
+ 113 0036 1344     		add	r3, r3, r2
+ 114 0038 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 115 003a 1846     		mov	r0, r3
+ 116 003c FFF7FEFF 		bl	STM_EVAL_LEDOff
+ 117              	.L2:
+ 108:lib/ParTest.c **** 		}
+ 109:lib/ParTest.c **** 	}
+ 110:lib/ParTest.c **** }
+ 118              		.loc 1 110 0
+ 119 0040 0837     		adds	r7, r7, #8
+ 120 0042 BD46     		mov	sp, r7
+ 121              		@ sp needed
+ 122 0044 80BD     		pop	{r7, pc}
+ 123              		.cfi_endproc
+ 124              	.LFE112:
+ 126 0046 00BF     		.section	.text.vParTestToggleLED,"ax",%progbits
+ 127              		.align	2
+ 128              		.global	vParTestToggleLED
+ 129              		.thumb
+ 130              		.thumb_func
+ 132              	vParTestToggleLED:
+ 133              	.LFB113:
+ 111:lib/ParTest.c **** /*-----------------------------------------------------------*/
+ 112:lib/ParTest.c **** 
+ 113:lib/ParTest.c **** void vParTestToggleLED( unsigned long ulLED )
+ 114:lib/ParTest.c **** {
+ 134              		.loc 1 114 0
+ 135              		.cfi_startproc
+ 136              		@ args = 0, pretend = 0, frame = 8
+ 137              		@ frame_needed = 1, uses_anonymous_args = 0
+ 138 0000 80B5     		push	{r7, lr}
+ 139              	.LCFI5:
+ 140              		.cfi_def_cfa_offset 8
+ 141              		.cfi_offset 7, -8
+ 142              		.cfi_offset 14, -4
+ 143 0002 82B0     		sub	sp, sp, #8
+ 144              	.LCFI6:
+ 145              		.cfi_def_cfa_offset 16
+ 146 0004 00AF     		add	r7, sp, #0
+ 147              	.LCFI7:
+ 148              		.cfi_def_cfa_register 7
+ 149 0006 7860     		str	r0, [r7, #4]
+ 115:lib/ParTest.c **** 	if( ulLED < partstMAX_LEDS )
+ 150              		.loc 1 115 0
+ 151 0008 7B68     		ldr	r3, [r7, #4]
+ 152 000a 032B     		cmp	r3, #3
+ 153 000c 0DD8     		bhi	.L5
+ 116:lib/ParTest.c **** 	{
+ 117:lib/ParTest.c **** 		taskENTER_CRITICAL();
+ 154              		.loc 1 117 0
+ 155 000e FFF7FEFF 		bl	vPortEnterCritical
+ 118:lib/ParTest.c **** 		{
+ 119:lib/ParTest.c **** 			STM_EVAL_LEDToggle( xLEDs[ ulLED ] );
+ 156              		.loc 1 119 0
+ 157 0012 40F20003 		movw	r3, #:lower16:xLEDs
+ 158 0016 C0F20003 		movt	r3, #:upper16:xLEDs
+ 159 001a 7A68     		ldr	r2, [r7, #4]
+ 160 001c 1344     		add	r3, r3, r2
+ 161 001e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 162 0020 1846     		mov	r0, r3
+ 163 0022 FFF7FEFF 		bl	STM_EVAL_LEDToggle
+ 120:lib/ParTest.c **** 		}
+ 121:lib/ParTest.c **** 		taskEXIT_CRITICAL();
+ 164              		.loc 1 121 0
+ 165 0026 FFF7FEFF 		bl	vPortExitCritical
+ 166              	.L5:
+ 122:lib/ParTest.c **** 	}
+ 123:lib/ParTest.c **** }
+ 167              		.loc 1 123 0
+ 168 002a 0837     		adds	r7, r7, #8
+ 169 002c BD46     		mov	sp, r7
+ 170              		@ sp needed
+ 171 002e 80BD     		pop	{r7, pc}
+ 172              		.cfi_endproc
+ 173              	.LFE113:
+ 175              		.text
+ 176              	.Letext0:
+ 177              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 178              		.file 3 "/usr/include/newlib/stdint.h"
+ 179              		.file 4 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 180              		.file 5 "lib/board/stm32f4_discovery.h"
+ 181              		.file 6 "lib/chip/CMSIS/Include/core_cm4.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 ParTest.c
+     /tmp/ccLC1WE3.s:20     .rodata.xLEDs:00000000 $d
+     /tmp/ccLC1WE3.s:23     .rodata.xLEDs:00000000 xLEDs
+     /tmp/ccLC1WE3.s:29     .text.vParTestInitialise:00000000 $t
+     /tmp/ccLC1WE3.s:34     .text.vParTestInitialise:00000000 vParTestInitialise
+     /tmp/ccLC1WE3.s:67     .text.vParTestSetLED:00000000 $t
+     /tmp/ccLC1WE3.s:72     .text.vParTestSetLED:00000000 vParTestSetLED
+     /tmp/ccLC1WE3.s:127    .text.vParTestToggleLED:00000000 $t
+     /tmp/ccLC1WE3.s:132    .text.vParTestToggleLED:00000000 vParTestToggleLED
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+STM_EVAL_LEDInit
+STM_EVAL_LEDOn
+STM_EVAL_LEDOff
+vPortEnterCritical
+STM_EVAL_LEDToggle
+vPortExitCritical

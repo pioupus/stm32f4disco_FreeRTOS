@@ -1,0 +1,953 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 3
+   4              		.fpu fpv4-sp-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.file	"BlockQ.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.bss.sBlockingConsumerCount,"aw",%nobits
+  20              		.align	2
+  23              	sBlockingConsumerCount:
+  24 0000 00000000 		.space	6
+  24      0000
+  25 0006 0000     		.section	.bss.sBlockingProducerCount,"aw",%nobits
+  26              		.align	2
+  29              	sBlockingProducerCount:
+  30 0000 00000000 		.space	6
+  30      0000
+  31 0006 0000     		.section	.rodata
+  32              		.align	2
+  33              	.LC0:
+  34 0000 51436F6E 		.ascii	"QConsB1\000"
+  34      73423100 
+  35              		.align	2
+  36              	.LC1:
+  37 0008 5150726F 		.ascii	"QProdB2\000"
+  37      64423200 
+  38              		.align	2
+  39              	.LC2:
+  40 0010 51436F6E 		.ascii	"QConsB3\000"
+  40      73423300 
+  41              		.align	2
+  42              	.LC3:
+  43 0018 5150726F 		.ascii	"QProdB4\000"
+  43      64423400 
+  44              		.align	2
+  45              	.LC4:
+  46 0020 5150726F 		.ascii	"QProdB5\000"
+  46      64423500 
+  47              		.align	2
+  48              	.LC5:
+  49 0028 51436F6E 		.ascii	"QConsB6\000"
+  49      73423600 
+  50              		.section	.text.vStartBlockingQueueTasks,"ax",%progbits
+  51              		.align	2
+  52              		.global	vStartBlockingQueueTasks
+  53              		.thumb
+  54              		.thumb_func
+  56              	vStartBlockingQueueTasks:
+  57              	.LFB1:
+  58              		.file 1 "lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c"
+   1:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /*
+   2:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     FreeRTOS V8.1.2 - Copyright (C) 2014 Real Time Engineers Ltd.
+   3:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     All rights reserved
+   4:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+   5:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
+   6:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+   7:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     ***************************************************************************
+   8:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *                                                                       *
+   9:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *    FreeRTOS provides completely free yet professionally developed,    *
+  10:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *    robust, strictly quality controlled, supported, and cross          *
+  11:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *    platform software that has become a de facto standard.             *
+  12:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *                                                                       *
+  13:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *    Help yourself get started quickly and support the FreeRTOS         *
+  14:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *    project by purchasing a FreeRTOS tutorial book, reference          *
+  15:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
+  16:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *                                                                       *
+  17:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *    Thank you!                                                         *
+  18:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *                                                                       *
+  19:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     ***************************************************************************
+  20:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  21:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     This file is part of the FreeRTOS distribution.
+  22:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  23:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  24:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     the terms of the GNU General Public License (version 2) as published by the
+  25:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+  26:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  27:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     >>!   NOTE: The modification to the GPL is included to allow you to     !<<
+  28:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     >>!   distribute a combined work that includes FreeRTOS without being   !<<
+  29:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     >>!   obliged to provide the source code for proprietary components     !<<
+  30:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     >>!   outside of the FreeRTOS kernel.                                   !<<
+  31:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  32:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
+  33:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  34:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     FOR A PARTICULAR PURPOSE.  Full license text is available from the following
+  35:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     link: http://www.freertos.org/a00114.html
+  36:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  37:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     1 tab == 4 spaces!
+  38:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  39:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     ***************************************************************************
+  40:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *                                                                       *
+  41:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *    Having a problem?  Start by reading the FAQ "My application does   *
+  42:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *    not run, what could be wrong?"                                     *
+  43:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *                                                                       *
+  44:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *    http://www.FreeRTOS.org/FAQHelp.html                               *
+  45:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****      *                                                                       *
+  46:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     ***************************************************************************
+  47:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  48:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     http://www.FreeRTOS.org - Documentation, books, training, latest versions,
+  49:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     license and Real Time Engineers Ltd. contact details.
+  50:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  51:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
+  52:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     including FreeRTOS+Trace - an indispensable productivity tool, a DOS
+  53:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     compatible FAT file system, and our tiny thread aware UDP/IP stack.
+  54:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  55:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
+  56:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     Integrity Systems to sell under the OpenRTOS brand.  Low cost OpenRTOS
+  57:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     licenses offer ticketed support, indemnification and middleware.
+  58:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  59:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     http://www.SafeRTOS.com - High Integrity Systems also provide a safety
+  60:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     engineered and independently SIL3 certified version for use in safety and
+  61:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     mission critical applications that require provable dependability.
+  62:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  63:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****     1 tab == 4 spaces!
+  64:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** */
+  65:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  66:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /*
+  67:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * Creates six tasks that operate on three queues as follows:
+  68:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  *
+  69:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * The first two tasks send and receive an incrementing number to/from a queue.
+  70:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * One task acts as a producer and the other as the consumer.  The consumer is a
+  71:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * higher priority than the producer and is set to block on queue reads.  The queue
+  72:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * only has space for one item - as soon as the producer posts a message on the
+  73:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * queue the consumer will unblock, pre-empt the producer, and remove the item.
+  74:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  *
+  75:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * The second two tasks work the other way around.  Again the queue used only has
+  76:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * enough space for one item.  This time the consumer has a lower priority than the
+  77:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * producer.  The producer will try to post on the queue blocking when the queue is
+  78:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * full.  When the consumer wakes it will remove the item from the queue, causing
+  79:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * the producer to unblock, pre-empt the consumer, and immediately re-fill the
+  80:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * queue.
+  81:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  *
+  82:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * The last two tasks use the same queue producer and consumer functions.  This time the queue has
+  83:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * enough space for lots of items and the tasks operate at the same priority.  The
+  84:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * producer will execute, placing items into the queue.  The consumer will start
+  85:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * executing when either the queue becomes full (causing the producer to block) or
+  86:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  * a context switch occurs (tasks of the same priority will time slice).
+  87:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  *
+  88:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c ****  */
+  89:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  90:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** #include <stdlib.h>
+  91:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  92:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /* Scheduler include files. */
+  93:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** #include "FreeRTOS.h"
+  94:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** #include "task.h"
+  95:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** #include "queue.h"
+  96:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+  97:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /* Demo program include files. */
+  98:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** #include "BlockQ.h"
+  99:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 100:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** #define blckqSTACK_SIZE		configMINIMAL_STACK_SIZE
+ 101:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** #define blckqNUM_TASK_SETS	( 3 )
+ 102:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 103:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /* Structure used to pass parameters to the blocking queue tasks. */
+ 104:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** typedef struct BLOCKING_QUEUE_PARAMETERS
+ 105:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** {
+ 106:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	QueueHandle_t xQueue;					/*< The queue to be used by the task. */
+ 107:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	TickType_t xBlockTime;				/*< The block time to use on queue reads/writes. */
+ 108:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	volatile short *psCheckVariable;	/*< Incremented on each successful cycle to check the task is sti
+ 109:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** } xBlockingQueueParameters;
+ 110:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 111:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /* Task function that creates an incrementing number and posts it on a queue. */
+ 112:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** static portTASK_FUNCTION_PROTO( vBlockingQueueProducer, pvParameters );
+ 113:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 114:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /* Task function that removes the incrementing number from a queue and checks that
+ 115:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** it is the expected number. */
+ 116:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** static portTASK_FUNCTION_PROTO( vBlockingQueueConsumer, pvParameters );
+ 117:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 118:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /* Variables which are incremented each time an item is removed from a queue, and
+ 119:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** found to be the expected value.
+ 120:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** These are used to check that the tasks are still running. */
+ 121:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** static volatile short sBlockingConsumerCount[ blckqNUM_TASK_SETS ] = { ( uint16_t ) 0, ( uint16_t )
+ 122:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 123:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /* Variable which are incremented each time an item is posted on a queue.   These
+ 124:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** are used to check that the tasks are still running. */
+ 125:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** static volatile short sBlockingProducerCount[ blckqNUM_TASK_SETS ] = { ( uint16_t ) 0, ( uint16_t )
+ 126:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 127:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /*-----------------------------------------------------------*/
+ 128:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 129:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** void vStartBlockingQueueTasks( UBaseType_t uxPriority )
+ 130:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** {
+  59              		.loc 1 130 0
+  60              		.cfi_startproc
+  61              		@ args = 0, pretend = 0, frame = 48
+  62              		@ frame_needed = 1, uses_anonymous_args = 0
+  63 0000 80B5     		push	{r7, lr}
+  64              	.LCFI0:
+  65              		.cfi_def_cfa_offset 8
+  66              		.cfi_offset 7, -8
+  67              		.cfi_offset 14, -4
+  68 0002 90B0     		sub	sp, sp, #64
+  69              	.LCFI1:
+  70              		.cfi_def_cfa_offset 72
+  71 0004 04AF     		add	r7, sp, #16
+  72              	.LCFI2:
+  73              		.cfi_def_cfa 7, 56
+  74 0006 7860     		str	r0, [r7, #4]
+ 131:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** xBlockingQueueParameters *pxQueueParameters1, *pxQueueParameters2;
+ 132:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** xBlockingQueueParameters *pxQueueParameters3, *pxQueueParameters4;
+ 133:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** xBlockingQueueParameters *pxQueueParameters5, *pxQueueParameters6;
+ 134:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** const UBaseType_t uxQueueSize1 = 1, uxQueueSize5 = 5;
+  75              		.loc 1 134 0
+  76 0008 0123     		movs	r3, #1
+  77 000a FB62     		str	r3, [r7, #44]
+  78 000c 0523     		movs	r3, #5
+  79 000e BB62     		str	r3, [r7, #40]
+ 135:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** const TickType_t xBlockTime = ( TickType_t ) 1000 / portTICK_PERIOD_MS;
+  80              		.loc 1 135 0
+  81 0010 4FF47A73 		mov	r3, #1000
+  82 0014 7B62     		str	r3, [r7, #36]
+ 136:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** const TickType_t xDontBlock = ( TickType_t ) 0;
+  83              		.loc 1 136 0
+  84 0016 0023     		movs	r3, #0
+  85 0018 3B62     		str	r3, [r7, #32]
+ 137:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 138:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	/* Create the first two tasks as described at the top of the file. */
+ 139:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 140:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	/* First create the structure used to pass parameters to the consumer tasks. */
+ 141:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters1 = ( xBlockingQueueParameters * ) pvPortMalloc( sizeof( xBlockingQueueParameters
+  86              		.loc 1 141 0
+  87 001a 0C20     		movs	r0, #12
+  88 001c FFF7FEFF 		bl	pvPortMalloc
+  89 0020 F861     		str	r0, [r7, #28]
+ 142:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 143:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	/* Create the queue used by the first two tasks to pass the incrementing number.
+ 144:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	Pass a pointer to the queue in the parameter structure. */
+ 145:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters1->xQueue = xQueueCreate( uxQueueSize1, ( UBaseType_t ) sizeof( uint16_t ) );
+  90              		.loc 1 145 0
+  91 0022 F86A     		ldr	r0, [r7, #44]
+  92 0024 0221     		movs	r1, #2
+  93 0026 0022     		movs	r2, #0
+  94 0028 FFF7FEFF 		bl	xQueueGenericCreate
+  95 002c 0246     		mov	r2, r0
+  96 002e FB69     		ldr	r3, [r7, #28]
+  97 0030 1A60     		str	r2, [r3]
+ 146:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 147:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	/* The consumer is created first so gets a block time as described above. */
+ 148:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters1->xBlockTime = xBlockTime;
+  98              		.loc 1 148 0
+  99 0032 FB69     		ldr	r3, [r7, #28]
+ 100 0034 7A6A     		ldr	r2, [r7, #36]
+ 101 0036 5A60     		str	r2, [r3, #4]
+ 149:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 150:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	/* Pass in the variable that this task is going to increment so we can check it
+ 151:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	is still running. */
+ 152:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters1->psCheckVariable = &( sBlockingConsumerCount[ 0 ] );
+ 102              		.loc 1 152 0
+ 103 0038 FA69     		ldr	r2, [r7, #28]
+ 104 003a 40F20003 		movw	r3, #:lower16:sBlockingConsumerCount
+ 105 003e C0F20003 		movt	r3, #:upper16:sBlockingConsumerCount
+ 106 0042 9360     		str	r3, [r2, #8]
+ 153:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 154:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	/* Create the structure used to pass parameters to the producer task. */
+ 155:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters2 = ( xBlockingQueueParameters * ) pvPortMalloc( sizeof( xBlockingQueueParameters
+ 107              		.loc 1 155 0
+ 108 0044 0C20     		movs	r0, #12
+ 109 0046 FFF7FEFF 		bl	pvPortMalloc
+ 110 004a B861     		str	r0, [r7, #24]
+ 156:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 157:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	/* Pass the queue to this task also, using the parameter structure. */
+ 158:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters2->xQueue = pxQueueParameters1->xQueue;
+ 111              		.loc 1 158 0
+ 112 004c FB69     		ldr	r3, [r7, #28]
+ 113 004e 1A68     		ldr	r2, [r3]
+ 114 0050 BB69     		ldr	r3, [r7, #24]
+ 115 0052 1A60     		str	r2, [r3]
+ 159:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 160:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	/* The producer is not going to block - as soon as it posts the consumer will
+ 161:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	wake and remove the item so the producer should always have room to post. */
+ 162:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters2->xBlockTime = xDontBlock;
+ 116              		.loc 1 162 0
+ 117 0054 BB69     		ldr	r3, [r7, #24]
+ 118 0056 3A6A     		ldr	r2, [r7, #32]
+ 119 0058 5A60     		str	r2, [r3, #4]
+ 163:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 164:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	/* Pass in the variable that this task is going to increment so we can check
+ 165:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	it is still running. */
+ 166:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters2->psCheckVariable = &( sBlockingProducerCount[ 0 ] );
+ 120              		.loc 1 166 0
+ 121 005a BA69     		ldr	r2, [r7, #24]
+ 122 005c 40F20003 		movw	r3, #:lower16:sBlockingProducerCount
+ 123 0060 C0F20003 		movt	r3, #:upper16:sBlockingProducerCount
+ 124 0064 9360     		str	r3, [r2, #8]
+ 167:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 168:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 169:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	/* Note the producer has a lower priority than the consumer when the tasks are
+ 170:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	spawned. */
+ 171:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	xTaskCreate( vBlockingQueueConsumer, "QConsB1", blckqSTACK_SIZE, ( void * ) pxQueueParameters1, ux
+ 125              		.loc 1 171 0
+ 126 0066 7B68     		ldr	r3, [r7, #4]
+ 127 0068 0093     		str	r3, [sp]
+ 128 006a 0023     		movs	r3, #0
+ 129 006c 0193     		str	r3, [sp, #4]
+ 130 006e 0023     		movs	r3, #0
+ 131 0070 0293     		str	r3, [sp, #8]
+ 132 0072 0023     		movs	r3, #0
+ 133 0074 0393     		str	r3, [sp, #12]
+ 134 0076 40F20000 		movw	r0, #:lower16:vBlockingQueueConsumer
+ 135 007a C0F20000 		movt	r0, #:upper16:vBlockingQueueConsumer
+ 136 007e 40F20001 		movw	r1, #:lower16:.LC0
+ 137 0082 C0F20001 		movt	r1, #:upper16:.LC0
+ 138 0086 8222     		movs	r2, #130
+ 139 0088 FB69     		ldr	r3, [r7, #28]
+ 140 008a FFF7FEFF 		bl	xTaskGenericCreate
+ 172:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	xTaskCreate( vBlockingQueueProducer, "QProdB2", blckqSTACK_SIZE, ( void * ) pxQueueParameters2, ts
+ 141              		.loc 1 172 0
+ 142 008e 0023     		movs	r3, #0
+ 143 0090 0093     		str	r3, [sp]
+ 144 0092 0023     		movs	r3, #0
+ 145 0094 0193     		str	r3, [sp, #4]
+ 146 0096 0023     		movs	r3, #0
+ 147 0098 0293     		str	r3, [sp, #8]
+ 148 009a 0023     		movs	r3, #0
+ 149 009c 0393     		str	r3, [sp, #12]
+ 150 009e 40F20000 		movw	r0, #:lower16:vBlockingQueueProducer
+ 151 00a2 C0F20000 		movt	r0, #:upper16:vBlockingQueueProducer
+ 152 00a6 40F20001 		movw	r1, #:lower16:.LC1
+ 153 00aa C0F20001 		movt	r1, #:upper16:.LC1
+ 154 00ae 8222     		movs	r2, #130
+ 155 00b0 BB69     		ldr	r3, [r7, #24]
+ 156 00b2 FFF7FEFF 		bl	xTaskGenericCreate
+ 173:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 174:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 175:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 176:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	/* Create the second two tasks as described at the top of the file.   This uses
+ 177:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	the same mechanism but reverses the task priorities. */
+ 178:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 179:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters3 = ( xBlockingQueueParameters * ) pvPortMalloc( sizeof( xBlockingQueueParameters
+ 157              		.loc 1 179 0
+ 158 00b6 0C20     		movs	r0, #12
+ 159 00b8 FFF7FEFF 		bl	pvPortMalloc
+ 160 00bc 7861     		str	r0, [r7, #20]
+ 180:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters3->xQueue = xQueueCreate( uxQueueSize1, ( UBaseType_t ) sizeof( uint16_t ) );
+ 161              		.loc 1 180 0
+ 162 00be F86A     		ldr	r0, [r7, #44]
+ 163 00c0 0221     		movs	r1, #2
+ 164 00c2 0022     		movs	r2, #0
+ 165 00c4 FFF7FEFF 		bl	xQueueGenericCreate
+ 166 00c8 0246     		mov	r2, r0
+ 167 00ca 7B69     		ldr	r3, [r7, #20]
+ 168 00cc 1A60     		str	r2, [r3]
+ 181:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters3->xBlockTime = xDontBlock;
+ 169              		.loc 1 181 0
+ 170 00ce 7B69     		ldr	r3, [r7, #20]
+ 171 00d0 3A6A     		ldr	r2, [r7, #32]
+ 172 00d2 5A60     		str	r2, [r3, #4]
+ 182:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters3->psCheckVariable = &( sBlockingProducerCount[ 1 ] );
+ 173              		.loc 1 182 0
+ 174 00d4 7B69     		ldr	r3, [r7, #20]
+ 175 00d6 414A     		ldr	r2, .L2
+ 176 00d8 9A60     		str	r2, [r3, #8]
+ 183:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 184:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters4 = ( xBlockingQueueParameters * ) pvPortMalloc( sizeof( xBlockingQueueParameters
+ 177              		.loc 1 184 0
+ 178 00da 0C20     		movs	r0, #12
+ 179 00dc FFF7FEFF 		bl	pvPortMalloc
+ 180 00e0 3861     		str	r0, [r7, #16]
+ 185:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters4->xQueue = pxQueueParameters3->xQueue;
+ 181              		.loc 1 185 0
+ 182 00e2 7B69     		ldr	r3, [r7, #20]
+ 183 00e4 1A68     		ldr	r2, [r3]
+ 184 00e6 3B69     		ldr	r3, [r7, #16]
+ 185 00e8 1A60     		str	r2, [r3]
+ 186:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters4->xBlockTime = xBlockTime;
+ 186              		.loc 1 186 0
+ 187 00ea 3B69     		ldr	r3, [r7, #16]
+ 188 00ec 7A6A     		ldr	r2, [r7, #36]
+ 189 00ee 5A60     		str	r2, [r3, #4]
+ 187:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters4->psCheckVariable = &( sBlockingConsumerCount[ 1 ] );
+ 190              		.loc 1 187 0
+ 191 00f0 3B69     		ldr	r3, [r7, #16]
+ 192 00f2 3B4A     		ldr	r2, .L2+4
+ 193 00f4 9A60     		str	r2, [r3, #8]
+ 188:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 189:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	xTaskCreate( vBlockingQueueConsumer, "QConsB3", blckqSTACK_SIZE, ( void * ) pxQueueParameters3, ts
+ 194              		.loc 1 189 0
+ 195 00f6 0023     		movs	r3, #0
+ 196 00f8 0093     		str	r3, [sp]
+ 197 00fa 0023     		movs	r3, #0
+ 198 00fc 0193     		str	r3, [sp, #4]
+ 199 00fe 0023     		movs	r3, #0
+ 200 0100 0293     		str	r3, [sp, #8]
+ 201 0102 0023     		movs	r3, #0
+ 202 0104 0393     		str	r3, [sp, #12]
+ 203 0106 40F20000 		movw	r0, #:lower16:vBlockingQueueConsumer
+ 204 010a C0F20000 		movt	r0, #:upper16:vBlockingQueueConsumer
+ 205 010e 40F20001 		movw	r1, #:lower16:.LC2
+ 206 0112 C0F20001 		movt	r1, #:upper16:.LC2
+ 207 0116 8222     		movs	r2, #130
+ 208 0118 7B69     		ldr	r3, [r7, #20]
+ 209 011a FFF7FEFF 		bl	xTaskGenericCreate
+ 190:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	xTaskCreate( vBlockingQueueProducer, "QProdB4", blckqSTACK_SIZE, ( void * ) pxQueueParameters4, ux
+ 210              		.loc 1 190 0
+ 211 011e 7B68     		ldr	r3, [r7, #4]
+ 212 0120 0093     		str	r3, [sp]
+ 213 0122 0023     		movs	r3, #0
+ 214 0124 0193     		str	r3, [sp, #4]
+ 215 0126 0023     		movs	r3, #0
+ 216 0128 0293     		str	r3, [sp, #8]
+ 217 012a 0023     		movs	r3, #0
+ 218 012c 0393     		str	r3, [sp, #12]
+ 219 012e 40F20000 		movw	r0, #:lower16:vBlockingQueueProducer
+ 220 0132 C0F20000 		movt	r0, #:upper16:vBlockingQueueProducer
+ 221 0136 40F20001 		movw	r1, #:lower16:.LC3
+ 222 013a C0F20001 		movt	r1, #:upper16:.LC3
+ 223 013e 8222     		movs	r2, #130
+ 224 0140 3B69     		ldr	r3, [r7, #16]
+ 225 0142 FFF7FEFF 		bl	xTaskGenericCreate
+ 191:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 192:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 193:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 194:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	/* Create the last two tasks as described above.  The mechanism is again just
+ 195:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	the same.  This time both parameter structures are given a block time. */
+ 196:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters5 = ( xBlockingQueueParameters * ) pvPortMalloc( sizeof( xBlockingQueueParameters
+ 226              		.loc 1 196 0
+ 227 0146 0C20     		movs	r0, #12
+ 228 0148 FFF7FEFF 		bl	pvPortMalloc
+ 229 014c F860     		str	r0, [r7, #12]
+ 197:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters5->xQueue = xQueueCreate( uxQueueSize5, ( UBaseType_t ) sizeof( uint16_t ) );
+ 230              		.loc 1 197 0
+ 231 014e B86A     		ldr	r0, [r7, #40]
+ 232 0150 0221     		movs	r1, #2
+ 233 0152 0022     		movs	r2, #0
+ 234 0154 FFF7FEFF 		bl	xQueueGenericCreate
+ 235 0158 0246     		mov	r2, r0
+ 236 015a FB68     		ldr	r3, [r7, #12]
+ 237 015c 1A60     		str	r2, [r3]
+ 198:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters5->xBlockTime = xBlockTime;
+ 238              		.loc 1 198 0
+ 239 015e FB68     		ldr	r3, [r7, #12]
+ 240 0160 7A6A     		ldr	r2, [r7, #36]
+ 241 0162 5A60     		str	r2, [r3, #4]
+ 199:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters5->psCheckVariable = &( sBlockingProducerCount[ 2 ] );
+ 242              		.loc 1 199 0
+ 243 0164 FB68     		ldr	r3, [r7, #12]
+ 244 0166 1F4A     		ldr	r2, .L2+8
+ 245 0168 9A60     		str	r2, [r3, #8]
+ 200:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 201:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters6 = ( xBlockingQueueParameters * ) pvPortMalloc( sizeof( xBlockingQueueParameters
+ 246              		.loc 1 201 0
+ 247 016a 0C20     		movs	r0, #12
+ 248 016c FFF7FEFF 		bl	pvPortMalloc
+ 249 0170 B860     		str	r0, [r7, #8]
+ 202:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters6->xQueue = pxQueueParameters5->xQueue;
+ 250              		.loc 1 202 0
+ 251 0172 FB68     		ldr	r3, [r7, #12]
+ 252 0174 1A68     		ldr	r2, [r3]
+ 253 0176 BB68     		ldr	r3, [r7, #8]
+ 254 0178 1A60     		str	r2, [r3]
+ 203:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters6->xBlockTime = xBlockTime;
+ 255              		.loc 1 203 0
+ 256 017a BB68     		ldr	r3, [r7, #8]
+ 257 017c 7A6A     		ldr	r2, [r7, #36]
+ 258 017e 5A60     		str	r2, [r3, #4]
+ 204:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters6->psCheckVariable = &( sBlockingConsumerCount[ 2 ] );
+ 259              		.loc 1 204 0
+ 260 0180 BB68     		ldr	r3, [r7, #8]
+ 261 0182 194A     		ldr	r2, .L2+12
+ 262 0184 9A60     		str	r2, [r3, #8]
+ 205:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 206:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	xTaskCreate( vBlockingQueueProducer, "QProdB5", blckqSTACK_SIZE, ( void * ) pxQueueParameters5, ts
+ 263              		.loc 1 206 0
+ 264 0186 0023     		movs	r3, #0
+ 265 0188 0093     		str	r3, [sp]
+ 266 018a 0023     		movs	r3, #0
+ 267 018c 0193     		str	r3, [sp, #4]
+ 268 018e 0023     		movs	r3, #0
+ 269 0190 0293     		str	r3, [sp, #8]
+ 270 0192 0023     		movs	r3, #0
+ 271 0194 0393     		str	r3, [sp, #12]
+ 272 0196 40F20000 		movw	r0, #:lower16:vBlockingQueueProducer
+ 273 019a C0F20000 		movt	r0, #:upper16:vBlockingQueueProducer
+ 274 019e 40F20001 		movw	r1, #:lower16:.LC4
+ 275 01a2 C0F20001 		movt	r1, #:upper16:.LC4
+ 276 01a6 8222     		movs	r2, #130
+ 277 01a8 FB68     		ldr	r3, [r7, #12]
+ 278 01aa FFF7FEFF 		bl	xTaskGenericCreate
+ 207:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	xTaskCreate( vBlockingQueueConsumer, "QConsB6", blckqSTACK_SIZE, ( void * ) pxQueueParameters6, ts
+ 279              		.loc 1 207 0
+ 280 01ae 0023     		movs	r3, #0
+ 281 01b0 0093     		str	r3, [sp]
+ 282 01b2 0023     		movs	r3, #0
+ 283 01b4 0193     		str	r3, [sp, #4]
+ 284 01b6 0023     		movs	r3, #0
+ 285 01b8 0293     		str	r3, [sp, #8]
+ 286 01ba 0023     		movs	r3, #0
+ 287 01bc 0393     		str	r3, [sp, #12]
+ 288 01be 40F20000 		movw	r0, #:lower16:vBlockingQueueConsumer
+ 289 01c2 C0F20000 		movt	r0, #:upper16:vBlockingQueueConsumer
+ 290 01c6 40F20001 		movw	r1, #:lower16:.LC5
+ 291 01ca C0F20001 		movt	r1, #:upper16:.LC5
+ 292 01ce 8222     		movs	r2, #130
+ 293 01d0 BB68     		ldr	r3, [r7, #8]
+ 294 01d2 FFF7FEFF 		bl	xTaskGenericCreate
+ 208:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** }
+ 295              		.loc 1 208 0
+ 296 01d6 3037     		adds	r7, r7, #48
+ 297 01d8 BD46     		mov	sp, r7
+ 298              		@ sp needed
+ 299 01da 80BD     		pop	{r7, pc}
+ 300              	.L3:
+ 301              		.align	2
+ 302              	.L2:
+ 303 01dc 02000000 		.word	sBlockingProducerCount+2
+ 304 01e0 02000000 		.word	sBlockingConsumerCount+2
+ 305 01e4 04000000 		.word	sBlockingProducerCount+4
+ 306 01e8 04000000 		.word	sBlockingConsumerCount+4
+ 307              		.cfi_endproc
+ 308              	.LFE1:
+ 310              		.section	.text.vBlockingQueueProducer,"ax",%progbits
+ 311              		.align	2
+ 312              		.thumb
+ 313              		.thumb_func
+ 315              	vBlockingQueueProducer:
+ 316              	.LFB2:
+ 209:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /*-----------------------------------------------------------*/
+ 210:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 211:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** static portTASK_FUNCTION( vBlockingQueueProducer, pvParameters )
+ 212:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** {
+ 317              		.loc 1 212 0
+ 318              		.cfi_startproc
+ 319              		@ args = 0, pretend = 0, frame = 24
+ 320              		@ frame_needed = 1, uses_anonymous_args = 0
+ 321 0000 80B5     		push	{r7, lr}
+ 322              	.LCFI3:
+ 323              		.cfi_def_cfa_offset 8
+ 324              		.cfi_offset 7, -8
+ 325              		.cfi_offset 14, -4
+ 326 0002 86B0     		sub	sp, sp, #24
+ 327              	.LCFI4:
+ 328              		.cfi_def_cfa_offset 32
+ 329 0004 00AF     		add	r7, sp, #0
+ 330              	.LCFI5:
+ 331              		.cfi_def_cfa_register 7
+ 332 0006 7860     		str	r0, [r7, #4]
+ 213:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** uint16_t usValue = 0;
+ 333              		.loc 1 213 0
+ 334 0008 0023     		movs	r3, #0
+ 335 000a FB81     		strh	r3, [r7, #14]	@ movhi
+ 214:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** xBlockingQueueParameters *pxQueueParameters;
+ 215:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** short sErrorEverOccurred = pdFALSE;
+ 336              		.loc 1 215 0
+ 337 000c 0023     		movs	r3, #0
+ 338 000e FB82     		strh	r3, [r7, #22]	@ movhi
+ 216:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 217:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters = ( xBlockingQueueParameters * ) pvParameters;
+ 339              		.loc 1 217 0
+ 340 0010 7B68     		ldr	r3, [r7, #4]
+ 341 0012 3B61     		str	r3, [r7, #16]
+ 342              	.L8:
+ 218:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 219:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	for( ;; )
+ 220:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	{
+ 221:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		if( xQueueSend( pxQueueParameters->xQueue, ( void * ) &usValue, pxQueueParameters->xBlockTime ) !
+ 343              		.loc 1 221 0
+ 344 0014 3B69     		ldr	r3, [r7, #16]
+ 345 0016 1968     		ldr	r1, [r3]
+ 346 0018 3B69     		ldr	r3, [r7, #16]
+ 347 001a 5B68     		ldr	r3, [r3, #4]
+ 348 001c 07F10E02 		add	r2, r7, #14
+ 349 0020 0846     		mov	r0, r1
+ 350 0022 1146     		mov	r1, r2
+ 351 0024 1A46     		mov	r2, r3
+ 352 0026 0023     		movs	r3, #0
+ 353 0028 FFF7FEFF 		bl	xQueueGenericSend
+ 354 002c 0346     		mov	r3, r0
+ 355 002e 012B     		cmp	r3, #1
+ 356 0030 02D0     		beq	.L5
+ 222:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		{
+ 223:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			sErrorEverOccurred = pdTRUE;
+ 357              		.loc 1 223 0
+ 358 0032 0123     		movs	r3, #1
+ 359 0034 FB82     		strh	r3, [r7, #22]	@ movhi
+ 224:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		}
+ 225:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		else
+ 226:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		{
+ 227:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			/* We have successfully posted a message, so increment the variable
+ 228:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			used to check we are still running. */
+ 229:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			if( sErrorEverOccurred == pdFALSE )
+ 230:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			{
+ 231:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				( *pxQueueParameters->psCheckVariable )++;
+ 232:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			}
+ 233:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 234:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			/* Increment the variable we are going to post next time round.  The
+ 235:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			consumer will expect the numbers to	follow in numerical order. */
+ 236:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			++usValue;
+ 237:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 238:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			#if configUSE_PREEMPTION == 0
+ 239:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				taskYIELD();
+ 240:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			#endif
+ 241:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		}
+ 242:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	}
+ 360              		.loc 1 242 0
+ 361 0036 EDE7     		b	.L8
+ 362              	.L5:
+ 229:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			{
+ 363              		.loc 1 229 0
+ 364 0038 B7F91630 		ldrsh	r3, [r7, #22]
+ 365 003c 002B     		cmp	r3, #0
+ 366 003e 07D1     		bne	.L7
+ 231:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			}
+ 367              		.loc 1 231 0
+ 368 0040 3B69     		ldr	r3, [r7, #16]
+ 369 0042 9A68     		ldr	r2, [r3, #8]
+ 370 0044 1388     		ldrh	r3, [r2]	@ movhi
+ 371 0046 9BB2     		uxth	r3, r3
+ 372 0048 9BB2     		uxth	r3, r3
+ 373 004a 0133     		adds	r3, r3, #1
+ 374 004c 9BB2     		uxth	r3, r3
+ 375 004e 1380     		strh	r3, [r2]	@ movhi
+ 376              	.L7:
+ 236:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 377              		.loc 1 236 0
+ 378 0050 FB89     		ldrh	r3, [r7, #14]
+ 379 0052 0133     		adds	r3, r3, #1
+ 380 0054 9BB2     		uxth	r3, r3
+ 381 0056 FB81     		strh	r3, [r7, #14]	@ movhi
+ 382              		.loc 1 242 0
+ 383 0058 DCE7     		b	.L8
+ 384              		.cfi_endproc
+ 385              	.LFE2:
+ 387 005a 00BF     		.section	.text.vBlockingQueueConsumer,"ax",%progbits
+ 388              		.align	2
+ 389              		.thumb
+ 390              		.thumb_func
+ 392              	vBlockingQueueConsumer:
+ 393              	.LFB3:
+ 243:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** }
+ 244:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /*-----------------------------------------------------------*/
+ 245:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 246:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** static portTASK_FUNCTION( vBlockingQueueConsumer, pvParameters )
+ 247:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** {
+ 394              		.loc 1 247 0
+ 395              		.cfi_startproc
+ 396              		@ args = 0, pretend = 0, frame = 24
+ 397              		@ frame_needed = 1, uses_anonymous_args = 0
+ 398 0000 80B5     		push	{r7, lr}
+ 399              	.LCFI6:
+ 400              		.cfi_def_cfa_offset 8
+ 401              		.cfi_offset 7, -8
+ 402              		.cfi_offset 14, -4
+ 403 0002 86B0     		sub	sp, sp, #24
+ 404              	.LCFI7:
+ 405              		.cfi_def_cfa_offset 32
+ 406 0004 00AF     		add	r7, sp, #0
+ 407              	.LCFI8:
+ 408              		.cfi_def_cfa_register 7
+ 409 0006 7860     		str	r0, [r7, #4]
+ 248:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** uint16_t usData, usExpectedValue = 0;
+ 410              		.loc 1 248 0
+ 411 0008 0023     		movs	r3, #0
+ 412 000a FB82     		strh	r3, [r7, #22]	@ movhi
+ 249:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** xBlockingQueueParameters *pxQueueParameters;
+ 250:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** short sErrorEverOccurred = pdFALSE;
+ 413              		.loc 1 250 0
+ 414 000c 0023     		movs	r3, #0
+ 415 000e BB82     		strh	r3, [r7, #20]	@ movhi
+ 251:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 252:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	pxQueueParameters = ( xBlockingQueueParameters * ) pvParameters;
+ 416              		.loc 1 252 0
+ 417 0010 7B68     		ldr	r3, [r7, #4]
+ 418 0012 3B61     		str	r3, [r7, #16]
+ 419              	.L13:
+ 253:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 254:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	for( ;; )
+ 255:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	{
+ 256:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		if( xQueueReceive( pxQueueParameters->xQueue, &usData, pxQueueParameters->xBlockTime ) == pdPASS 
+ 420              		.loc 1 256 0
+ 421 0014 3B69     		ldr	r3, [r7, #16]
+ 422 0016 1968     		ldr	r1, [r3]
+ 423 0018 3B69     		ldr	r3, [r7, #16]
+ 424 001a 5B68     		ldr	r3, [r3, #4]
+ 425 001c 07F10E02 		add	r2, r7, #14
+ 426 0020 0846     		mov	r0, r1
+ 427 0022 1146     		mov	r1, r2
+ 428 0024 1A46     		mov	r2, r3
+ 429 0026 0023     		movs	r3, #0
+ 430 0028 FFF7FEFF 		bl	xQueueGenericReceive
+ 431 002c 0346     		mov	r3, r0
+ 432 002e 012B     		cmp	r3, #1
+ 433 0030 18D1     		bne	.L10
+ 257:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		{
+ 258:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			if( usData != usExpectedValue )
+ 434              		.loc 1 258 0
+ 435 0032 FB89     		ldrh	r3, [r7, #14]
+ 436 0034 FA8A     		ldrh	r2, [r7, #22]
+ 437 0036 9A42     		cmp	r2, r3
+ 438 0038 04D0     		beq	.L11
+ 259:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			{
+ 260:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				/* Catch-up. */
+ 261:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				usExpectedValue = usData;
+ 439              		.loc 1 261 0
+ 440 003a FB89     		ldrh	r3, [r7, #14]	@ movhi
+ 441 003c FB82     		strh	r3, [r7, #22]	@ movhi
+ 262:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 263:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				sErrorEverOccurred = pdTRUE;
+ 442              		.loc 1 263 0
+ 443 003e 0123     		movs	r3, #1
+ 444 0040 BB82     		strh	r3, [r7, #20]	@ movhi
+ 445 0042 0FE0     		b	.L10
+ 446              	.L11:
+ 264:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			}
+ 265:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			else
+ 266:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			{
+ 267:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				/* We have successfully received a message, so increment the
+ 268:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				variable used to check we are still running. */
+ 269:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				if( sErrorEverOccurred == pdFALSE )
+ 447              		.loc 1 269 0
+ 448 0044 B7F91430 		ldrsh	r3, [r7, #20]
+ 449 0048 002B     		cmp	r3, #0
+ 450 004a 07D1     		bne	.L12
+ 270:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				{
+ 271:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 					( *pxQueueParameters->psCheckVariable )++;
+ 451              		.loc 1 271 0
+ 452 004c 3B69     		ldr	r3, [r7, #16]
+ 453 004e 9A68     		ldr	r2, [r3, #8]
+ 454 0050 1388     		ldrh	r3, [r2]	@ movhi
+ 455 0052 9BB2     		uxth	r3, r3
+ 456 0054 9BB2     		uxth	r3, r3
+ 457 0056 0133     		adds	r3, r3, #1
+ 458 0058 9BB2     		uxth	r3, r3
+ 459 005a 1380     		strh	r3, [r2]	@ movhi
+ 460              	.L12:
+ 272:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				}
+ 273:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 274:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				/* Increment the value we expect to remove from the queue next time
+ 275:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				round. */
+ 276:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				++usExpectedValue;
+ 461              		.loc 1 276 0
+ 462 005c FB8A     		ldrh	r3, [r7, #22]	@ movhi
+ 463 005e 0133     		adds	r3, r3, #1
+ 464 0060 FB82     		strh	r3, [r7, #22]	@ movhi
+ 277:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			}
+ 278:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 279:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			#if configUSE_PREEMPTION == 0
+ 280:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			{
+ 281:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				if( pxQueueParameters->xBlockTime == 0 )
+ 282:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				{
+ 283:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 					taskYIELD();
+ 284:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 				}
+ 285:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			}
+ 286:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			#endif
+ 287:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		}
+ 288:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	}
+ 465              		.loc 1 288 0
+ 466 0062 D7E7     		b	.L13
+ 467              	.L10:
+ 468 0064 D6E7     		b	.L13
+ 469              		.cfi_endproc
+ 470              	.LFE3:
+ 472              		.section	.text.xAreBlockingQueuesStillRunning,"ax",%progbits
+ 473              		.align	2
+ 474              		.global	xAreBlockingQueuesStillRunning
+ 475              		.thumb
+ 476              		.thumb_func
+ 478              	xAreBlockingQueuesStillRunning:
+ 479              	.LFB4:
+ 289:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** }
+ 290:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /*-----------------------------------------------------------*/
+ 291:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 292:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** /* This is called to check that all the created tasks are still running. */
+ 293:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** BaseType_t xAreBlockingQueuesStillRunning( void )
+ 294:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** {
+ 480              		.loc 1 294 0
+ 481              		.cfi_startproc
+ 482              		@ args = 0, pretend = 0, frame = 8
+ 483              		@ frame_needed = 1, uses_anonymous_args = 0
+ 484              		@ link register save eliminated.
+ 485 0000 80B4     		push	{r7}
+ 486              	.LCFI9:
+ 487              		.cfi_def_cfa_offset 4
+ 488              		.cfi_offset 7, -4
+ 489 0002 83B0     		sub	sp, sp, #12
+ 490              	.LCFI10:
+ 491              		.cfi_def_cfa_offset 16
+ 492 0004 00AF     		add	r7, sp, #0
+ 493              	.LCFI11:
+ 494              		.cfi_def_cfa_register 7
+ 295:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** static short sLastBlockingConsumerCount[ blckqNUM_TASK_SETS ] = { ( uint16_t ) 0, ( uint16_t ) 0, (
+ 296:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** static short sLastBlockingProducerCount[ blckqNUM_TASK_SETS ] = { ( uint16_t ) 0, ( uint16_t ) 0, (
+ 297:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** BaseType_t xReturn = pdPASS, xTasks;
+ 495              		.loc 1 297 0
+ 496 0006 0123     		movs	r3, #1
+ 497 0008 7B60     		str	r3, [r7, #4]
+ 298:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 299:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	/* Not too worried about mutual exclusion on these variables as they are 16
+ 300:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	bits and we are only reading them. We also only care to see if they have
+ 301:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	changed or not.
+ 302:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 303:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	Loop through each check variable to and return pdFALSE if any are found not
+ 304:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	to have changed since the last call. */
+ 305:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 306:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	for( xTasks = 0; xTasks < blckqNUM_TASK_SETS; xTasks++ )
+ 498              		.loc 1 306 0
+ 499 000a 0023     		movs	r3, #0
+ 500 000c 3B60     		str	r3, [r7]
+ 501 000e 4AE0     		b	.L15
+ 502              	.L18:
+ 307:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	{
+ 308:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		if( sBlockingConsumerCount[ xTasks ] == sLastBlockingConsumerCount[ xTasks ]  )
+ 503              		.loc 1 308 0
+ 504 0010 40F20003 		movw	r3, #:lower16:sBlockingConsumerCount
+ 505 0014 C0F20003 		movt	r3, #:upper16:sBlockingConsumerCount
+ 506 0018 3A68     		ldr	r2, [r7]
+ 507 001a 33F81230 		ldrh	r3, [r3, r2, lsl #1]	@ movhi
+ 508 001e 9AB2     		uxth	r2, r3
+ 509 0020 40F20003 		movw	r3, #:lower16:sLastBlockingConsumerCount.5051
+ 510 0024 C0F20003 		movt	r3, #:upper16:sLastBlockingConsumerCount.5051
+ 511 0028 3968     		ldr	r1, [r7]
+ 512 002a 33F81130 		ldrh	r3, [r3, r1, lsl #1]
+ 513 002e 12B2     		sxth	r2, r2
+ 514 0030 1BB2     		sxth	r3, r3
+ 515 0032 9A42     		cmp	r2, r3
+ 516 0034 01D1     		bne	.L16
+ 309:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		{
+ 310:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			xReturn = pdFALSE;
+ 517              		.loc 1 310 0
+ 518 0036 0023     		movs	r3, #0
+ 519 0038 7B60     		str	r3, [r7, #4]
+ 520              	.L16:
+ 311:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		}
+ 312:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		sLastBlockingConsumerCount[ xTasks ] = sBlockingConsumerCount[ xTasks ];
+ 521              		.loc 1 312 0
+ 522 003a 40F20003 		movw	r3, #:lower16:sBlockingConsumerCount
+ 523 003e C0F20003 		movt	r3, #:upper16:sBlockingConsumerCount
+ 524 0042 3A68     		ldr	r2, [r7]
+ 525 0044 33F81230 		ldrh	r3, [r3, r2, lsl #1]	@ movhi
+ 526 0048 99B2     		uxth	r1, r3
+ 527 004a 40F20003 		movw	r3, #:lower16:sLastBlockingConsumerCount.5051
+ 528 004e C0F20003 		movt	r3, #:upper16:sLastBlockingConsumerCount.5051
+ 529 0052 3A68     		ldr	r2, [r7]
+ 530 0054 23F81210 		strh	r1, [r3, r2, lsl #1]	@ movhi
+ 313:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 314:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 315:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		if( sBlockingProducerCount[ xTasks ] == sLastBlockingProducerCount[ xTasks ]  )
+ 531              		.loc 1 315 0
+ 532 0058 40F20003 		movw	r3, #:lower16:sBlockingProducerCount
+ 533 005c C0F20003 		movt	r3, #:upper16:sBlockingProducerCount
+ 534 0060 3A68     		ldr	r2, [r7]
+ 535 0062 33F81230 		ldrh	r3, [r3, r2, lsl #1]	@ movhi
+ 536 0066 9AB2     		uxth	r2, r3
+ 537 0068 40F20003 		movw	r3, #:lower16:sLastBlockingProducerCount.5052
+ 538 006c C0F20003 		movt	r3, #:upper16:sLastBlockingProducerCount.5052
+ 539 0070 3968     		ldr	r1, [r7]
+ 540 0072 33F81130 		ldrh	r3, [r3, r1, lsl #1]
+ 541 0076 12B2     		sxth	r2, r2
+ 542 0078 1BB2     		sxth	r3, r3
+ 543 007a 9A42     		cmp	r2, r3
+ 544 007c 01D1     		bne	.L17
+ 316:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		{
+ 317:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 			xReturn = pdFALSE;
+ 545              		.loc 1 317 0
+ 546 007e 0023     		movs	r3, #0
+ 547 0080 7B60     		str	r3, [r7, #4]
+ 548              	.L17:
+ 318:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		}
+ 319:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 		sLastBlockingProducerCount[ xTasks ] = sBlockingProducerCount[ xTasks ];
+ 549              		.loc 1 319 0
+ 550 0082 40F20003 		movw	r3, #:lower16:sBlockingProducerCount
+ 551 0086 C0F20003 		movt	r3, #:upper16:sBlockingProducerCount
+ 552 008a 3A68     		ldr	r2, [r7]
+ 553 008c 33F81230 		ldrh	r3, [r3, r2, lsl #1]	@ movhi
+ 554 0090 99B2     		uxth	r1, r3
+ 555 0092 40F20003 		movw	r3, #:lower16:sLastBlockingProducerCount.5052
+ 556 0096 C0F20003 		movt	r3, #:upper16:sLastBlockingProducerCount.5052
+ 557 009a 3A68     		ldr	r2, [r7]
+ 558 009c 23F81210 		strh	r1, [r3, r2, lsl #1]	@ movhi
+ 306:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	{
+ 559              		.loc 1 306 0
+ 560 00a0 3B68     		ldr	r3, [r7]
+ 561 00a2 0133     		adds	r3, r3, #1
+ 562 00a4 3B60     		str	r3, [r7]
+ 563              	.L15:
+ 306:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	{
+ 564              		.loc 1 306 0 is_stmt 0 discriminator 1
+ 565 00a6 3B68     		ldr	r3, [r7]
+ 566 00a8 022B     		cmp	r3, #2
+ 567 00aa B1DD     		ble	.L18
+ 320:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	}
+ 321:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 
+ 322:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** 	return xReturn;
+ 568              		.loc 1 322 0 is_stmt 1
+ 569 00ac 7B68     		ldr	r3, [r7, #4]
+ 323:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/BlockQ.c **** }
+ 570              		.loc 1 323 0
+ 571 00ae 1846     		mov	r0, r3
+ 572 00b0 0C37     		adds	r7, r7, #12
+ 573 00b2 BD46     		mov	sp, r7
+ 574              		@ sp needed
+ 575 00b4 5DF8047B 		ldr	r7, [sp], #4
+ 576 00b8 7047     		bx	lr
+ 577              		.cfi_endproc
+ 578              	.LFE4:
+ 580 00ba 00BF     		.section	.bss.sLastBlockingConsumerCount.5051,"aw",%nobits
+ 581              		.align	2
+ 584              	sLastBlockingConsumerCount.5051:
+ 585 0000 00000000 		.space	6
+ 585      0000
+ 586 0006 0000     		.section	.bss.sLastBlockingProducerCount.5052,"aw",%nobits
+ 587              		.align	2
+ 590              	sLastBlockingProducerCount.5052:
+ 591 0000 00000000 		.space	6
+ 591      0000
+ 592 0006 0000     		.text
+ 593              	.Letext0:
+ 594              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 595              		.file 3 "/usr/include/newlib/stdint.h"
+ 596              		.file 4 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 597              		.file 5 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/queue.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 BlockQ.c
+     /tmp/ccuuohgM.s:20     .bss.sBlockingConsumerCount:00000000 $d
+     /tmp/ccuuohgM.s:23     .bss.sBlockingConsumerCount:00000000 sBlockingConsumerCount
+     /tmp/ccuuohgM.s:26     .bss.sBlockingProducerCount:00000000 $d
+     /tmp/ccuuohgM.s:29     .bss.sBlockingProducerCount:00000000 sBlockingProducerCount
+     /tmp/ccuuohgM.s:32     .rodata:00000000 $d
+     /tmp/ccuuohgM.s:33     .rodata:00000000 .LC0
+     /tmp/ccuuohgM.s:36     .rodata:00000008 .LC1
+     /tmp/ccuuohgM.s:39     .rodata:00000010 .LC2
+     /tmp/ccuuohgM.s:42     .rodata:00000018 .LC3
+     /tmp/ccuuohgM.s:45     .rodata:00000020 .LC4
+     /tmp/ccuuohgM.s:48     .rodata:00000028 .LC5
+     /tmp/ccuuohgM.s:51     .text.vStartBlockingQueueTasks:00000000 $t
+     /tmp/ccuuohgM.s:56     .text.vStartBlockingQueueTasks:00000000 vStartBlockingQueueTasks
+     /tmp/ccuuohgM.s:392    .text.vBlockingQueueConsumer:00000000 vBlockingQueueConsumer
+     /tmp/ccuuohgM.s:315    .text.vBlockingQueueProducer:00000000 vBlockingQueueProducer
+     /tmp/ccuuohgM.s:303    .text.vStartBlockingQueueTasks:000001dc $d
+     /tmp/ccuuohgM.s:311    .text.vBlockingQueueProducer:00000000 $t
+     /tmp/ccuuohgM.s:388    .text.vBlockingQueueConsumer:00000000 $t
+     /tmp/ccuuohgM.s:473    .text.xAreBlockingQueuesStillRunning:00000000 $t
+     /tmp/ccuuohgM.s:478    .text.xAreBlockingQueuesStillRunning:00000000 xAreBlockingQueuesStillRunning
+     /tmp/ccuuohgM.s:584    .bss.sLastBlockingConsumerCount.5051:00000000 sLastBlockingConsumerCount.5051
+     /tmp/ccuuohgM.s:590    .bss.sLastBlockingProducerCount.5052:00000000 sLastBlockingProducerCount.5052
+     /tmp/ccuuohgM.s:581    .bss.sLastBlockingConsumerCount.5051:00000000 $d
+     /tmp/ccuuohgM.s:587    .bss.sLastBlockingProducerCount.5052:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+pvPortMalloc
+xQueueGenericCreate
+xTaskGenericCreate
+xQueueGenericSend
+xQueueGenericReceive

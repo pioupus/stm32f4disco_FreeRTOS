@@ -1,0 +1,677 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 3
+   4              		.fpu fpv4-sp-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.file	"death.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.bss.usCreationCount,"aw",%nobits
+  20              		.align	1
+  23              	usCreationCount:
+  24 0000 0000     		.space	2
+  25              		.section	.bss.uxTasksRunningAtStart,"aw",%nobits
+  26              		.align	2
+  29              	uxTasksRunningAtStart:
+  30 0000 00000000 		.space	4
+  31              		.section	.rodata.uxMaxNumberOfExtraTasksRunning,"a",%progbits
+  32              		.align	2
+  35              	uxMaxNumberOfExtraTasksRunning:
+  36 0000 03000000 		.word	3
+  37              		.comm	xCreatedTask,4,4
+  38              		.section	.rodata
+  39              		.align	2
+  40              	.LC0:
+  41 0000 43524541 		.ascii	"CREATOR\000"
+  41      544F5200 
+  42              		.section	.text.vCreateSuicidalTasks,"ax",%progbits
+  43              		.align	2
+  44              		.global	vCreateSuicidalTasks
+  45              		.thumb
+  46              		.thumb_func
+  48              	vCreateSuicidalTasks:
+  49              	.LFB1:
+  50              		.file 1 "lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c"
+   1:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /*
+   2:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     FreeRTOS V8.1.2 - Copyright (C) 2014 Real Time Engineers Ltd. 
+   3:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     All rights reserved
+   4:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+   5:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
+   6:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+   7:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     ***************************************************************************
+   8:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *                                                                       *
+   9:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *    FreeRTOS provides completely free yet professionally developed,    *
+  10:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *    robust, strictly quality controlled, supported, and cross          *
+  11:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *    platform software that has become a de facto standard.             *
+  12:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *                                                                       *
+  13:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *    Help yourself get started quickly and support the FreeRTOS         *
+  14:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *    project by purchasing a FreeRTOS tutorial book, reference          *
+  15:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
+  16:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *                                                                       *
+  17:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *    Thank you!                                                         *
+  18:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *                                                                       *
+  19:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     ***************************************************************************
+  20:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  21:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     This file is part of the FreeRTOS distribution.
+  22:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  23:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  24:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     the terms of the GNU General Public License (version 2) as published by the
+  25:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+  26:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  27:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     >>!   NOTE: The modification to the GPL is included to allow you to     !<<
+  28:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     >>!   distribute a combined work that includes FreeRTOS without being   !<<
+  29:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     >>!   obliged to provide the source code for proprietary components     !<<
+  30:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     >>!   outside of the FreeRTOS kernel.                                   !<<
+  31:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  32:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
+  33:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  34:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     FOR A PARTICULAR PURPOSE.  Full license text is available from the following
+  35:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     link: http://www.freertos.org/a00114.html
+  36:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  37:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     1 tab == 4 spaces!
+  38:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  39:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     ***************************************************************************
+  40:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *                                                                       *
+  41:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *    Having a problem?  Start by reading the FAQ "My application does   *
+  42:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *    not run, what could be wrong?"                                     *
+  43:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *                                                                       *
+  44:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *    http://www.FreeRTOS.org/FAQHelp.html                               *
+  45:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****      *                                                                       *
+  46:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     ***************************************************************************
+  47:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  48:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     http://www.FreeRTOS.org - Documentation, books, training, latest versions,
+  49:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     license and Real Time Engineers Ltd. contact details.
+  50:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  51:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
+  52:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     including FreeRTOS+Trace - an indispensable productivity tool, a DOS
+  53:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     compatible FAT file system, and our tiny thread aware UDP/IP stack.
+  54:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  55:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
+  56:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     Integrity Systems to sell under the OpenRTOS brand.  Low cost OpenRTOS
+  57:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     licenses offer ticketed support, indemnification and middleware.
+  58:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  59:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     http://www.SafeRTOS.com - High Integrity Systems also provide a safety
+  60:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     engineered and independently SIL3 certified version for use in safety and
+  61:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     mission critical applications that require provable dependability.
+  62:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  63:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****     1 tab == 4 spaces!
+  64:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** */
+  65:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  66:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /**
+  67:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  * Create a single persistent task which periodically dynamically creates another
+  68:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  * two tasks.  The original task is called the creator task, the two tasks it
+  69:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  * creates are called suicidal tasks.
+  70:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  *
+  71:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  * One of the created suicidal tasks kill one other suicidal task before killing
+  72:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  * itself - leaving just the original task remaining.
+  73:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  *
+  74:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  * The creator task must be spawned after all of the other demo application tasks
+  75:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  * as it keeps a check on the number of tasks under the scheduler control.  The
+  76:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  * number of tasks it expects to see running should never be greater than the
+  77:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  * number of tasks that were in existence when the creator task was spawned, plus
+  78:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  * one set of four suicidal tasks.  If this number is exceeded an error is flagged.
+  79:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  *
+  80:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  * \page DeathC death.c
+  81:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  * \ingroup DemoFiles
+  82:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  * <HR>
+  83:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c ****  */
+  84:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  85:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  86:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** #include <stdlib.h>
+  87:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  88:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /* Scheduler include files. */
+  89:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** #include "FreeRTOS.h"
+  90:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** #include "task.h"
+  91:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  92:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /* Demo program include files. */
+  93:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** #include "death.h"
+  94:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  95:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** #define deathSTACK_SIZE		( configMINIMAL_STACK_SIZE + 60 )
+  96:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+  97:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /* The task originally created which is responsible for periodically dynamically
+  98:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** creating another four tasks. */
+  99:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** static portTASK_FUNCTION_PROTO( vCreateTasks, pvParameters );
+ 100:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 101:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /* The task function of the dynamically created tasks. */
+ 102:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** static portTASK_FUNCTION_PROTO( vSuicidalTask, pvParameters );
+ 103:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 104:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /* A variable which is incremented every time the dynamic tasks are created.  This
+ 105:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** is used to check that the task is still running. */
+ 106:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** static volatile uint16_t usCreationCount = 0;
+ 107:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 108:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /* Used to store the number of tasks that were originally running so the creator
+ 109:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** task can tell if any of the suicidal tasks have failed to die.
+ 110:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** */
+ 111:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** static volatile UBaseType_t uxTasksRunningAtStart = 0;
+ 112:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 113:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /* Tasks are deleted by the idle task.  Under heavy load the idle task might
+ 114:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** not get much processing time, so it would be legitimate for several tasks to
+ 115:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** remain undeleted for a short period. */
+ 116:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** static const UBaseType_t uxMaxNumberOfExtraTasksRunning = 3;
+ 117:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 118:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /* Used to store a handle to the task that should be killed by a suicidal task,
+ 119:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** before it kills itself. */
+ 120:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** TaskHandle_t xCreatedTask;
+ 121:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 122:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /*-----------------------------------------------------------*/
+ 123:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 124:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** void vCreateSuicidalTasks( UBaseType_t uxPriority )
+ 125:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** {
+  51              		.loc 1 125 0
+  52              		.cfi_startproc
+  53              		@ args = 0, pretend = 0, frame = 16
+  54              		@ frame_needed = 1, uses_anonymous_args = 0
+  55 0000 80B5     		push	{r7, lr}
+  56              	.LCFI0:
+  57              		.cfi_def_cfa_offset 8
+  58              		.cfi_offset 7, -8
+  59              		.cfi_offset 14, -4
+  60 0002 88B0     		sub	sp, sp, #32
+  61              	.LCFI1:
+  62              		.cfi_def_cfa_offset 40
+  63 0004 04AF     		add	r7, sp, #16
+  64              	.LCFI2:
+  65              		.cfi_def_cfa 7, 24
+  66 0006 7860     		str	r0, [r7, #4]
+ 126:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** UBaseType_t *puxPriority;
+ 127:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 128:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	/* Create the Creator tasks - passing in as a parameter the priority at which
+ 129:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	the suicidal tasks should be created. */
+ 130:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	puxPriority = ( UBaseType_t * ) pvPortMalloc( sizeof( UBaseType_t ) );
+  67              		.loc 1 130 0
+  68 0008 0420     		movs	r0, #4
+  69 000a FFF7FEFF 		bl	pvPortMalloc
+  70 000e F860     		str	r0, [r7, #12]
+ 131:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	*puxPriority = uxPriority;
+  71              		.loc 1 131 0
+  72 0010 FB68     		ldr	r3, [r7, #12]
+  73 0012 7A68     		ldr	r2, [r7, #4]
+  74 0014 1A60     		str	r2, [r3]
+ 132:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 133:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	xTaskCreate( vCreateTasks, "CREATOR", deathSTACK_SIZE, ( void * ) puxPriority, uxPriority, NULL );
+  75              		.loc 1 133 0
+  76 0016 7B68     		ldr	r3, [r7, #4]
+  77 0018 0093     		str	r3, [sp]
+  78 001a 0023     		movs	r3, #0
+  79 001c 0193     		str	r3, [sp, #4]
+  80 001e 0023     		movs	r3, #0
+  81 0020 0293     		str	r3, [sp, #8]
+  82 0022 0023     		movs	r3, #0
+  83 0024 0393     		str	r3, [sp, #12]
+  84 0026 40F20000 		movw	r0, #:lower16:vCreateTasks
+  85 002a C0F20000 		movt	r0, #:upper16:vCreateTasks
+  86 002e 40F20001 		movw	r1, #:lower16:.LC0
+  87 0032 C0F20001 		movt	r1, #:upper16:.LC0
+  88 0036 BE22     		movs	r2, #190
+  89 0038 FB68     		ldr	r3, [r7, #12]
+  90 003a FFF7FEFF 		bl	xTaskGenericCreate
+ 134:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 135:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	/* Record the number of tasks that are running now so we know if any of the
+ 136:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	suicidal tasks have failed to be killed. */
+ 137:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	uxTasksRunningAtStart = ( UBaseType_t ) uxTaskGetNumberOfTasks();
+  91              		.loc 1 137 0
+  92 003e FFF7FEFF 		bl	uxTaskGetNumberOfTasks
+  93 0042 0246     		mov	r2, r0
+  94 0044 40F20003 		movw	r3, #:lower16:uxTasksRunningAtStart
+  95 0048 C0F20003 		movt	r3, #:upper16:uxTasksRunningAtStart
+  96 004c 1A60     		str	r2, [r3]
+ 138:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	
+ 139:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	/* FreeRTOS.org versions before V3.0 started the idle-task as the very
+ 140:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	first task. The idle task was then already included in uxTasksRunningAtStart.
+ 141:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	From FreeRTOS V3.0 on, the idle task is started when the scheduler is
+ 142:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	started. Therefore the idle task is not yet accounted for. We correct
+ 143:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	this by increasing uxTasksRunningAtStart by 1. */
+ 144:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	uxTasksRunningAtStart++;
+  97              		.loc 1 144 0
+  98 004e 40F20003 		movw	r3, #:lower16:uxTasksRunningAtStart
+  99 0052 C0F20003 		movt	r3, #:upper16:uxTasksRunningAtStart
+ 100 0056 1B68     		ldr	r3, [r3]
+ 101 0058 5A1C     		adds	r2, r3, #1
+ 102 005a 40F20003 		movw	r3, #:lower16:uxTasksRunningAtStart
+ 103 005e C0F20003 		movt	r3, #:upper16:uxTasksRunningAtStart
+ 104 0062 1A60     		str	r2, [r3]
+ 145:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	
+ 146:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	/* From FreeRTOS version 7.0.0 can optionally create a timer service task.  
+ 147:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	If this is done, then uxTasksRunningAtStart needs incrementing again as that
+ 148:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	too is created when the scheduler is started. */
+ 149:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	#if configUSE_TIMERS == 1
+ 150:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		uxTasksRunningAtStart++;
+ 105              		.loc 1 150 0
+ 106 0064 40F20003 		movw	r3, #:lower16:uxTasksRunningAtStart
+ 107 0068 C0F20003 		movt	r3, #:upper16:uxTasksRunningAtStart
+ 108 006c 1B68     		ldr	r3, [r3]
+ 109 006e 5A1C     		adds	r2, r3, #1
+ 110 0070 40F20003 		movw	r3, #:lower16:uxTasksRunningAtStart
+ 111 0074 C0F20003 		movt	r3, #:upper16:uxTasksRunningAtStart
+ 112 0078 1A60     		str	r2, [r3]
+ 151:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	#endif
+ 152:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** }
+ 113              		.loc 1 152 0
+ 114 007a 1037     		adds	r7, r7, #16
+ 115 007c BD46     		mov	sp, r7
+ 116              		@ sp needed
+ 117 007e 80BD     		pop	{r7, pc}
+ 118              		.cfi_endproc
+ 119              	.LFE1:
+ 121              		.section	.text.vSuicidalTask,"ax",%progbits
+ 122              		.align	2
+ 123              		.thumb
+ 124              		.thumb_func
+ 126              	vSuicidalTask:
+ 127              	.LFB2:
+ 153:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /*-----------------------------------------------------------*/
+ 154:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 					
+ 155:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** static portTASK_FUNCTION( vSuicidalTask, pvParameters )
+ 156:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** {
+ 128              		.loc 1 156 0
+ 129              		.cfi_startproc
+ 130              		@ args = 0, pretend = 0, frame = 24
+ 131              		@ frame_needed = 1, uses_anonymous_args = 0
+ 132 0000 80B5     		push	{r7, lr}
+ 133              	.LCFI3:
+ 134              		.cfi_def_cfa_offset 8
+ 135              		.cfi_offset 7, -8
+ 136              		.cfi_offset 14, -4
+ 137 0002 86B0     		sub	sp, sp, #24
+ 138              	.LCFI4:
+ 139              		.cfi_def_cfa_offset 32
+ 140 0004 00AF     		add	r7, sp, #0
+ 141              	.LCFI5:
+ 142              		.cfi_def_cfa_register 7
+ 143 0006 7860     		str	r0, [r7, #4]
+ 157:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** volatile long l1, l2;
+ 158:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** TaskHandle_t xTaskToKill;
+ 159:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** const TickType_t xDelay = ( TickType_t ) 200 / portTICK_PERIOD_MS;
+ 144              		.loc 1 159 0
+ 145 0008 C823     		movs	r3, #200
+ 146 000a 3B61     		str	r3, [r7, #16]
+ 160:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 161:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	if( pvParameters != NULL )
+ 147              		.loc 1 161 0
+ 148 000c 7B68     		ldr	r3, [r7, #4]
+ 149 000e 002B     		cmp	r3, #0
+ 150 0010 03D0     		beq	.L3
+ 162:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	{
+ 163:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		/* This task is periodically created four times.  Two created tasks are
+ 164:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		passed a handle to the other task so it can kill it before killing itself.
+ 165:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		The other task is passed in null. */
+ 166:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		xTaskToKill = *( TaskHandle_t* )pvParameters;
+ 151              		.loc 1 166 0
+ 152 0012 7B68     		ldr	r3, [r7, #4]
+ 153 0014 1B68     		ldr	r3, [r3]
+ 154 0016 7B61     		str	r3, [r7, #20]
+ 155 0018 01E0     		b	.L4
+ 156              	.L3:
+ 167:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	}
+ 168:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	else
+ 169:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	{
+ 170:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		xTaskToKill = NULL;
+ 157              		.loc 1 170 0
+ 158 001a 0023     		movs	r3, #0
+ 159 001c 7B61     		str	r3, [r7, #20]
+ 160              	.L4:
+ 171:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	}
+ 172:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 173:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	for( ;; )
+ 174:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	{
+ 175:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		/* Do something random just to use some stack and registers. */
+ 176:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		l1 = 2;
+ 161              		.loc 1 176 0
+ 162 001e 0223     		movs	r3, #2
+ 163 0020 FB60     		str	r3, [r7, #12]
+ 177:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		l2 = 89;
+ 164              		.loc 1 177 0
+ 165 0022 5923     		movs	r3, #89
+ 166 0024 BB60     		str	r3, [r7, #8]
+ 178:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		l2 *= l1;
+ 167              		.loc 1 178 0
+ 168 0026 BB68     		ldr	r3, [r7, #8]
+ 169 0028 FA68     		ldr	r2, [r7, #12]
+ 170 002a 02FB03F3 		mul	r3, r2, r3
+ 171 002e BB60     		str	r3, [r7, #8]
+ 179:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		vTaskDelay( xDelay );
+ 172              		.loc 1 179 0
+ 173 0030 3869     		ldr	r0, [r7, #16]
+ 174 0032 FFF7FEFF 		bl	vTaskDelay
+ 180:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 181:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		if( xTaskToKill != NULL )
+ 175              		.loc 1 181 0
+ 176 0036 7B69     		ldr	r3, [r7, #20]
+ 177 0038 002B     		cmp	r3, #0
+ 178 003a 09D0     		beq	.L5
+ 182:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		{
+ 183:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 			/* Make sure the other task has a go before we delete it. */
+ 184:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 			vTaskDelay( ( TickType_t ) 0 );
+ 179              		.loc 1 184 0
+ 180 003c 0020     		movs	r0, #0
+ 181 003e FFF7FEFF 		bl	vTaskDelay
+ 185:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 186:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 			/* Kill the other task that was created by vCreateTasks(). */
+ 187:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 			vTaskDelete( xTaskToKill );
+ 182              		.loc 1 187 0
+ 183 0042 7869     		ldr	r0, [r7, #20]
+ 184 0044 FFF7FEFF 		bl	vTaskDelete
+ 188:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 189:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 			/* Kill ourselves. */
+ 190:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 			vTaskDelete( NULL );
+ 185              		.loc 1 190 0
+ 186 0048 0020     		movs	r0, #0
+ 187 004a FFF7FEFF 		bl	vTaskDelete
+ 191:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		}
+ 192:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	}
+ 188              		.loc 1 192 0
+ 189 004e E6E7     		b	.L4
+ 190              	.L5:
+ 191 0050 E5E7     		b	.L4
+ 192              		.cfi_endproc
+ 193              	.LFE2:
+ 195 0052 00BF     		.section	.rodata
+ 196              		.align	2
+ 197              	.LC1:
+ 198 0008 53554943 		.ascii	"SUICID1\000"
+ 198      49443100 
+ 199              		.align	2
+ 200              	.LC2:
+ 201 0010 53554943 		.ascii	"SUICID2\000"
+ 201      49443200 
+ 202              		.section	.text.vCreateTasks,"ax",%progbits
+ 203              		.align	2
+ 204              		.thumb
+ 205              		.thumb_func
+ 207              	vCreateTasks:
+ 208              	.LFB3:
+ 193:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** }/*lint !e818 !e550 Function prototype must be as per standard for task functions. */
+ 194:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /*-----------------------------------------------------------*/
+ 195:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 196:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** static portTASK_FUNCTION( vCreateTasks, pvParameters )
+ 197:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** {
+ 209              		.loc 1 197 0
+ 210              		.cfi_startproc
+ 211              		@ args = 0, pretend = 0, frame = 16
+ 212              		@ frame_needed = 1, uses_anonymous_args = 0
+ 213 0000 80B5     		push	{r7, lr}
+ 214              	.LCFI6:
+ 215              		.cfi_def_cfa_offset 8
+ 216              		.cfi_offset 7, -8
+ 217              		.cfi_offset 14, -4
+ 218 0002 88B0     		sub	sp, sp, #32
+ 219              	.LCFI7:
+ 220              		.cfi_def_cfa_offset 40
+ 221 0004 04AF     		add	r7, sp, #16
+ 222              	.LCFI8:
+ 223              		.cfi_def_cfa 7, 24
+ 224 0006 7860     		str	r0, [r7, #4]
+ 198:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** const TickType_t xDelay = ( TickType_t ) 1000 / portTICK_PERIOD_MS;
+ 225              		.loc 1 198 0
+ 226 0008 4FF47A73 		mov	r3, #1000
+ 227 000c FB60     		str	r3, [r7, #12]
+ 199:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** UBaseType_t uxPriority;
+ 200:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 201:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	uxPriority = *( UBaseType_t * ) pvParameters;
+ 228              		.loc 1 201 0
+ 229 000e 7B68     		ldr	r3, [r7, #4]
+ 230 0010 1B68     		ldr	r3, [r3]
+ 231 0012 BB60     		str	r3, [r7, #8]
+ 202:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	vPortFree( pvParameters );
+ 232              		.loc 1 202 0
+ 233 0014 7868     		ldr	r0, [r7, #4]
+ 234 0016 FFF7FEFF 		bl	vPortFree
+ 235              	.L7:
+ 203:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 204:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	for( ;; )
+ 205:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	{
+ 206:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		/* Just loop round, delaying then creating the four suicidal tasks. */
+ 207:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		vTaskDelay( xDelay );
+ 236              		.loc 1 207 0 discriminator 1
+ 237 001a F868     		ldr	r0, [r7, #12]
+ 238 001c FFF7FEFF 		bl	vTaskDelay
+ 208:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 209:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		xCreatedTask = NULL;
+ 239              		.loc 1 209 0 discriminator 1
+ 240 0020 40F20003 		movw	r3, #:lower16:xCreatedTask
+ 241 0024 C0F20003 		movt	r3, #:upper16:xCreatedTask
+ 242 0028 0022     		movs	r2, #0
+ 243 002a 1A60     		str	r2, [r3]
+ 210:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 211:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		xTaskCreate( vSuicidalTask, "SUICID1", configMINIMAL_STACK_SIZE, NULL, uxPriority, &xCreatedTask 
+ 244              		.loc 1 211 0 discriminator 1
+ 245 002c BB68     		ldr	r3, [r7, #8]
+ 246 002e 0093     		str	r3, [sp]
+ 247 0030 40F20003 		movw	r3, #:lower16:xCreatedTask
+ 248 0034 C0F20003 		movt	r3, #:upper16:xCreatedTask
+ 249 0038 0193     		str	r3, [sp, #4]
+ 250 003a 0023     		movs	r3, #0
+ 251 003c 0293     		str	r3, [sp, #8]
+ 252 003e 0023     		movs	r3, #0
+ 253 0040 0393     		str	r3, [sp, #12]
+ 254 0042 40F20000 		movw	r0, #:lower16:vSuicidalTask
+ 255 0046 C0F20000 		movt	r0, #:upper16:vSuicidalTask
+ 256 004a 40F20001 		movw	r1, #:lower16:.LC1
+ 257 004e C0F20001 		movt	r1, #:upper16:.LC1
+ 258 0052 8222     		movs	r2, #130
+ 259 0054 0023     		movs	r3, #0
+ 260 0056 FFF7FEFF 		bl	xTaskGenericCreate
+ 212:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		xTaskCreate( vSuicidalTask, "SUICID2", configMINIMAL_STACK_SIZE, &xCreatedTask, uxPriority, NULL 
+ 261              		.loc 1 212 0 discriminator 1
+ 262 005a BB68     		ldr	r3, [r7, #8]
+ 263 005c 0093     		str	r3, [sp]
+ 264 005e 0023     		movs	r3, #0
+ 265 0060 0193     		str	r3, [sp, #4]
+ 266 0062 0023     		movs	r3, #0
+ 267 0064 0293     		str	r3, [sp, #8]
+ 268 0066 0023     		movs	r3, #0
+ 269 0068 0393     		str	r3, [sp, #12]
+ 270 006a 40F20000 		movw	r0, #:lower16:vSuicidalTask
+ 271 006e C0F20000 		movt	r0, #:upper16:vSuicidalTask
+ 272 0072 40F20001 		movw	r1, #:lower16:.LC2
+ 273 0076 C0F20001 		movt	r1, #:upper16:.LC2
+ 274 007a 8222     		movs	r2, #130
+ 275 007c 40F20003 		movw	r3, #:lower16:xCreatedTask
+ 276 0080 C0F20003 		movt	r3, #:upper16:xCreatedTask
+ 277 0084 FFF7FEFF 		bl	xTaskGenericCreate
+ 213:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 214:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		++usCreationCount;
+ 278              		.loc 1 214 0 discriminator 1
+ 279 0088 40F20003 		movw	r3, #:lower16:usCreationCount
+ 280 008c C0F20003 		movt	r3, #:upper16:usCreationCount
+ 281 0090 1B88     		ldrh	r3, [r3]	@ movhi
+ 282 0092 9BB2     		uxth	r3, r3
+ 283 0094 0133     		adds	r3, r3, #1
+ 284 0096 9AB2     		uxth	r2, r3
+ 285 0098 40F20003 		movw	r3, #:lower16:usCreationCount
+ 286 009c C0F20003 		movt	r3, #:upper16:usCreationCount
+ 287 00a0 1A80     		strh	r2, [r3]	@ movhi
+ 215:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	}
+ 288              		.loc 1 215 0 discriminator 1
+ 289 00a2 BAE7     		b	.L7
+ 290              		.cfi_endproc
+ 291              	.LFE3:
+ 293              		.section	.text.xIsCreateTaskStillRunning,"ax",%progbits
+ 294              		.align	2
+ 295              		.global	xIsCreateTaskStillRunning
+ 296              		.thumb
+ 297              		.thumb_func
+ 299              	xIsCreateTaskStillRunning:
+ 300              	.LFB4:
+ 216:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** }
+ 217:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /*-----------------------------------------------------------*/
+ 218:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 219:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** /* This is called to check that the creator task is still running and that there
+ 220:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** are not any more than four extra tasks. */
+ 221:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** BaseType_t xIsCreateTaskStillRunning( void )
+ 222:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** {
+ 301              		.loc 1 222 0
+ 302              		.cfi_startproc
+ 303              		@ args = 0, pretend = 0, frame = 8
+ 304              		@ frame_needed = 1, uses_anonymous_args = 0
+ 305 0000 80B5     		push	{r7, lr}
+ 306              	.LCFI9:
+ 307              		.cfi_def_cfa_offset 8
+ 308              		.cfi_offset 7, -8
+ 309              		.cfi_offset 14, -4
+ 310 0002 82B0     		sub	sp, sp, #8
+ 311              	.LCFI10:
+ 312              		.cfi_def_cfa_offset 16
+ 313 0004 00AF     		add	r7, sp, #0
+ 314              	.LCFI11:
+ 315              		.cfi_def_cfa_register 7
+ 223:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** static uint16_t usLastCreationCount = 0xfff;
+ 224:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** BaseType_t xReturn = pdTRUE;
+ 316              		.loc 1 224 0
+ 317 0006 0123     		movs	r3, #1
+ 318 0008 7B60     		str	r3, [r7, #4]
+ 225:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** static UBaseType_t uxTasksRunningNow;
+ 226:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 227:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	if( usLastCreationCount == usCreationCount )
+ 319              		.loc 1 227 0
+ 320 000a 40F20003 		movw	r3, #:lower16:usLastCreationCount.4928
+ 321 000e C0F20003 		movt	r3, #:upper16:usLastCreationCount.4928
+ 322 0012 1A88     		ldrh	r2, [r3]
+ 323 0014 40F20003 		movw	r3, #:lower16:usCreationCount
+ 324 0018 C0F20003 		movt	r3, #:upper16:usCreationCount
+ 325 001c 1B88     		ldrh	r3, [r3]	@ movhi
+ 326 001e 9BB2     		uxth	r3, r3
+ 327 0020 9A42     		cmp	r2, r3
+ 328 0022 02D1     		bne	.L9
+ 228:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	{
+ 229:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		xReturn = pdFALSE;
+ 329              		.loc 1 229 0
+ 330 0024 0023     		movs	r3, #0
+ 331 0026 7B60     		str	r3, [r7, #4]
+ 332 0028 0AE0     		b	.L10
+ 333              	.L9:
+ 230:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	}
+ 231:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	else
+ 232:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	{
+ 233:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		usLastCreationCount = usCreationCount;
+ 334              		.loc 1 233 0
+ 335 002a 40F20003 		movw	r3, #:lower16:usCreationCount
+ 336 002e C0F20003 		movt	r3, #:upper16:usCreationCount
+ 337 0032 1B88     		ldrh	r3, [r3]	@ movhi
+ 338 0034 9AB2     		uxth	r2, r3
+ 339 0036 40F20003 		movw	r3, #:lower16:usLastCreationCount.4928
+ 340 003a C0F20003 		movt	r3, #:upper16:usLastCreationCount.4928
+ 341 003e 1A80     		strh	r2, [r3]	@ movhi
+ 342              	.L10:
+ 234:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	}
+ 235:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	
+ 236:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	uxTasksRunningNow = ( UBaseType_t ) uxTaskGetNumberOfTasks();
+ 343              		.loc 1 236 0
+ 344 0040 FFF7FEFF 		bl	uxTaskGetNumberOfTasks
+ 345 0044 0246     		mov	r2, r0
+ 346 0046 40F20003 		movw	r3, #:lower16:uxTasksRunningNow.4930
+ 347 004a C0F20003 		movt	r3, #:upper16:uxTasksRunningNow.4930
+ 348 004e 1A60     		str	r2, [r3]
+ 237:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 238:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	if( uxTasksRunningNow < uxTasksRunningAtStart )
+ 349              		.loc 1 238 0
+ 350 0050 40F20003 		movw	r3, #:lower16:uxTasksRunningNow.4930
+ 351 0054 C0F20003 		movt	r3, #:upper16:uxTasksRunningNow.4930
+ 352 0058 1A68     		ldr	r2, [r3]
+ 353 005a 40F20003 		movw	r3, #:lower16:uxTasksRunningAtStart
+ 354 005e C0F20003 		movt	r3, #:upper16:uxTasksRunningAtStart
+ 355 0062 1B68     		ldr	r3, [r3]
+ 356 0064 9A42     		cmp	r2, r3
+ 357 0066 02D2     		bcs	.L11
+ 239:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	{
+ 240:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		xReturn = pdFALSE;
+ 358              		.loc 1 240 0
+ 359 0068 0023     		movs	r3, #0
+ 360 006a 7B60     		str	r3, [r7, #4]
+ 361 006c 0FE0     		b	.L12
+ 362              	.L11:
+ 241:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	}
+ 242:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	else if( ( uxTasksRunningNow - uxTasksRunningAtStart ) > uxMaxNumberOfExtraTasksRunning )
+ 363              		.loc 1 242 0
+ 364 006e 40F20003 		movw	r3, #:lower16:uxTasksRunningNow.4930
+ 365 0072 C0F20003 		movt	r3, #:upper16:uxTasksRunningNow.4930
+ 366 0076 1A68     		ldr	r2, [r3]
+ 367 0078 40F20003 		movw	r3, #:lower16:uxTasksRunningAtStart
+ 368 007c C0F20003 		movt	r3, #:upper16:uxTasksRunningAtStart
+ 369 0080 1B68     		ldr	r3, [r3]
+ 370 0082 D21A     		subs	r2, r2, r3
+ 371 0084 0323     		movs	r3, #3
+ 372 0086 9A42     		cmp	r2, r3
+ 373 0088 01D9     		bls	.L12
+ 243:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	{
+ 244:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		xReturn = pdFALSE;
+ 374              		.loc 1 244 0
+ 375 008a 0023     		movs	r3, #0
+ 376 008c 7B60     		str	r3, [r7, #4]
+ 377              	.L12:
+ 245:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	}
+ 246:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	else
+ 247:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	{
+ 248:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 		/* Everything is okay. */
+ 249:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	}
+ 250:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 
+ 251:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** 	return xReturn;
+ 378              		.loc 1 251 0
+ 379 008e 7B68     		ldr	r3, [r7, #4]
+ 252:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/death.c **** }
+ 380              		.loc 1 252 0
+ 381 0090 1846     		mov	r0, r3
+ 382 0092 0837     		adds	r7, r7, #8
+ 383 0094 BD46     		mov	sp, r7
+ 384              		@ sp needed
+ 385 0096 80BD     		pop	{r7, pc}
+ 386              		.cfi_endproc
+ 387              	.LFE4:
+ 389              		.section	.data.usLastCreationCount.4928,"aw",%progbits
+ 390              		.align	1
+ 393              	usLastCreationCount.4928:
+ 394 0000 FF0F     		.short	4095
+ 395              		.section	.bss.uxTasksRunningNow.4930,"aw",%nobits
+ 396              		.align	2
+ 399              	uxTasksRunningNow.4930:
+ 400 0000 00000000 		.space	4
+ 401              		.text
+ 402              	.Letext0:
+ 403              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 404              		.file 3 "/usr/include/newlib/stdint.h"
+ 405              		.file 4 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 406              		.file 5 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/task.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 death.c
+     /tmp/ccbEBO8Z.s:20     .bss.usCreationCount:00000000 $d
+     /tmp/ccbEBO8Z.s:23     .bss.usCreationCount:00000000 usCreationCount
+     /tmp/ccbEBO8Z.s:26     .bss.uxTasksRunningAtStart:00000000 $d
+     /tmp/ccbEBO8Z.s:29     .bss.uxTasksRunningAtStart:00000000 uxTasksRunningAtStart
+     /tmp/ccbEBO8Z.s:32     .rodata.uxMaxNumberOfExtraTasksRunning:00000000 $d
+     /tmp/ccbEBO8Z.s:35     .rodata.uxMaxNumberOfExtraTasksRunning:00000000 uxMaxNumberOfExtraTasksRunning
+                            *COM*:00000004 xCreatedTask
+     /tmp/ccbEBO8Z.s:39     .rodata:00000000 $d
+     /tmp/ccbEBO8Z.s:40     .rodata:00000000 .LC0
+     /tmp/ccbEBO8Z.s:43     .text.vCreateSuicidalTasks:00000000 $t
+     /tmp/ccbEBO8Z.s:48     .text.vCreateSuicidalTasks:00000000 vCreateSuicidalTasks
+     /tmp/ccbEBO8Z.s:207    .text.vCreateTasks:00000000 vCreateTasks
+     /tmp/ccbEBO8Z.s:122    .text.vSuicidalTask:00000000 $t
+     /tmp/ccbEBO8Z.s:126    .text.vSuicidalTask:00000000 vSuicidalTask
+     /tmp/ccbEBO8Z.s:197    .rodata:00000008 .LC1
+     /tmp/ccbEBO8Z.s:200    .rodata:00000010 .LC2
+     /tmp/ccbEBO8Z.s:203    .text.vCreateTasks:00000000 $t
+     /tmp/ccbEBO8Z.s:294    .text.xIsCreateTaskStillRunning:00000000 $t
+     /tmp/ccbEBO8Z.s:299    .text.xIsCreateTaskStillRunning:00000000 xIsCreateTaskStillRunning
+     /tmp/ccbEBO8Z.s:393    .data.usLastCreationCount.4928:00000000 usLastCreationCount.4928
+     /tmp/ccbEBO8Z.s:399    .bss.uxTasksRunningNow.4930:00000000 uxTasksRunningNow.4930
+     /tmp/ccbEBO8Z.s:390    .data.usLastCreationCount.4928:00000000 $d
+     /tmp/ccbEBO8Z.s:396    .bss.uxTasksRunningNow.4930:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+pvPortMalloc
+xTaskGenericCreate
+uxTaskGetNumberOfTasks
+vTaskDelay
+vTaskDelete
+vPortFree

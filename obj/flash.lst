@@ -1,0 +1,344 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 3
+   4              		.fpu fpv4-sp-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.file	"flash.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.bss.uxFlashTaskNumber,"aw",%nobits
+  20              		.align	2
+  23              	uxFlashTaskNumber:
+  24 0000 00000000 		.space	4
+  25              		.section	.rodata
+  26              		.align	2
+  27              	.LC0:
+  28 0000 4C454478 		.ascii	"LEDx\000"
+  28      00
+  29 0005 000000   		.section	.text.vStartLEDFlashTasks,"ax",%progbits
+  30              		.align	2
+  31              		.global	vStartLEDFlashTasks
+  32              		.thumb
+  33              		.thumb_func
+  35              	vStartLEDFlashTasks:
+  36              	.LFB1:
+  37              		.file 1 "lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c"
+   1:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** /*
+   2:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     FreeRTOS V8.1.2 - Copyright (C) 2014 Real Time Engineers Ltd. 
+   3:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     All rights reserved
+   4:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+   5:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
+   6:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+   7:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     ***************************************************************************
+   8:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *                                                                       *
+   9:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *    FreeRTOS provides completely free yet professionally developed,    *
+  10:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *    robust, strictly quality controlled, supported, and cross          *
+  11:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *    platform software that has become a de facto standard.             *
+  12:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *                                                                       *
+  13:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *    Help yourself get started quickly and support the FreeRTOS         *
+  14:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *    project by purchasing a FreeRTOS tutorial book, reference          *
+  15:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
+  16:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *                                                                       *
+  17:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *    Thank you!                                                         *
+  18:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *                                                                       *
+  19:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     ***************************************************************************
+  20:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  21:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     This file is part of the FreeRTOS distribution.
+  22:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  23:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  24:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     the terms of the GNU General Public License (version 2) as published by the
+  25:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+  26:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  27:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     >>!   NOTE: The modification to the GPL is included to allow you to     !<<
+  28:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     >>!   distribute a combined work that includes FreeRTOS without being   !<<
+  29:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     >>!   obliged to provide the source code for proprietary components     !<<
+  30:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     >>!   outside of the FreeRTOS kernel.                                   !<<
+  31:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  32:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
+  33:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  34:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     FOR A PARTICULAR PURPOSE.  Full license text is available from the following
+  35:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     link: http://www.freertos.org/a00114.html
+  36:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  37:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     1 tab == 4 spaces!
+  38:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  39:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     ***************************************************************************
+  40:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *                                                                       *
+  41:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *    Having a problem?  Start by reading the FAQ "My application does   *
+  42:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *    not run, what could be wrong?"                                     *
+  43:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *                                                                       *
+  44:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *    http://www.FreeRTOS.org/FAQHelp.html                               *
+  45:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****      *                                                                       *
+  46:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     ***************************************************************************
+  47:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  48:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     http://www.FreeRTOS.org - Documentation, books, training, latest versions,
+  49:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     license and Real Time Engineers Ltd. contact details.
+  50:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  51:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
+  52:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     including FreeRTOS+Trace - an indispensable productivity tool, a DOS
+  53:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     compatible FAT file system, and our tiny thread aware UDP/IP stack.
+  54:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  55:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
+  56:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     Integrity Systems to sell under the OpenRTOS brand.  Low cost OpenRTOS
+  57:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     licenses offer ticketed support, indemnification and middleware.
+  58:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  59:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     http://www.SafeRTOS.com - High Integrity Systems also provide a safety
+  60:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     engineered and independently SIL3 certified version for use in safety and
+  61:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     mission critical applications that require provable dependability.
+  62:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  63:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****     1 tab == 4 spaces!
+  64:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** */
+  65:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  66:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** /**
+  67:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****  * This version of flash .c is for use on systems that have limited stack space
+  68:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****  * and no display facilities.  The complete version can be found in the 
+  69:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****  * Demo/Common/Full directory.
+  70:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****  * 
+  71:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****  * Three tasks are created, each of which flash an LED at a different rate.  The first 
+  72:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****  * LED flashes every 200ms, the second every 400ms, the third every 600ms.
+  73:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****  *
+  74:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****  * The LED flash tasks provide instant visual feedback.  They show that the scheduler 
+  75:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****  * is still operational.
+  76:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****  *
+  77:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c ****  */
+  78:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  79:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  80:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** #include <stdlib.h>
+  81:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  82:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** /* Scheduler include files. */
+  83:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** #include "FreeRTOS.h"
+  84:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** #include "task.h"
+  85:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  86:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** /* Demo program include files. */
+  87:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** #include "partest.h"
+  88:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** #include "flash.h"
+  89:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  90:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** #define ledSTACK_SIZE		configMINIMAL_STACK_SIZE
+  91:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** #define ledNUMBER_OF_LEDS	( 3 )
+  92:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** #define ledFLASH_RATE_BASE	( ( TickType_t ) 333 )
+  93:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  94:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** /* Variable used by the created tasks to calculate the LED number to use, and
+  95:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** the rate at which they should flash the LED. */
+  96:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** static volatile UBaseType_t uxFlashTaskNumber = 0;
+  97:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+  98:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** /* The task that is created three times. */
+  99:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** static portTASK_FUNCTION_PROTO( vLEDFlashTask, pvParameters );
+ 100:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+ 101:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** /*-----------------------------------------------------------*/
+ 102:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+ 103:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** void vStartLEDFlashTasks( UBaseType_t uxPriority )
+ 104:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** {
+  38              		.loc 1 104 0
+  39              		.cfi_startproc
+  40              		@ args = 0, pretend = 0, frame = 16
+  41              		@ frame_needed = 1, uses_anonymous_args = 0
+  42 0000 80B5     		push	{r7, lr}
+  43              	.LCFI0:
+  44              		.cfi_def_cfa_offset 8
+  45              		.cfi_offset 7, -8
+  46              		.cfi_offset 14, -4
+  47 0002 88B0     		sub	sp, sp, #32
+  48              	.LCFI1:
+  49              		.cfi_def_cfa_offset 40
+  50 0004 04AF     		add	r7, sp, #16
+  51              	.LCFI2:
+  52              		.cfi_def_cfa 7, 24
+  53 0006 7860     		str	r0, [r7, #4]
+ 105:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** BaseType_t xLEDTask;
+ 106:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+ 107:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	/* Create the three tasks. */
+ 108:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	for( xLEDTask = 0; xLEDTask < ledNUMBER_OF_LEDS; ++xLEDTask )
+  54              		.loc 1 108 0
+  55 0008 0023     		movs	r3, #0
+  56 000a FB60     		str	r3, [r7, #12]
+  57 000c 16E0     		b	.L2
+  58              	.L3:
+ 109:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	{
+ 110:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 		/* Spawn the task. */
+ 111:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 		xTaskCreate( vLEDFlashTask, "LEDx", ledSTACK_SIZE, NULL, uxPriority, ( TaskHandle_t * ) NULL );
+  59              		.loc 1 111 0 discriminator 2
+  60 000e 7B68     		ldr	r3, [r7, #4]
+  61 0010 0093     		str	r3, [sp]
+  62 0012 0023     		movs	r3, #0
+  63 0014 0193     		str	r3, [sp, #4]
+  64 0016 0023     		movs	r3, #0
+  65 0018 0293     		str	r3, [sp, #8]
+  66 001a 0023     		movs	r3, #0
+  67 001c 0393     		str	r3, [sp, #12]
+  68 001e 40F20000 		movw	r0, #:lower16:vLEDFlashTask
+  69 0022 C0F20000 		movt	r0, #:upper16:vLEDFlashTask
+  70 0026 40F20001 		movw	r1, #:lower16:.LC0
+  71 002a C0F20001 		movt	r1, #:upper16:.LC0
+  72 002e 8222     		movs	r2, #130
+  73 0030 0023     		movs	r3, #0
+  74 0032 FFF7FEFF 		bl	xTaskGenericCreate
+ 108:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	{
+  75              		.loc 1 108 0 discriminator 2
+  76 0036 FB68     		ldr	r3, [r7, #12]
+  77 0038 0133     		adds	r3, r3, #1
+  78 003a FB60     		str	r3, [r7, #12]
+  79              	.L2:
+ 108:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	{
+  80              		.loc 1 108 0 is_stmt 0 discriminator 1
+  81 003c FB68     		ldr	r3, [r7, #12]
+  82 003e 022B     		cmp	r3, #2
+  83 0040 E5DD     		ble	.L3
+ 112:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	}
+ 113:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** }
+  84              		.loc 1 113 0 is_stmt 1
+  85 0042 1037     		adds	r7, r7, #16
+  86 0044 BD46     		mov	sp, r7
+  87              		@ sp needed
+  88 0046 80BD     		pop	{r7, pc}
+  89              		.cfi_endproc
+  90              	.LFE1:
+  92              		.section	.text.vLEDFlashTask,"ax",%progbits
+  93              		.align	2
+  94              		.thumb
+  95              		.thumb_func
+  97              	vLEDFlashTask:
+  98              	.LFB2:
+ 114:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** /*-----------------------------------------------------------*/
+ 115:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+ 116:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** static portTASK_FUNCTION( vLEDFlashTask, pvParameters )
+ 117:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** {
+  99              		.loc 1 117 0
+ 100              		.cfi_startproc
+ 101              		@ args = 0, pretend = 0, frame = 24
+ 102              		@ frame_needed = 1, uses_anonymous_args = 0
+ 103 0000 80B5     		push	{r7, lr}
+ 104              	.LCFI3:
+ 105              		.cfi_def_cfa_offset 8
+ 106              		.cfi_offset 7, -8
+ 107              		.cfi_offset 14, -4
+ 108 0002 86B0     		sub	sp, sp, #24
+ 109              	.LCFI4:
+ 110              		.cfi_def_cfa_offset 32
+ 111 0004 00AF     		add	r7, sp, #0
+ 112              	.LCFI5:
+ 113              		.cfi_def_cfa_register 7
+ 114 0006 7860     		str	r0, [r7, #4]
+ 118:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** TickType_t xFlashRate, xLastFlashTime;
+ 119:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** UBaseType_t uxLED;
+ 120:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+ 121:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	/* The parameters are not used. */
+ 122:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	( void ) pvParameters;
+ 123:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+ 124:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	/* Calculate the LED and flash rate. */
+ 125:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	portENTER_CRITICAL();
+ 115              		.loc 1 125 0
+ 116 0008 FFF7FEFF 		bl	vPortEnterCritical
+ 126:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	{
+ 127:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 		/* See which of the eight LED's we should use. */
+ 128:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 		uxLED = uxFlashTaskNumber;
+ 117              		.loc 1 128 0
+ 118 000c 40F20003 		movw	r3, #:lower16:uxFlashTaskNumber
+ 119 0010 C0F20003 		movt	r3, #:upper16:uxFlashTaskNumber
+ 120 0014 1B68     		ldr	r3, [r3]
+ 121 0016 7B61     		str	r3, [r7, #20]
+ 129:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+ 130:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 		/* Update so the next task uses the next LED. */
+ 131:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 		uxFlashTaskNumber++;
+ 122              		.loc 1 131 0
+ 123 0018 40F20003 		movw	r3, #:lower16:uxFlashTaskNumber
+ 124 001c C0F20003 		movt	r3, #:upper16:uxFlashTaskNumber
+ 125 0020 1B68     		ldr	r3, [r3]
+ 126 0022 5A1C     		adds	r2, r3, #1
+ 127 0024 40F20003 		movw	r3, #:lower16:uxFlashTaskNumber
+ 128 0028 C0F20003 		movt	r3, #:upper16:uxFlashTaskNumber
+ 129 002c 1A60     		str	r2, [r3]
+ 132:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	}
+ 133:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	portEXIT_CRITICAL();
+ 130              		.loc 1 133 0
+ 131 002e FFF7FEFF 		bl	vPortExitCritical
+ 134:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+ 135:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	xFlashRate = ledFLASH_RATE_BASE + ( ledFLASH_RATE_BASE * ( TickType_t ) uxLED );
+ 132              		.loc 1 135 0
+ 133 0032 7B69     		ldr	r3, [r7, #20]
+ 134 0034 0133     		adds	r3, r3, #1
+ 135 0036 40F24D12 		movw	r2, #333
+ 136 003a 02FB03F3 		mul	r3, r2, r3
+ 137 003e 3B61     		str	r3, [r7, #16]
+ 136:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	xFlashRate /= portTICK_PERIOD_MS;
+ 137:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+ 138:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	/* We will turn the LED on and off again in the delay period, so each
+ 139:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	delay is only half the total period. */
+ 140:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	xFlashRate /= ( TickType_t ) 2;
+ 138              		.loc 1 140 0
+ 139 0040 3B69     		ldr	r3, [r7, #16]
+ 140 0042 5B08     		lsrs	r3, r3, #1
+ 141 0044 3B61     		str	r3, [r7, #16]
+ 141:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+ 142:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	/* We need to initialise xLastFlashTime prior to the first call to 
+ 143:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	vTaskDelayUntil(). */
+ 144:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	xLastFlashTime = xTaskGetTickCount();
+ 142              		.loc 1 144 0
+ 143 0046 FFF7FEFF 		bl	xTaskGetTickCount
+ 144 004a 0346     		mov	r3, r0
+ 145 004c FB60     		str	r3, [r7, #12]
+ 146              	.L5:
+ 145:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+ 146:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	for(;;)
+ 147:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	{
+ 148:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 		/* Delay for half the flash period then turn the LED on. */
+ 149:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 		vTaskDelayUntil( &xLastFlashTime, xFlashRate );
+ 147              		.loc 1 149 0 discriminator 1
+ 148 004e 07F10C03 		add	r3, r7, #12
+ 149 0052 1846     		mov	r0, r3
+ 150 0054 3969     		ldr	r1, [r7, #16]
+ 151 0056 FFF7FEFF 		bl	vTaskDelayUntil
+ 150:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 		vParTestToggleLED( uxLED );
+ 152              		.loc 1 150 0 discriminator 1
+ 153 005a 7869     		ldr	r0, [r7, #20]
+ 154 005c FFF7FEFF 		bl	vParTestToggleLED
+ 151:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 
+ 152:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 		/* Delay for half the flash period then turn the LED off. */
+ 153:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 		vTaskDelayUntil( &xLastFlashTime, xFlashRate );
+ 155              		.loc 1 153 0 discriminator 1
+ 156 0060 07F10C03 		add	r3, r7, #12
+ 157 0064 1846     		mov	r0, r3
+ 158 0066 3969     		ldr	r1, [r7, #16]
+ 159 0068 FFF7FEFF 		bl	vTaskDelayUntil
+ 154:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 		vParTestToggleLED( uxLED );
+ 160              		.loc 1 154 0 discriminator 1
+ 161 006c 7869     		ldr	r0, [r7, #20]
+ 162 006e FFF7FEFF 		bl	vParTestToggleLED
+ 155:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/flash.c **** 	}
+ 163              		.loc 1 155 0 discriminator 1
+ 164 0072 ECE7     		b	.L5
+ 165              		.cfi_endproc
+ 166              	.LFE2:
+ 168              		.text
+ 169              	.Letext0:
+ 170              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 171              		.file 3 "/usr/include/newlib/stdint.h"
+ 172              		.file 4 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 173              		.file 5 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/task.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 flash.c
+     /tmp/ccEdfrF6.s:20     .bss.uxFlashTaskNumber:00000000 $d
+     /tmp/ccEdfrF6.s:23     .bss.uxFlashTaskNumber:00000000 uxFlashTaskNumber
+     /tmp/ccEdfrF6.s:26     .rodata:00000000 $d
+     /tmp/ccEdfrF6.s:27     .rodata:00000000 .LC0
+     /tmp/ccEdfrF6.s:30     .text.vStartLEDFlashTasks:00000000 $t
+     /tmp/ccEdfrF6.s:35     .text.vStartLEDFlashTasks:00000000 vStartLEDFlashTasks
+     /tmp/ccEdfrF6.s:97     .text.vLEDFlashTask:00000000 vLEDFlashTask
+     /tmp/ccEdfrF6.s:93     .text.vLEDFlashTask:00000000 $t
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+xTaskGenericCreate
+vPortEnterCritical
+vPortExitCritical
+xTaskGetTickCount
+vTaskDelayUntil
+vParTestToggleLED

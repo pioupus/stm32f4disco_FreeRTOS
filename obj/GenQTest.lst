@@ -1,0 +1,2452 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 3
+   4              		.fpu fpv4-sp-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.file	"GenQTest.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.bss.xErrorDetected,"aw",%nobits
+  20              		.align	2
+  23              	xErrorDetected:
+  24 0000 00000000 		.space	4
+  25              		.section	.bss.ulLoopCounter,"aw",%nobits
+  26              		.align	2
+  29              	ulLoopCounter:
+  30 0000 00000000 		.space	4
+  31              		.section	.bss.ulLoopCounter2,"aw",%nobits
+  32              		.align	2
+  35              	ulLoopCounter2:
+  36 0000 00000000 		.space	4
+  37              		.section	.bss.ulGuardedVariable,"aw",%nobits
+  38              		.align	2
+  41              	ulGuardedVariable:
+  42 0000 00000000 		.space	4
+  43              		.section	.bss.xHighPriorityMutexTask,"aw",%nobits
+  44              		.align	2
+  47              	xHighPriorityMutexTask:
+  48 0000 00000000 		.space	4
+  49              		.section	.bss.xMediumPriorityMutexTask,"aw",%nobits
+  50              		.align	2
+  53              	xMediumPriorityMutexTask:
+  54 0000 00000000 		.space	4
+  55              		.section	.bss.xISRMutex,"aw",%nobits
+  56              		.align	2
+  59              	xISRMutex:
+  60 0000 00000000 		.space	4
+  61              		.section	.rodata
+  62              		.align	2
+  63              	.LC0:
+  64 0000 47656E5F 		.ascii	"Gen_Queue_Test\000"
+  64      51756575 
+  64      655F5465 
+  64      737400
+  65 000f 00       		.align	2
+  66              	.LC1:
+  67 0010 47656E51 		.ascii	"GenQ\000"
+  67      00
+  68 0015 000000   		.align	2
+  69              	.LC2:
+  70 0018 47656E5F 		.ascii	"Gen_Queue_Mutex\000"
+  70      51756575 
+  70      655F4D75 
+  70      74657800 
+  71              		.align	2
+  72              	.LC3:
+  73 0028 4D754C6F 		.ascii	"MuLow\000"
+  73      7700
+  74 002e 0000     		.align	2
+  75              	.LC4:
+  76 0030 4D754D65 		.ascii	"MuMed\000"
+  76      6400
+  77 0036 0000     		.align	2
+  78              	.LC5:
+  79 0038 4D754869 		.ascii	"MuHigh\000"
+  79      676800
+  80 003f 00       		.section	.text.vStartGenericQueueTasks,"ax",%progbits
+  81              		.align	2
+  82              		.global	vStartGenericQueueTasks
+  83              		.thumb
+  84              		.thumb_func
+  86              	vStartGenericQueueTasks:
+  87              	.LFB1:
+  88              		.file 1 "lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c"
+   1:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*
+   2:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     FreeRTOS V8.1.2 - Copyright (C) 2014 Real Time Engineers Ltd.
+   3:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     All rights reserved
+   4:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+   5:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
+   6:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+   7:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     ***************************************************************************
+   8:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *                                                                       *
+   9:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *    FreeRTOS provides completely free yet professionally developed,    *
+  10:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *    robust, strictly quality controlled, supported, and cross          *
+  11:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *    platform software that has become a de facto standard.             *
+  12:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *                                                                       *
+  13:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *    Help yourself get started quickly and support the FreeRTOS         *
+  14:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *    project by purchasing a FreeRTOS tutorial book, reference          *
+  15:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
+  16:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *                                                                       *
+  17:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *    Thank you!                                                         *
+  18:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *                                                                       *
+  19:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     ***************************************************************************
+  20:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  21:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     This file is part of the FreeRTOS distribution.
+  22:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  23:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  24:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     the terms of the GNU General Public License (version 2) as published by the
+  25:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+  26:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  27:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     >>!   NOTE: The modification to the GPL is included to allow you to     !<<
+  28:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     >>!   distribute a combined work that includes FreeRTOS without being   !<<
+  29:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     >>!   obliged to provide the source code for proprietary components     !<<
+  30:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     >>!   outside of the FreeRTOS kernel.                                   !<<
+  31:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  32:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
+  33:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  34:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     FOR A PARTICULAR PURPOSE.  Full license text is available from the following
+  35:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     link: http://www.freertos.org/a00114.html
+  36:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  37:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     1 tab == 4 spaces!
+  38:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  39:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     ***************************************************************************
+  40:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *                                                                       *
+  41:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *    Having a problem?  Start by reading the FAQ "My application does   *
+  42:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *    not run, what could be wrong?"                                     *
+  43:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *                                                                       *
+  44:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *    http://www.FreeRTOS.org/FAQHelp.html                               *
+  45:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****      *                                                                       *
+  46:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     ***************************************************************************
+  47:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  48:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     http://www.FreeRTOS.org - Documentation, books, training, latest versions,
+  49:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     license and Real Time Engineers Ltd. contact details.
+  50:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  51:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
+  52:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     including FreeRTOS+Trace - an indispensable productivity tool, a DOS
+  53:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     compatible FAT file system, and our tiny thread aware UDP/IP stack.
+  54:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  55:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
+  56:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     Integrity Systems to sell under the OpenRTOS brand.  Low cost OpenRTOS
+  57:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     licenses offer ticketed support, indemnification and middleware.
+  58:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  59:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     http://www.SafeRTOS.com - High Integrity Systems also provide a safety
+  60:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     engineered and independently SIL3 certified version for use in safety and
+  61:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     mission critical applications that require provable dependability.
+  62:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  63:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****     1 tab == 4 spaces!
+  64:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** */
+  65:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  66:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  67:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*
+  68:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * Tests the extra queue functionality introduced in FreeRTOS.org V4.5.0 -
+  69:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * including xQueueSendToFront(), xQueueSendToBack(), xQueuePeek() and
+  70:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * mutex behaviour.
+  71:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  *
+  72:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * See the comments above the prvSendFrontAndBackTest() and
+  73:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * prvLowPriorityMutexTask() prototypes below for more information.
+  74:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  */
+  75:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  76:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  77:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** #include <stdlib.h>
+  78:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  79:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /* Scheduler include files. */
+  80:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** #include "FreeRTOS.h"
+  81:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** #include "task.h"
+  82:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** #include "queue.h"
+  83:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** #include "semphr.h"
+  84:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  85:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /* Demo program include files. */
+  86:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** #include "GenQTest.h"
+  87:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  88:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** #define genqQUEUE_LENGTH		( 5 )
+  89:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** #define genqNO_BLOCK			( 0 )
+  90:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  91:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** #define genqMUTEX_LOW_PRIORITY		( tskIDLE_PRIORITY )
+  92:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** #define genqMUTEX_TEST_PRIORITY		( tskIDLE_PRIORITY + 1 )
+  93:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** #define genqMUTEX_MEDIUM_PRIORITY	( tskIDLE_PRIORITY + 2 )
+  94:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** #define genqMUTEX_HIGH_PRIORITY		( tskIDLE_PRIORITY + 3 )
+  95:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  96:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** #define genqINTERRUPT_MUTEX_GIVE_PERIOD_MS ( 100 )
+  97:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*-----------------------------------------------------------*/
+  98:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+  99:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*
+ 100:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * Tests the behaviour of the xQueueSendToFront() and xQueueSendToBack()
+ 101:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * macros by using both to fill a queue, then reading from the queue to
+ 102:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * check the resultant queue order is as expected.  Queue data is also
+ 103:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * peeked.
+ 104:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  */
+ 105:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static void prvSendFrontAndBackTest( void *pvParameters );
+ 106:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 107:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*
+ 108:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * The following three tasks are used to demonstrate the mutex behaviour.
+ 109:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * Each task is given a different priority to demonstrate the priority
+ 110:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * inheritance mechanism.
+ 111:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  *
+ 112:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * The low priority task obtains a mutex.  After this a high priority task
+ 113:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * attempts to obtain the same mutex, causing its priority to be inherited
+ 114:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * by the low priority task.  The task with the inherited high priority then
+ 115:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * resumes a medium priority task to ensure it is not blocked by the medium
+ 116:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * priority task while it holds the inherited high priority.  Once the mutex
+ 117:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * is returned the task with the inherited priority returns to its original
+ 118:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * low priority, and is therefore immediately preempted by first the high
+ 119:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * priority task and then the medium prioroity task before it can continue.
+ 120:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  */
+ 121:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static void prvLowPriorityMutexTask( void *pvParameters );
+ 122:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static void prvMediumPriorityMutexTask( void *pvParameters );
+ 123:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static void prvHighPriorityMutexTask( void *pvParameters );
+ 124:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 125:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*
+ 126:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * Exercises the priority inheritance when a task takes two mutexes, returning
+ 127:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * them in a different order to which they were taken.
+ 128:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  */
+ 129:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static void prvTakeTwoMutexesReturnInDifferentOrder( SemaphoreHandle_t xMutex, SemaphoreHandle_t xL
+ 130:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 131:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*
+ 132:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * Exercises the priority inheritance when a task takes two mutexes, returning
+ 133:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * them in the same order in which they were taken.
+ 134:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  */
+ 135:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static void prvTakeTwoMutexesReturnInSameOrder( SemaphoreHandle_t xMutex, SemaphoreHandle_t xLocalM
+ 136:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 137:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*
+ 138:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * Task that receives an a mutex that is given from an interrupt - although
+ 139:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * generally mutexes should not be used given in interrupts (and definitely
+ 140:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * never taken in an interrupt) there are some circumstances when it may be
+ 141:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * desirable.  NOTE:  This function is not declared static to prevent compiler
+ 142:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * warnings being generated in demos where the function is declared but not
+ 143:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  * used.
+ 144:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c ****  */
+ 145:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** void vInterruptMutexTask( void *pvParameters );
+ 146:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 147:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*-----------------------------------------------------------*/
+ 148:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 149:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /* Flag that will be latched to pdTRUE should any unexpected behaviour be
+ 150:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** detected in any of the tasks. */
+ 151:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static volatile BaseType_t xErrorDetected = pdFALSE;
+ 152:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 153:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /* Counters that are incremented on each cycle of a test.  This is used to
+ 154:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** detect a stalled task - a test that is no longer running. */
+ 155:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static volatile uint32_t ulLoopCounter = 0;
+ 156:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static volatile uint32_t ulLoopCounter2 = 0;
+ 157:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 158:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /* The variable that is guarded by the mutex in the mutex demo tasks. */
+ 159:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static volatile uint32_t ulGuardedVariable = 0;
+ 160:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 161:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /* Handles used in the mutext test to suspend and resume the high and medium
+ 162:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** priority mutex test tasks. */
+ 163:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static TaskHandle_t xHighPriorityMutexTask, xMediumPriorityMutexTask;
+ 164:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 165:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /* A mutex which is given from an interrupt - although generally mutexes should
+ 166:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** not be used given in interrupts (and definitely never taken in an interrupt)
+ 167:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** there are some circumstances when it may be desirable. */
+ 168:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static SemaphoreHandle_t xISRMutex = NULL;
+ 169:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 170:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*-----------------------------------------------------------*/
+ 171:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 172:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** void vStartGenericQueueTasks( UBaseType_t uxPriority )
+ 173:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** {
+  89              		.loc 1 173 0
+  90              		.cfi_startproc
+  91              		@ args = 0, pretend = 0, frame = 16
+  92              		@ frame_needed = 1, uses_anonymous_args = 0
+  93 0000 80B5     		push	{r7, lr}
+  94              	.LCFI0:
+  95              		.cfi_def_cfa_offset 8
+  96              		.cfi_offset 7, -8
+  97              		.cfi_offset 14, -4
+  98 0002 88B0     		sub	sp, sp, #32
+  99              	.LCFI1:
+ 100              		.cfi_def_cfa_offset 40
+ 101 0004 04AF     		add	r7, sp, #16
+ 102              	.LCFI2:
+ 103              		.cfi_def_cfa 7, 24
+ 104 0006 7860     		str	r0, [r7, #4]
+ 174:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** QueueHandle_t xQueue;
+ 175:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** SemaphoreHandle_t xMutex;
+ 176:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 177:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	xISRMutex = xSemaphoreCreateMutex();
+ 105              		.loc 1 177 0
+ 106 0008 0120     		movs	r0, #1
+ 107 000a FFF7FEFF 		bl	xQueueCreateMutex
+ 108 000e 0246     		mov	r2, r0
+ 109 0010 40F20003 		movw	r3, #:lower16:xISRMutex
+ 110 0014 C0F20003 		movt	r3, #:upper16:xISRMutex
+ 111 0018 1A60     		str	r2, [r3]
+ 178:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	configASSERT( xISRMutex );
+ 112              		.loc 1 178 0
+ 113 001a 40F20003 		movw	r3, #:lower16:xISRMutex
+ 114 001e C0F20003 		movt	r3, #:upper16:xISRMutex
+ 115 0022 1B68     		ldr	r3, [r3]
+ 116 0024 002B     		cmp	r3, #0
+ 117 0026 02D1     		bne	.L2
+ 118              		.loc 1 178 0 is_stmt 0 discriminator 1
+ 119 0028 FFF7FEFF 		bl	ulPortSetInterruptMask
+ 120              	.L3:
+ 121 002c FEE7     		b	.L3
+ 122              	.L2:
+ 179:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 180:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Create the queue that we are going to use for the
+ 181:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	prvSendFrontAndBackTest demo. */
+ 182:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	xQueue = xQueueCreate( genqQUEUE_LENGTH, sizeof( uint32_t ) );
+ 123              		.loc 1 182 0 is_stmt 1
+ 124 002e 0520     		movs	r0, #5
+ 125 0030 0421     		movs	r1, #4
+ 126 0032 0022     		movs	r2, #0
+ 127 0034 FFF7FEFF 		bl	xQueueGenericCreate
+ 128 0038 F860     		str	r0, [r7, #12]
+ 183:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 184:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* vQueueAddToRegistry() adds the queue to the queue registry, if one is
+ 185:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	in use.  The queue registry is provided as a means for kernel aware
+ 186:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	debuggers to locate queues and has no purpose if a kernel aware debugger
+ 187:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	is not being used.  The call to vQueueAddToRegistry() will be removed
+ 188:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	by the pre-processor if configQUEUE_REGISTRY_SIZE is not defined or is
+ 189:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	defined to be less than 1. */
+ 190:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	vQueueAddToRegistry( xQueue, "Gen_Queue_Test" );
+ 129              		.loc 1 190 0
+ 130 003a F868     		ldr	r0, [r7, #12]
+ 131 003c 40F20001 		movw	r1, #:lower16:.LC0
+ 132 0040 C0F20001 		movt	r1, #:upper16:.LC0
+ 133 0044 FFF7FEFF 		bl	vQueueAddToRegistry
+ 191:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 192:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Create the demo task and pass it the queue just created.  We are
+ 193:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	passing the queue handle by value so it does not matter that it is
+ 194:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	declared on the stack here. */
+ 195:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	xTaskCreate( prvSendFrontAndBackTest, "GenQ", configMINIMAL_STACK_SIZE, ( void * ) xQueue, uxPrior
+ 134              		.loc 1 195 0
+ 135 0048 7B68     		ldr	r3, [r7, #4]
+ 136 004a 0093     		str	r3, [sp]
+ 137 004c 0023     		movs	r3, #0
+ 138 004e 0193     		str	r3, [sp, #4]
+ 139 0050 0023     		movs	r3, #0
+ 140 0052 0293     		str	r3, [sp, #8]
+ 141 0054 0023     		movs	r3, #0
+ 142 0056 0393     		str	r3, [sp, #12]
+ 143 0058 40F20000 		movw	r0, #:lower16:prvSendFrontAndBackTest
+ 144 005c C0F20000 		movt	r0, #:upper16:prvSendFrontAndBackTest
+ 145 0060 40F20001 		movw	r1, #:lower16:.LC1
+ 146 0064 C0F20001 		movt	r1, #:upper16:.LC1
+ 147 0068 8222     		movs	r2, #130
+ 148 006a FB68     		ldr	r3, [r7, #12]
+ 149 006c FFF7FEFF 		bl	xTaskGenericCreate
+ 196:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 197:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Create the mutex used by the prvMutexTest task. */
+ 198:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	xMutex = xSemaphoreCreateMutex();
+ 150              		.loc 1 198 0
+ 151 0070 0120     		movs	r0, #1
+ 152 0072 FFF7FEFF 		bl	xQueueCreateMutex
+ 153 0076 B860     		str	r0, [r7, #8]
+ 199:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 200:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* vQueueAddToRegistry() adds the mutex to the registry, if one is
+ 201:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	in use.  The registry is provided as a means for kernel aware
+ 202:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	debuggers to locate mutexes and has no purpose if a kernel aware debugger
+ 203:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	is not being used.  The call to vQueueAddToRegistry() will be removed
+ 204:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	by the pre-processor if configQUEUE_REGISTRY_SIZE is not defined or is
+ 205:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	defined to be less than 1. */
+ 206:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	vQueueAddToRegistry( ( QueueHandle_t ) xMutex, "Gen_Queue_Mutex" );
+ 154              		.loc 1 206 0
+ 155 0078 B868     		ldr	r0, [r7, #8]
+ 156 007a 40F20001 		movw	r1, #:lower16:.LC2
+ 157 007e C0F20001 		movt	r1, #:upper16:.LC2
+ 158 0082 FFF7FEFF 		bl	vQueueAddToRegistry
+ 207:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 208:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Create the mutex demo tasks and pass it the mutex just created.  We are
+ 209:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	passing the mutex handle by value so it does not matter that it is declared
+ 210:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	on the stack here. */
+ 211:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	xTaskCreate( prvLowPriorityMutexTask, "MuLow", configMINIMAL_STACK_SIZE, ( void * ) xMutex, genqMU
+ 159              		.loc 1 211 0
+ 160 0086 0023     		movs	r3, #0
+ 161 0088 0093     		str	r3, [sp]
+ 162 008a 0023     		movs	r3, #0
+ 163 008c 0193     		str	r3, [sp, #4]
+ 164 008e 0023     		movs	r3, #0
+ 165 0090 0293     		str	r3, [sp, #8]
+ 166 0092 0023     		movs	r3, #0
+ 167 0094 0393     		str	r3, [sp, #12]
+ 168 0096 40F20000 		movw	r0, #:lower16:prvLowPriorityMutexTask
+ 169 009a C0F20000 		movt	r0, #:upper16:prvLowPriorityMutexTask
+ 170 009e 40F20001 		movw	r1, #:lower16:.LC3
+ 171 00a2 C0F20001 		movt	r1, #:upper16:.LC3
+ 172 00a6 8222     		movs	r2, #130
+ 173 00a8 BB68     		ldr	r3, [r7, #8]
+ 174 00aa FFF7FEFF 		bl	xTaskGenericCreate
+ 212:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	xTaskCreate( prvMediumPriorityMutexTask, "MuMed", configMINIMAL_STACK_SIZE, NULL, genqMUTEX_MEDIUM
+ 175              		.loc 1 212 0
+ 176 00ae 0223     		movs	r3, #2
+ 177 00b0 0093     		str	r3, [sp]
+ 178 00b2 40F20003 		movw	r3, #:lower16:xMediumPriorityMutexTask
+ 179 00b6 C0F20003 		movt	r3, #:upper16:xMediumPriorityMutexTask
+ 180 00ba 0193     		str	r3, [sp, #4]
+ 181 00bc 0023     		movs	r3, #0
+ 182 00be 0293     		str	r3, [sp, #8]
+ 183 00c0 0023     		movs	r3, #0
+ 184 00c2 0393     		str	r3, [sp, #12]
+ 185 00c4 40F20000 		movw	r0, #:lower16:prvMediumPriorityMutexTask
+ 186 00c8 C0F20000 		movt	r0, #:upper16:prvMediumPriorityMutexTask
+ 187 00cc 40F20001 		movw	r1, #:lower16:.LC4
+ 188 00d0 C0F20001 		movt	r1, #:upper16:.LC4
+ 189 00d4 8222     		movs	r2, #130
+ 190 00d6 0023     		movs	r3, #0
+ 191 00d8 FFF7FEFF 		bl	xTaskGenericCreate
+ 213:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	xTaskCreate( prvHighPriorityMutexTask, "MuHigh", configMINIMAL_STACK_SIZE, ( void * ) xMutex, genq
+ 192              		.loc 1 213 0
+ 193 00dc 0323     		movs	r3, #3
+ 194 00de 0093     		str	r3, [sp]
+ 195 00e0 40F20003 		movw	r3, #:lower16:xHighPriorityMutexTask
+ 196 00e4 C0F20003 		movt	r3, #:upper16:xHighPriorityMutexTask
+ 197 00e8 0193     		str	r3, [sp, #4]
+ 198 00ea 0023     		movs	r3, #0
+ 199 00ec 0293     		str	r3, [sp, #8]
+ 200 00ee 0023     		movs	r3, #0
+ 201 00f0 0393     		str	r3, [sp, #12]
+ 202 00f2 40F20000 		movw	r0, #:lower16:prvHighPriorityMutexTask
+ 203 00f6 C0F20000 		movt	r0, #:upper16:prvHighPriorityMutexTask
+ 204 00fa 40F20001 		movw	r1, #:lower16:.LC5
+ 205 00fe C0F20001 		movt	r1, #:upper16:.LC5
+ 206 0102 8222     		movs	r2, #130
+ 207 0104 BB68     		ldr	r3, [r7, #8]
+ 208 0106 FFF7FEFF 		bl	xTaskGenericCreate
+ 214:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 215:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Only when the windows simulator is being used - create the task that
+ 216:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	receives a mutex from an interrupt. */
+ 217:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#ifdef _WINDOWS_
+ 218:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 219:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xTaskCreate( vInterruptMutexTask, "IntMu", configMINIMAL_STACK_SIZE, NULL, genqMUTEX_MEDIUM_PRIOR
+ 220:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 221:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#endif /* __WINDOWS__ */
+ 222:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** }
+ 209              		.loc 1 222 0
+ 210 010a 1037     		adds	r7, r7, #16
+ 211 010c BD46     		mov	sp, r7
+ 212              		@ sp needed
+ 213 010e 80BD     		pop	{r7, pc}
+ 214              		.cfi_endproc
+ 215              	.LFE1:
+ 217              		.section	.text.prvSendFrontAndBackTest,"ax",%progbits
+ 218              		.align	2
+ 219              		.thumb
+ 220              		.thumb_func
+ 222              	prvSendFrontAndBackTest:
+ 223              	.LFB2:
+ 223:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*-----------------------------------------------------------*/
+ 224:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 225:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static void prvSendFrontAndBackTest( void *pvParameters )
+ 226:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** {
+ 224              		.loc 1 226 0
+ 225              		.cfi_startproc
+ 226              		@ args = 0, pretend = 0, frame = 24
+ 227              		@ frame_needed = 1, uses_anonymous_args = 0
+ 228 0000 80B5     		push	{r7, lr}
+ 229              	.LCFI3:
+ 230              		.cfi_def_cfa_offset 8
+ 231              		.cfi_offset 7, -8
+ 232              		.cfi_offset 14, -4
+ 233 0002 86B0     		sub	sp, sp, #24
+ 234              	.LCFI4:
+ 235              		.cfi_def_cfa_offset 32
+ 236 0004 00AF     		add	r7, sp, #0
+ 237              	.LCFI5:
+ 238              		.cfi_def_cfa_register 7
+ 239 0006 7860     		str	r0, [r7, #4]
+ 227:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** uint32_t ulData, ulData2;
+ 228:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** QueueHandle_t xQueue;
+ 229:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 230:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#ifdef USE_STDIO
+ 231:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	void vPrintDisplayMessage( const char * const * ppcMessageToSend );
+ 232:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 233:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		const char * const pcTaskStartMsg = "Queue SendToFront/SendToBack/Peek test started.\r\n";
+ 234:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 235:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Queue a message for printing to say the task has started. */
+ 236:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		vPrintDisplayMessage( &pcTaskStartMsg );
+ 237:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#endif
+ 238:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 239:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	xQueue = ( QueueHandle_t ) pvParameters;
+ 240              		.loc 1 239 0
+ 241 0008 7B68     		ldr	r3, [r7, #4]
+ 242 000a 7B61     		str	r3, [r7, #20]
+ 243              	.L40:
+ 240:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 241:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	for( ;; )
+ 242:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 243:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* The queue is empty, so sending an item to the back of the queue
+ 244:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		should have the same efect as sending it to the front of the queue.
+ 245:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 246:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		First send to the front and check everything is as expected. */
+ 247:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xQueueSendToFront( xQueue, ( void * ) &ulLoopCounter, genqNO_BLOCK );
+ 244              		.loc 1 247 0
+ 245 000c 7869     		ldr	r0, [r7, #20]
+ 246 000e 40F20001 		movw	r1, #:lower16:ulLoopCounter
+ 247 0012 C0F20001 		movt	r1, #:upper16:ulLoopCounter
+ 248 0016 0022     		movs	r2, #0
+ 249 0018 0123     		movs	r3, #1
+ 250 001a FFF7FEFF 		bl	xQueueGenericSend
+ 248:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 249:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 1 )
+ 251              		.loc 1 249 0
+ 252 001e 7869     		ldr	r0, [r7, #20]
+ 253 0020 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 254 0024 0346     		mov	r3, r0
+ 255 0026 012B     		cmp	r3, #1
+ 256 0028 05D0     		beq	.L5
+ 250:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 251:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 257              		.loc 1 251 0
+ 258 002a 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 259 002e C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 260 0032 0122     		movs	r2, #1
+ 261 0034 1A60     		str	r2, [r3]
+ 262              	.L5:
+ 252:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 253:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 254:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( xQueueReceive( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != pdPASS )
+ 263              		.loc 1 254 0
+ 264 0036 07F11003 		add	r3, r7, #16
+ 265 003a 7869     		ldr	r0, [r7, #20]
+ 266 003c 1946     		mov	r1, r3
+ 267 003e 0022     		movs	r2, #0
+ 268 0040 0023     		movs	r3, #0
+ 269 0042 FFF7FEFF 		bl	xQueueGenericReceive
+ 270 0046 0346     		mov	r3, r0
+ 271 0048 012B     		cmp	r3, #1
+ 272 004a 05D0     		beq	.L6
+ 255:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 256:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 273              		.loc 1 256 0
+ 274 004c 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 275 0050 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 276 0054 0122     		movs	r2, #1
+ 277 0056 1A60     		str	r2, [r3]
+ 278              	.L6:
+ 257:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 258:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 259:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* The data we sent to the queue should equal the data we just received
+ 260:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		from the queue. */
+ 261:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( ulLoopCounter != ulData )
+ 279              		.loc 1 261 0
+ 280 0058 40F20003 		movw	r3, #:lower16:ulLoopCounter
+ 281 005c C0F20003 		movt	r3, #:upper16:ulLoopCounter
+ 282 0060 1A68     		ldr	r2, [r3]
+ 283 0062 3B69     		ldr	r3, [r7, #16]
+ 284 0064 9A42     		cmp	r2, r3
+ 285 0066 05D0     		beq	.L7
+ 262:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 263:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 286              		.loc 1 263 0
+ 287 0068 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 288 006c C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 289 0070 0122     		movs	r2, #1
+ 290 0072 1A60     		str	r2, [r3]
+ 291              	.L7:
+ 264:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 265:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 266:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Then do the same, sending the data to the back, checking everything
+ 267:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		is as expected. */
+ 268:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 0 )
+ 292              		.loc 1 268 0
+ 293 0074 7869     		ldr	r0, [r7, #20]
+ 294 0076 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 295 007a 0346     		mov	r3, r0
+ 296 007c 002B     		cmp	r3, #0
+ 297 007e 05D0     		beq	.L8
+ 269:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 270:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 298              		.loc 1 270 0
+ 299 0080 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 300 0084 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 301 0088 0122     		movs	r2, #1
+ 302 008a 1A60     		str	r2, [r3]
+ 303              	.L8:
+ 271:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 272:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 273:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xQueueSendToBack( xQueue, ( void * ) &ulLoopCounter, genqNO_BLOCK );
+ 304              		.loc 1 273 0
+ 305 008c 7869     		ldr	r0, [r7, #20]
+ 306 008e 40F20001 		movw	r1, #:lower16:ulLoopCounter
+ 307 0092 C0F20001 		movt	r1, #:upper16:ulLoopCounter
+ 308 0096 0022     		movs	r2, #0
+ 309 0098 0023     		movs	r3, #0
+ 310 009a FFF7FEFF 		bl	xQueueGenericSend
+ 274:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 275:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 1 )
+ 311              		.loc 1 275 0
+ 312 009e 7869     		ldr	r0, [r7, #20]
+ 313 00a0 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 314 00a4 0346     		mov	r3, r0
+ 315 00a6 012B     		cmp	r3, #1
+ 316 00a8 05D0     		beq	.L9
+ 276:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 277:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 317              		.loc 1 277 0
+ 318 00aa 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 319 00ae C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 320 00b2 0122     		movs	r2, #1
+ 321 00b4 1A60     		str	r2, [r3]
+ 322              	.L9:
+ 278:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 279:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 280:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( xQueueReceive( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != pdPASS )
+ 323              		.loc 1 280 0
+ 324 00b6 07F11003 		add	r3, r7, #16
+ 325 00ba 7869     		ldr	r0, [r7, #20]
+ 326 00bc 1946     		mov	r1, r3
+ 327 00be 0022     		movs	r2, #0
+ 328 00c0 0023     		movs	r3, #0
+ 329 00c2 FFF7FEFF 		bl	xQueueGenericReceive
+ 330 00c6 0346     		mov	r3, r0
+ 331 00c8 012B     		cmp	r3, #1
+ 332 00ca 05D0     		beq	.L10
+ 281:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 282:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 333              		.loc 1 282 0
+ 334 00cc 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 335 00d0 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 336 00d4 0122     		movs	r2, #1
+ 337 00d6 1A60     		str	r2, [r3]
+ 338              	.L10:
+ 283:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 284:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 285:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 0 )
+ 339              		.loc 1 285 0
+ 340 00d8 7869     		ldr	r0, [r7, #20]
+ 341 00da FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 342 00de 0346     		mov	r3, r0
+ 343 00e0 002B     		cmp	r3, #0
+ 344 00e2 05D0     		beq	.L11
+ 286:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 287:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 345              		.loc 1 287 0
+ 346 00e4 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 347 00e8 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 348 00ec 0122     		movs	r2, #1
+ 349 00ee 1A60     		str	r2, [r3]
+ 350              	.L11:
+ 288:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 289:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 290:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* The data we sent to the queue should equal the data we just received
+ 291:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		from the queue. */
+ 292:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( ulLoopCounter != ulData )
+ 351              		.loc 1 292 0
+ 352 00f0 40F20003 		movw	r3, #:lower16:ulLoopCounter
+ 353 00f4 C0F20003 		movt	r3, #:upper16:ulLoopCounter
+ 354 00f8 1A68     		ldr	r2, [r3]
+ 355 00fa 3B69     		ldr	r3, [r7, #16]
+ 356 00fc 9A42     		cmp	r2, r3
+ 357 00fe 05D0     		beq	.L12
+ 293:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 294:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 358              		.loc 1 294 0
+ 359 0100 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 360 0104 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 361 0108 0122     		movs	r2, #1
+ 362 010a 1A60     		str	r2, [r3]
+ 363              	.L12:
+ 295:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 296:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 297:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		#if configUSE_PREEMPTION == 0
+ 298:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			taskYIELD();
+ 299:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		#endif
+ 300:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 301:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 302:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 303:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Place 2, 3, 4 into the queue, adding items to the back of the queue. */
+ 304:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		for( ulData = 2; ulData < 5; ulData++ )
+ 364              		.loc 1 304 0
+ 365 010c 0223     		movs	r3, #2
+ 366 010e 3B61     		str	r3, [r7, #16]
+ 367 0110 0AE0     		b	.L13
+ 368              	.L14:
+ 305:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 306:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xQueueSendToBack( xQueue, ( void * ) &ulData, genqNO_BLOCK );
+ 369              		.loc 1 306 0 discriminator 2
+ 370 0112 07F11003 		add	r3, r7, #16
+ 371 0116 7869     		ldr	r0, [r7, #20]
+ 372 0118 1946     		mov	r1, r3
+ 373 011a 0022     		movs	r2, #0
+ 374 011c 0023     		movs	r3, #0
+ 375 011e FFF7FEFF 		bl	xQueueGenericSend
+ 304:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 376              		.loc 1 304 0 discriminator 2
+ 377 0122 3B69     		ldr	r3, [r7, #16]
+ 378 0124 0133     		adds	r3, r3, #1
+ 379 0126 3B61     		str	r3, [r7, #16]
+ 380              	.L13:
+ 304:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 381              		.loc 1 304 0 is_stmt 0 discriminator 1
+ 382 0128 3B69     		ldr	r3, [r7, #16]
+ 383 012a 042B     		cmp	r3, #4
+ 384 012c F1D9     		bls	.L14
+ 307:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 308:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 309:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Now the order in the queue should be 2, 3, 4, with 2 being the first
+ 310:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		thing to be read out.  Now add 1 then 0 to the front of the queue. */
+ 311:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 3 )
+ 385              		.loc 1 311 0 is_stmt 1
+ 386 012e 7869     		ldr	r0, [r7, #20]
+ 387 0130 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 388 0134 0346     		mov	r3, r0
+ 389 0136 032B     		cmp	r3, #3
+ 390 0138 05D0     		beq	.L15
+ 312:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 313:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 391              		.loc 1 313 0
+ 392 013a 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 393 013e C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 394 0142 0122     		movs	r2, #1
+ 395 0144 1A60     		str	r2, [r3]
+ 396              	.L15:
+ 314:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 315:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		ulData = 1;
+ 397              		.loc 1 315 0
+ 398 0146 0123     		movs	r3, #1
+ 399 0148 3B61     		str	r3, [r7, #16]
+ 316:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xQueueSendToFront( xQueue, ( void * ) &ulData, genqNO_BLOCK );
+ 400              		.loc 1 316 0
+ 401 014a 07F11003 		add	r3, r7, #16
+ 402 014e 7869     		ldr	r0, [r7, #20]
+ 403 0150 1946     		mov	r1, r3
+ 404 0152 0022     		movs	r2, #0
+ 405 0154 0123     		movs	r3, #1
+ 406 0156 FFF7FEFF 		bl	xQueueGenericSend
+ 317:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		ulData = 0;
+ 407              		.loc 1 317 0
+ 408 015a 0023     		movs	r3, #0
+ 409 015c 3B61     		str	r3, [r7, #16]
+ 318:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xQueueSendToFront( xQueue, ( void * ) &ulData, genqNO_BLOCK );
+ 410              		.loc 1 318 0
+ 411 015e 07F11003 		add	r3, r7, #16
+ 412 0162 7869     		ldr	r0, [r7, #20]
+ 413 0164 1946     		mov	r1, r3
+ 414 0166 0022     		movs	r2, #0
+ 415 0168 0123     		movs	r3, #1
+ 416 016a FFF7FEFF 		bl	xQueueGenericSend
+ 319:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 320:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Now the queue should be full, and when we read the data out we
+ 321:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		should receive 0, 1, 2, 3, 4. */
+ 322:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 5 )
+ 417              		.loc 1 322 0
+ 418 016e 7869     		ldr	r0, [r7, #20]
+ 419 0170 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 420 0174 0346     		mov	r3, r0
+ 421 0176 052B     		cmp	r3, #5
+ 422 0178 05D0     		beq	.L16
+ 323:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 324:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 423              		.loc 1 324 0
+ 424 017a 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 425 017e C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 426 0182 0122     		movs	r2, #1
+ 427 0184 1A60     		str	r2, [r3]
+ 428              	.L16:
+ 325:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 326:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 327:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( xQueueSendToFront( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != errQUEUE_FULL )
+ 429              		.loc 1 327 0
+ 430 0186 07F11003 		add	r3, r7, #16
+ 431 018a 7869     		ldr	r0, [r7, #20]
+ 432 018c 1946     		mov	r1, r3
+ 433 018e 0022     		movs	r2, #0
+ 434 0190 0123     		movs	r3, #1
+ 435 0192 FFF7FEFF 		bl	xQueueGenericSend
+ 436 0196 0346     		mov	r3, r0
+ 437 0198 002B     		cmp	r3, #0
+ 438 019a 05D0     		beq	.L17
+ 328:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 329:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 439              		.loc 1 329 0
+ 440 019c 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 441 01a0 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 442 01a4 0122     		movs	r2, #1
+ 443 01a6 1A60     		str	r2, [r3]
+ 444              	.L17:
+ 330:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 331:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 332:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( xQueueSendToBack( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != errQUEUE_FULL )
+ 445              		.loc 1 332 0
+ 446 01a8 07F11003 		add	r3, r7, #16
+ 447 01ac 7869     		ldr	r0, [r7, #20]
+ 448 01ae 1946     		mov	r1, r3
+ 449 01b0 0022     		movs	r2, #0
+ 450 01b2 0023     		movs	r3, #0
+ 451 01b4 FFF7FEFF 		bl	xQueueGenericSend
+ 452 01b8 0346     		mov	r3, r0
+ 453 01ba 002B     		cmp	r3, #0
+ 454 01bc 05D0     		beq	.L18
+ 333:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 334:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 455              		.loc 1 334 0
+ 456 01be 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 457 01c2 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 458 01c6 0122     		movs	r2, #1
+ 459 01c8 1A60     		str	r2, [r3]
+ 460              	.L18:
+ 335:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 336:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 337:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		#if configUSE_PREEMPTION == 0
+ 338:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			taskYIELD();
+ 339:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		#endif
+ 340:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 341:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Check the data we read out is in the expected order. */
+ 342:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		for( ulData = 0; ulData < genqQUEUE_LENGTH; ulData++ )
+ 461              		.loc 1 342 0
+ 462 01ca 0023     		movs	r3, #0
+ 463 01cc 3B61     		str	r3, [r7, #16]
+ 464 01ce 3BE0     		b	.L19
+ 465              	.L24:
+ 343:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 344:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			/* Try peeking the data first. */
+ 345:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			if( xQueuePeek( xQueue, &ulData2, genqNO_BLOCK ) != pdPASS )
+ 466              		.loc 1 345 0
+ 467 01d0 07F10C03 		add	r3, r7, #12
+ 468 01d4 7869     		ldr	r0, [r7, #20]
+ 469 01d6 1946     		mov	r1, r3
+ 470 01d8 0022     		movs	r2, #0
+ 471 01da 0123     		movs	r3, #1
+ 472 01dc FFF7FEFF 		bl	xQueueGenericReceive
+ 473 01e0 0346     		mov	r3, r0
+ 474 01e2 012B     		cmp	r3, #1
+ 475 01e4 05D0     		beq	.L20
+ 346:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			{
+ 347:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 476              		.loc 1 347 0
+ 477 01e6 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 478 01ea C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 479 01ee 0122     		movs	r2, #1
+ 480 01f0 1A60     		str	r2, [r3]
+ 481              	.L20:
+ 348:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			}
+ 349:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 350:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			if( ulData != ulData2 )
+ 482              		.loc 1 350 0
+ 483 01f2 3A69     		ldr	r2, [r7, #16]
+ 484 01f4 FB68     		ldr	r3, [r7, #12]
+ 485 01f6 9A42     		cmp	r2, r3
+ 486 01f8 05D0     		beq	.L21
+ 351:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			{
+ 352:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 487              		.loc 1 352 0
+ 488 01fa 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 489 01fe C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 490 0202 0122     		movs	r2, #1
+ 491 0204 1A60     		str	r2, [r3]
+ 492              	.L21:
+ 353:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			}
+ 354:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 355:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 356:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			/* Now try receiving the data for real.  The value should be the
+ 357:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			same.  Clobber the value first so we know we really received it. */
+ 358:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			ulData2 = ~ulData2;
+ 493              		.loc 1 358 0
+ 494 0206 FB68     		ldr	r3, [r7, #12]
+ 495 0208 DB43     		mvns	r3, r3
+ 496 020a FB60     		str	r3, [r7, #12]
+ 359:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			if( xQueueReceive( xQueue, &ulData2, genqNO_BLOCK ) != pdPASS )
+ 497              		.loc 1 359 0
+ 498 020c 07F10C03 		add	r3, r7, #12
+ 499 0210 7869     		ldr	r0, [r7, #20]
+ 500 0212 1946     		mov	r1, r3
+ 501 0214 0022     		movs	r2, #0
+ 502 0216 0023     		movs	r3, #0
+ 503 0218 FFF7FEFF 		bl	xQueueGenericReceive
+ 504 021c 0346     		mov	r3, r0
+ 505 021e 012B     		cmp	r3, #1
+ 506 0220 05D0     		beq	.L22
+ 360:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			{
+ 361:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 507              		.loc 1 361 0
+ 508 0222 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 509 0226 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 510 022a 0122     		movs	r2, #1
+ 511 022c 1A60     		str	r2, [r3]
+ 512              	.L22:
+ 362:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			}
+ 363:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 364:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			if( ulData != ulData2 )
+ 513              		.loc 1 364 0
+ 514 022e 3A69     		ldr	r2, [r7, #16]
+ 515 0230 FB68     		ldr	r3, [r7, #12]
+ 516 0232 9A42     		cmp	r2, r3
+ 517 0234 05D0     		beq	.L23
+ 365:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			{
+ 366:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 518              		.loc 1 366 0
+ 519 0236 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 520 023a C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 521 023e 0122     		movs	r2, #1
+ 522 0240 1A60     		str	r2, [r3]
+ 523              	.L23:
+ 342:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 524              		.loc 1 342 0
+ 525 0242 3B69     		ldr	r3, [r7, #16]
+ 526 0244 0133     		adds	r3, r3, #1
+ 527 0246 3B61     		str	r3, [r7, #16]
+ 528              	.L19:
+ 342:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 529              		.loc 1 342 0 is_stmt 0 discriminator 1
+ 530 0248 3B69     		ldr	r3, [r7, #16]
+ 531 024a 042B     		cmp	r3, #4
+ 532 024c C0D9     		bls	.L24
+ 367:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			}
+ 368:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 369:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 370:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* The queue should now be empty again. */
+ 371:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 0 )
+ 533              		.loc 1 371 0 is_stmt 1
+ 534 024e 7869     		ldr	r0, [r7, #20]
+ 535 0250 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 536 0254 0346     		mov	r3, r0
+ 537 0256 002B     		cmp	r3, #0
+ 538 0258 05D0     		beq	.L25
+ 372:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 373:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 539              		.loc 1 373 0
+ 540 025a 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 541 025e C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 542 0262 0122     		movs	r2, #1
+ 543 0264 1A60     		str	r2, [r3]
+ 544              	.L25:
+ 374:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 375:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 376:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		#if configUSE_PREEMPTION == 0
+ 377:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			taskYIELD();
+ 378:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		#endif
+ 379:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 380:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 381:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Our queue is empty once more, add 10, 11 to the back. */
+ 382:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		ulData = 10;
+ 545              		.loc 1 382 0
+ 546 0266 0A23     		movs	r3, #10
+ 547 0268 3B61     		str	r3, [r7, #16]
+ 383:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( xQueueSend( xQueue, &ulData, genqNO_BLOCK ) != pdPASS )
+ 548              		.loc 1 383 0
+ 549 026a 07F11003 		add	r3, r7, #16
+ 550 026e 7869     		ldr	r0, [r7, #20]
+ 551 0270 1946     		mov	r1, r3
+ 552 0272 0022     		movs	r2, #0
+ 553 0274 0023     		movs	r3, #0
+ 554 0276 FFF7FEFF 		bl	xQueueGenericSend
+ 555 027a 0346     		mov	r3, r0
+ 556 027c 012B     		cmp	r3, #1
+ 557 027e 05D0     		beq	.L26
+ 384:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 385:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 558              		.loc 1 385 0
+ 559 0280 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 560 0284 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 561 0288 0122     		movs	r2, #1
+ 562 028a 1A60     		str	r2, [r3]
+ 563              	.L26:
+ 386:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 387:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		ulData = 11;
+ 564              		.loc 1 387 0
+ 565 028c 0B23     		movs	r3, #11
+ 566 028e 3B61     		str	r3, [r7, #16]
+ 388:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( xQueueSend( xQueue, &ulData, genqNO_BLOCK ) != pdPASS )
+ 567              		.loc 1 388 0
+ 568 0290 07F11003 		add	r3, r7, #16
+ 569 0294 7869     		ldr	r0, [r7, #20]
+ 570 0296 1946     		mov	r1, r3
+ 571 0298 0022     		movs	r2, #0
+ 572 029a 0023     		movs	r3, #0
+ 573 029c FFF7FEFF 		bl	xQueueGenericSend
+ 574 02a0 0346     		mov	r3, r0
+ 575 02a2 012B     		cmp	r3, #1
+ 576 02a4 05D0     		beq	.L27
+ 389:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 390:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 577              		.loc 1 390 0
+ 578 02a6 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 579 02aa C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 580 02ae 0122     		movs	r2, #1
+ 581 02b0 1A60     		str	r2, [r3]
+ 582              	.L27:
+ 391:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 392:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 393:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 2 )
+ 583              		.loc 1 393 0
+ 584 02b2 7869     		ldr	r0, [r7, #20]
+ 585 02b4 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 586 02b8 0346     		mov	r3, r0
+ 587 02ba 022B     		cmp	r3, #2
+ 588 02bc 05D0     		beq	.L28
+ 394:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 395:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 589              		.loc 1 395 0
+ 590 02be 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 591 02c2 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 592 02c6 0122     		movs	r2, #1
+ 593 02c8 1A60     		str	r2, [r3]
+ 594              	.L28:
+ 396:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 397:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 398:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Now we should have 10, 11 in the queue.  Add 7, 8, 9 to the
+ 399:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		front. */
+ 400:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		for( ulData = 9; ulData >= 7; ulData-- )
+ 595              		.loc 1 400 0
+ 596 02ca 0923     		movs	r3, #9
+ 597 02cc 3B61     		str	r3, [r7, #16]
+ 598 02ce 13E0     		b	.L29
+ 599              	.L31:
+ 401:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 402:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			if( xQueueSendToFront( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != pdPASS )
+ 600              		.loc 1 402 0
+ 601 02d0 07F11003 		add	r3, r7, #16
+ 602 02d4 7869     		ldr	r0, [r7, #20]
+ 603 02d6 1946     		mov	r1, r3
+ 604 02d8 0022     		movs	r2, #0
+ 605 02da 0123     		movs	r3, #1
+ 606 02dc FFF7FEFF 		bl	xQueueGenericSend
+ 607 02e0 0346     		mov	r3, r0
+ 608 02e2 012B     		cmp	r3, #1
+ 609 02e4 05D0     		beq	.L30
+ 403:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			{
+ 404:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 610              		.loc 1 404 0
+ 611 02e6 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 612 02ea C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 613 02ee 0122     		movs	r2, #1
+ 614 02f0 1A60     		str	r2, [r3]
+ 615              	.L30:
+ 400:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 616              		.loc 1 400 0
+ 617 02f2 3B69     		ldr	r3, [r7, #16]
+ 618 02f4 013B     		subs	r3, r3, #1
+ 619 02f6 3B61     		str	r3, [r7, #16]
+ 620              	.L29:
+ 400:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 621              		.loc 1 400 0 is_stmt 0 discriminator 1
+ 622 02f8 3B69     		ldr	r3, [r7, #16]
+ 623 02fa 062B     		cmp	r3, #6
+ 624 02fc E8D8     		bhi	.L31
+ 405:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			}
+ 406:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 407:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 408:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Now check that the queue is full, and that receiving data provides
+ 409:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		the expected sequence of 7, 8, 9, 10, 11. */
+ 410:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 5 )
+ 625              		.loc 1 410 0 is_stmt 1
+ 626 02fe 7869     		ldr	r0, [r7, #20]
+ 627 0300 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 628 0304 0346     		mov	r3, r0
+ 629 0306 052B     		cmp	r3, #5
+ 630 0308 05D0     		beq	.L32
+ 411:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 412:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 631              		.loc 1 412 0
+ 632 030a 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 633 030e C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 634 0312 0122     		movs	r2, #1
+ 635 0314 1A60     		str	r2, [r3]
+ 636              	.L32:
+ 413:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 414:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 415:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( xQueueSendToFront( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != errQUEUE_FULL )
+ 637              		.loc 1 415 0
+ 638 0316 07F11003 		add	r3, r7, #16
+ 639 031a 7869     		ldr	r0, [r7, #20]
+ 640 031c 1946     		mov	r1, r3
+ 641 031e 0022     		movs	r2, #0
+ 642 0320 0123     		movs	r3, #1
+ 643 0322 FFF7FEFF 		bl	xQueueGenericSend
+ 644 0326 0346     		mov	r3, r0
+ 645 0328 002B     		cmp	r3, #0
+ 646 032a 05D0     		beq	.L33
+ 416:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 417:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 647              		.loc 1 417 0
+ 648 032c 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 649 0330 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 650 0334 0122     		movs	r2, #1
+ 651 0336 1A60     		str	r2, [r3]
+ 652              	.L33:
+ 418:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 419:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 420:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( xQueueSendToBack( xQueue, ( void * ) &ulData, genqNO_BLOCK ) != errQUEUE_FULL )
+ 653              		.loc 1 420 0
+ 654 0338 07F11003 		add	r3, r7, #16
+ 655 033c 7869     		ldr	r0, [r7, #20]
+ 656 033e 1946     		mov	r1, r3
+ 657 0340 0022     		movs	r2, #0
+ 658 0342 0023     		movs	r3, #0
+ 659 0344 FFF7FEFF 		bl	xQueueGenericSend
+ 660 0348 0346     		mov	r3, r0
+ 661 034a 002B     		cmp	r3, #0
+ 662 034c 05D0     		beq	.L34
+ 421:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 422:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 663              		.loc 1 422 0
+ 664 034e 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 665 0352 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 666 0356 0122     		movs	r2, #1
+ 667 0358 1A60     		str	r2, [r3]
+ 668              	.L34:
+ 423:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 424:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 425:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		#if configUSE_PREEMPTION == 0
+ 426:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			taskYIELD();
+ 427:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		#endif
+ 428:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 429:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Check the data we read out is in the expected order. */
+ 430:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		for( ulData = 7; ulData < ( 7 + genqQUEUE_LENGTH ); ulData++ )
+ 669              		.loc 1 430 0
+ 670 035a 0723     		movs	r3, #7
+ 671 035c 3B61     		str	r3, [r7, #16]
+ 672 035e 1DE0     		b	.L35
+ 673              	.L38:
+ 431:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 432:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			if( xQueueReceive( xQueue, &ulData2, genqNO_BLOCK ) != pdPASS )
+ 674              		.loc 1 432 0
+ 675 0360 07F10C03 		add	r3, r7, #12
+ 676 0364 7869     		ldr	r0, [r7, #20]
+ 677 0366 1946     		mov	r1, r3
+ 678 0368 0022     		movs	r2, #0
+ 679 036a 0023     		movs	r3, #0
+ 680 036c FFF7FEFF 		bl	xQueueGenericReceive
+ 681 0370 0346     		mov	r3, r0
+ 682 0372 012B     		cmp	r3, #1
+ 683 0374 05D0     		beq	.L36
+ 433:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			{
+ 434:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 684              		.loc 1 434 0
+ 685 0376 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 686 037a C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 687 037e 0122     		movs	r2, #1
+ 688 0380 1A60     		str	r2, [r3]
+ 689              	.L36:
+ 435:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			}
+ 436:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 437:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			if( ulData != ulData2 )
+ 690              		.loc 1 437 0
+ 691 0382 3A69     		ldr	r2, [r7, #16]
+ 692 0384 FB68     		ldr	r3, [r7, #12]
+ 693 0386 9A42     		cmp	r2, r3
+ 694 0388 05D0     		beq	.L37
+ 438:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			{
+ 439:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 				xErrorDetected = pdTRUE;
+ 695              		.loc 1 439 0
+ 696 038a 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 697 038e C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 698 0392 0122     		movs	r2, #1
+ 699 0394 1A60     		str	r2, [r3]
+ 700              	.L37:
+ 430:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 701              		.loc 1 430 0
+ 702 0396 3B69     		ldr	r3, [r7, #16]
+ 703 0398 0133     		adds	r3, r3, #1
+ 704 039a 3B61     		str	r3, [r7, #16]
+ 705              	.L35:
+ 430:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 706              		.loc 1 430 0 is_stmt 0 discriminator 1
+ 707 039c 3B69     		ldr	r3, [r7, #16]
+ 708 039e 0B2B     		cmp	r3, #11
+ 709 03a0 DED9     		bls	.L38
+ 440:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			}
+ 441:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 442:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 443:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( uxQueueMessagesWaiting( xQueue ) != 0 )
+ 710              		.loc 1 443 0 is_stmt 1
+ 711 03a2 7869     		ldr	r0, [r7, #20]
+ 712 03a4 FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 713 03a8 0346     		mov	r3, r0
+ 714 03aa 002B     		cmp	r3, #0
+ 715 03ac 05D0     		beq	.L39
+ 444:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 445:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 716              		.loc 1 445 0
+ 717 03ae 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 718 03b2 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 719 03b6 0122     		movs	r2, #1
+ 720 03b8 1A60     		str	r2, [r3]
+ 721              	.L39:
+ 446:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 447:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 448:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		ulLoopCounter++;
+ 722              		.loc 1 448 0
+ 723 03ba 40F20003 		movw	r3, #:lower16:ulLoopCounter
+ 724 03be C0F20003 		movt	r3, #:upper16:ulLoopCounter
+ 725 03c2 1B68     		ldr	r3, [r3]
+ 726 03c4 5A1C     		adds	r2, r3, #1
+ 727 03c6 40F20003 		movw	r3, #:lower16:ulLoopCounter
+ 728 03ca C0F20003 		movt	r3, #:upper16:ulLoopCounter
+ 729 03ce 1A60     		str	r2, [r3]
+ 449:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 730              		.loc 1 449 0
+ 731 03d0 1CE6     		b	.L40
+ 732              		.cfi_endproc
+ 733              	.LFE2:
+ 735 03d2 00BF     		.section	.text.prvTakeTwoMutexesReturnInDifferentOrder,"ax",%progbits
+ 736              		.align	2
+ 737              		.thumb
+ 738              		.thumb_func
+ 740              	prvTakeTwoMutexesReturnInDifferentOrder:
+ 741              	.LFB3:
+ 450:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** }
+ 451:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*-----------------------------------------------------------*/
+ 452:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 453:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static void prvTakeTwoMutexesReturnInDifferentOrder( SemaphoreHandle_t xMutex, SemaphoreHandle_t xL
+ 454:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** {
+ 742              		.loc 1 454 0
+ 743              		.cfi_startproc
+ 744              		@ args = 0, pretend = 0, frame = 8
+ 745              		@ frame_needed = 1, uses_anonymous_args = 0
+ 746 0000 80B5     		push	{r7, lr}
+ 747              	.LCFI6:
+ 748              		.cfi_def_cfa_offset 8
+ 749              		.cfi_offset 7, -8
+ 750              		.cfi_offset 14, -4
+ 751 0002 82B0     		sub	sp, sp, #8
+ 752              	.LCFI7:
+ 753              		.cfi_def_cfa_offset 16
+ 754 0004 00AF     		add	r7, sp, #0
+ 755              	.LCFI8:
+ 756              		.cfi_def_cfa_register 7
+ 757 0006 7860     		str	r0, [r7, #4]
+ 758 0008 3960     		str	r1, [r7]
+ 455:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Take the mutex.  It should be available now. */
+ 456:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( xSemaphoreTake( xMutex, genqNO_BLOCK ) != pdPASS )
+ 759              		.loc 1 456 0
+ 760 000a 7868     		ldr	r0, [r7, #4]
+ 761 000c 0021     		movs	r1, #0
+ 762 000e 0022     		movs	r2, #0
+ 763 0010 0023     		movs	r3, #0
+ 764 0012 FFF7FEFF 		bl	xQueueGenericReceive
+ 765 0016 0346     		mov	r3, r0
+ 766 0018 012B     		cmp	r3, #1
+ 767 001a 05D0     		beq	.L42
+ 457:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 458:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 768              		.loc 1 458 0
+ 769 001c 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 770 0020 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 771 0024 0122     		movs	r2, #1
+ 772 0026 1A60     		str	r2, [r3]
+ 773              	.L42:
+ 459:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 460:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 461:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Set the guarded variable to a known start value. */
+ 462:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	ulGuardedVariable = 0;
+ 774              		.loc 1 462 0
+ 775 0028 40F20003 		movw	r3, #:lower16:ulGuardedVariable
+ 776 002c C0F20003 		movt	r3, #:upper16:ulGuardedVariable
+ 777 0030 0022     		movs	r2, #0
+ 778 0032 1A60     		str	r2, [r3]
+ 463:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 464:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* This task's priority should be as per that assigned when the task was
+ 465:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	created. */
+ 466:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( uxTaskPriorityGet( NULL ) != genqMUTEX_LOW_PRIORITY )
+ 779              		.loc 1 466 0
+ 780 0034 0020     		movs	r0, #0
+ 781 0036 FFF7FEFF 		bl	uxTaskPriorityGet
+ 782 003a 0346     		mov	r3, r0
+ 783 003c 002B     		cmp	r3, #0
+ 784 003e 05D0     		beq	.L43
+ 467:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 468:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 785              		.loc 1 468 0
+ 786 0040 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 787 0044 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 788 0048 0122     		movs	r2, #1
+ 789 004a 1A60     		str	r2, [r3]
+ 790              	.L43:
+ 469:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 470:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 471:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Now unsuspend the high priority task.  This will attempt to take the
+ 472:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	mutex, and block when it finds it cannot obtain it. */
+ 473:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	vTaskResume( xHighPriorityMutexTask );
+ 791              		.loc 1 473 0
+ 792 004c 40F20003 		movw	r3, #:lower16:xHighPriorityMutexTask
+ 793 0050 C0F20003 		movt	r3, #:upper16:xHighPriorityMutexTask
+ 794 0054 1B68     		ldr	r3, [r3]
+ 795 0056 1846     		mov	r0, r3
+ 796 0058 FFF7FEFF 		bl	vTaskResume
+ 474:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 475:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#if configUSE_PREEMPTION == 0
+ 476:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		taskYIELD();
+ 477:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#endif
+ 478:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 479:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Ensure the task is reporting its priority as blocked and not
+ 480:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	suspended (as it would have done in versions up to V7.5.3). */
+ 481:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#if( INCLUDE_eTaskGetState == 1 )
+ 482:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 483:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		configASSERT( eTaskGetState( xHighPriorityMutexTask ) == eBlocked );
+ 484:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 485:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#endif /* INCLUDE_eTaskGetState */
+ 486:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 487:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* The priority of the high priority task should now have been inherited
+ 488:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	as by now it will have attempted to get the mutex. */
+ 489:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( uxTaskPriorityGet( NULL ) != genqMUTEX_HIGH_PRIORITY )
+ 797              		.loc 1 489 0
+ 798 005c 0020     		movs	r0, #0
+ 799 005e FFF7FEFF 		bl	uxTaskPriorityGet
+ 800 0062 0346     		mov	r3, r0
+ 801 0064 032B     		cmp	r3, #3
+ 802 0066 05D0     		beq	.L44
+ 490:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 491:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 803              		.loc 1 491 0
+ 804 0068 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 805 006c C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 806 0070 0122     		movs	r2, #1
+ 807 0072 1A60     		str	r2, [r3]
+ 808              	.L44:
+ 492:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 493:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 494:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Attempt to set the priority of this task to the test priority -
+ 495:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	between the	idle priority and the medium/high test priorities, but the
+ 496:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	actual priority should remain at the high priority. */
+ 497:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	vTaskPrioritySet( NULL, genqMUTEX_TEST_PRIORITY );
+ 809              		.loc 1 497 0
+ 810 0074 0020     		movs	r0, #0
+ 811 0076 0121     		movs	r1, #1
+ 812 0078 FFF7FEFF 		bl	vTaskPrioritySet
+ 498:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( uxTaskPriorityGet( NULL ) != genqMUTEX_HIGH_PRIORITY )
+ 813              		.loc 1 498 0
+ 814 007c 0020     		movs	r0, #0
+ 815 007e FFF7FEFF 		bl	uxTaskPriorityGet
+ 816 0082 0346     		mov	r3, r0
+ 817 0084 032B     		cmp	r3, #3
+ 818 0086 05D0     		beq	.L45
+ 499:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 500:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 819              		.loc 1 500 0
+ 820 0088 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 821 008c C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 822 0090 0122     		movs	r2, #1
+ 823 0092 1A60     		str	r2, [r3]
+ 824              	.L45:
+ 501:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 502:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 503:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Now unsuspend the medium priority task.  This should not run as the
+ 504:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	inherited priority of this task is above that of the medium priority
+ 505:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	task. */
+ 506:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	vTaskResume( xMediumPriorityMutexTask );
+ 825              		.loc 1 506 0
+ 826 0094 40F20003 		movw	r3, #:lower16:xMediumPriorityMutexTask
+ 827 0098 C0F20003 		movt	r3, #:upper16:xMediumPriorityMutexTask
+ 828 009c 1B68     		ldr	r3, [r3]
+ 829 009e 1846     		mov	r0, r3
+ 830 00a0 FFF7FEFF 		bl	vTaskResume
+ 507:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 508:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* If the medium priority task did run then it will have incremented the
+ 509:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	guarded variable. */
+ 510:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( ulGuardedVariable != 0 )
+ 831              		.loc 1 510 0
+ 832 00a4 40F20003 		movw	r3, #:lower16:ulGuardedVariable
+ 833 00a8 C0F20003 		movt	r3, #:upper16:ulGuardedVariable
+ 834 00ac 1B68     		ldr	r3, [r3]
+ 835 00ae 002B     		cmp	r3, #0
+ 836 00b0 05D0     		beq	.L46
+ 511:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 512:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 837              		.loc 1 512 0
+ 838 00b2 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 839 00b6 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 840 00ba 0122     		movs	r2, #1
+ 841 00bc 1A60     		str	r2, [r3]
+ 842              	.L46:
+ 513:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 514:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 515:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Take the local mutex too, so two mutexes are now held. */
+ 516:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( xSemaphoreTake( xLocalMutex, genqNO_BLOCK ) != pdPASS )
+ 843              		.loc 1 516 0
+ 844 00be 3868     		ldr	r0, [r7]
+ 845 00c0 0021     		movs	r1, #0
+ 846 00c2 0022     		movs	r2, #0
+ 847 00c4 0023     		movs	r3, #0
+ 848 00c6 FFF7FEFF 		bl	xQueueGenericReceive
+ 849 00ca 0346     		mov	r3, r0
+ 850 00cc 012B     		cmp	r3, #1
+ 851 00ce 05D0     		beq	.L47
+ 517:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 518:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 852              		.loc 1 518 0
+ 853 00d0 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 854 00d4 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 855 00d8 0122     		movs	r2, #1
+ 856 00da 1A60     		str	r2, [r3]
+ 857              	.L47:
+ 519:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 520:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 521:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* When the semaphore is given back the priority of this task should not
+ 522:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	yet be disinherited because the local mutex is still held.  This is a
+ 523:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	simplification to allow FreeRTOS to be integrated with middleware that
+ 524:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	attempts to hold multiple mutexes without bloating the code with complex
+ 525:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	algorithms.  It is possible that the high priority mutex task will
+ 526:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	execute as it shares a priority with this task. */
+ 527:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( xSemaphoreGive( xMutex ) != pdPASS )
+ 858              		.loc 1 527 0
+ 859 00dc 7868     		ldr	r0, [r7, #4]
+ 860 00de 0021     		movs	r1, #0
+ 861 00e0 0022     		movs	r2, #0
+ 862 00e2 0023     		movs	r3, #0
+ 863 00e4 FFF7FEFF 		bl	xQueueGenericSend
+ 864 00e8 0346     		mov	r3, r0
+ 865 00ea 012B     		cmp	r3, #1
+ 866 00ec 05D0     		beq	.L48
+ 528:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 529:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 867              		.loc 1 529 0
+ 868 00ee 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 869 00f2 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 870 00f6 0122     		movs	r2, #1
+ 871 00f8 1A60     		str	r2, [r3]
+ 872              	.L48:
+ 530:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 531:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 532:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#if configUSE_PREEMPTION == 0
+ 533:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		taskYIELD();
+ 534:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#endif
+ 535:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 536:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* The guarded variable is only incremented by the medium priority task,
+ 537:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	which still should not have executed as this task should remain at the
+ 538:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	higher priority, ensure this is the case. */
+ 539:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( ulGuardedVariable != 0 )
+ 873              		.loc 1 539 0
+ 874 00fa 40F20003 		movw	r3, #:lower16:ulGuardedVariable
+ 875 00fe C0F20003 		movt	r3, #:upper16:ulGuardedVariable
+ 876 0102 1B68     		ldr	r3, [r3]
+ 877 0104 002B     		cmp	r3, #0
+ 878 0106 05D0     		beq	.L49
+ 540:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 541:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 879              		.loc 1 541 0
+ 880 0108 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 881 010c C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 882 0110 0122     		movs	r2, #1
+ 883 0112 1A60     		str	r2, [r3]
+ 884              	.L49:
+ 542:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 543:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 544:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( uxTaskPriorityGet( NULL ) != genqMUTEX_HIGH_PRIORITY )
+ 885              		.loc 1 544 0
+ 886 0114 0020     		movs	r0, #0
+ 887 0116 FFF7FEFF 		bl	uxTaskPriorityGet
+ 888 011a 0346     		mov	r3, r0
+ 889 011c 032B     		cmp	r3, #3
+ 890 011e 05D0     		beq	.L50
+ 545:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 546:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 891              		.loc 1 546 0
+ 892 0120 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 893 0124 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 894 0128 0122     		movs	r2, #1
+ 895 012a 1A60     		str	r2, [r3]
+ 896              	.L50:
+ 547:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 548:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 549:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Now also give back the local mutex, taking the held count back to 0.
+ 550:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	This time the priority of this task should be disinherited back to the
+ 551:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	priority to which it was set while the mutex was held.  This means
+ 552:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	the medium priority task should execute and increment the guarded
+ 553:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	variable.   When this task next	runs both the high and medium priority
+ 554:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	tasks will have been suspended again. */
+ 555:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( xSemaphoreGive( xLocalMutex ) != pdPASS )
+ 897              		.loc 1 555 0
+ 898 012c 3868     		ldr	r0, [r7]
+ 899 012e 0021     		movs	r1, #0
+ 900 0130 0022     		movs	r2, #0
+ 901 0132 0023     		movs	r3, #0
+ 902 0134 FFF7FEFF 		bl	xQueueGenericSend
+ 903 0138 0346     		mov	r3, r0
+ 904 013a 012B     		cmp	r3, #1
+ 905 013c 05D0     		beq	.L51
+ 556:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 557:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 906              		.loc 1 557 0
+ 907 013e 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 908 0142 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 909 0146 0122     		movs	r2, #1
+ 910 0148 1A60     		str	r2, [r3]
+ 911              	.L51:
+ 558:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 559:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 560:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#if configUSE_PREEMPTION == 0
+ 561:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		taskYIELD();
+ 562:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#endif
+ 563:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 564:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Check the guarded variable did indeed increment... */
+ 565:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( ulGuardedVariable != 1 )
+ 912              		.loc 1 565 0
+ 913 014a 40F20003 		movw	r3, #:lower16:ulGuardedVariable
+ 914 014e C0F20003 		movt	r3, #:upper16:ulGuardedVariable
+ 915 0152 1B68     		ldr	r3, [r3]
+ 916 0154 012B     		cmp	r3, #1
+ 917 0156 05D0     		beq	.L52
+ 566:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 567:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 918              		.loc 1 567 0
+ 919 0158 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 920 015c C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 921 0160 0122     		movs	r2, #1
+ 922 0162 1A60     		str	r2, [r3]
+ 923              	.L52:
+ 568:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 569:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 570:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* ... and that the priority of this task has been disinherited to
+ 571:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	genqMUTEX_TEST_PRIORITY. */
+ 572:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( uxTaskPriorityGet( NULL ) != genqMUTEX_TEST_PRIORITY )
+ 924              		.loc 1 572 0
+ 925 0164 0020     		movs	r0, #0
+ 926 0166 FFF7FEFF 		bl	uxTaskPriorityGet
+ 927 016a 0346     		mov	r3, r0
+ 928 016c 012B     		cmp	r3, #1
+ 929 016e 05D0     		beq	.L53
+ 573:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 574:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 930              		.loc 1 574 0
+ 931 0170 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 932 0174 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 933 0178 0122     		movs	r2, #1
+ 934 017a 1A60     		str	r2, [r3]
+ 935              	.L53:
+ 575:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 576:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 577:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Set the priority of this task back to its original value, ready for
+ 578:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	the next loop around this test. */
+ 579:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	vTaskPrioritySet( NULL, genqMUTEX_LOW_PRIORITY );
+ 936              		.loc 1 579 0
+ 937 017c 0020     		movs	r0, #0
+ 938 017e 0021     		movs	r1, #0
+ 939 0180 FFF7FEFF 		bl	vTaskPrioritySet
+ 580:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** }
+ 940              		.loc 1 580 0
+ 941 0184 0837     		adds	r7, r7, #8
+ 942 0186 BD46     		mov	sp, r7
+ 943              		@ sp needed
+ 944 0188 80BD     		pop	{r7, pc}
+ 945              		.cfi_endproc
+ 946              	.LFE3:
+ 948 018a 00BF     		.section	.text.prvTakeTwoMutexesReturnInSameOrder,"ax",%progbits
+ 949              		.align	2
+ 950              		.thumb
+ 951              		.thumb_func
+ 953              	prvTakeTwoMutexesReturnInSameOrder:
+ 954              	.LFB4:
+ 581:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*-----------------------------------------------------------*/
+ 582:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 583:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static void prvTakeTwoMutexesReturnInSameOrder( SemaphoreHandle_t xMutex, SemaphoreHandle_t xLocalM
+ 584:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** {
+ 955              		.loc 1 584 0
+ 956              		.cfi_startproc
+ 957              		@ args = 0, pretend = 0, frame = 8
+ 958              		@ frame_needed = 1, uses_anonymous_args = 0
+ 959 0000 80B5     		push	{r7, lr}
+ 960              	.LCFI9:
+ 961              		.cfi_def_cfa_offset 8
+ 962              		.cfi_offset 7, -8
+ 963              		.cfi_offset 14, -4
+ 964 0002 82B0     		sub	sp, sp, #8
+ 965              	.LCFI10:
+ 966              		.cfi_def_cfa_offset 16
+ 967 0004 00AF     		add	r7, sp, #0
+ 968              	.LCFI11:
+ 969              		.cfi_def_cfa_register 7
+ 970 0006 7860     		str	r0, [r7, #4]
+ 971 0008 3960     		str	r1, [r7]
+ 585:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Take the mutex.  It should be available now. */
+ 586:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( xSemaphoreTake( xMutex, genqNO_BLOCK ) != pdPASS )
+ 972              		.loc 1 586 0
+ 973 000a 7868     		ldr	r0, [r7, #4]
+ 974 000c 0021     		movs	r1, #0
+ 975 000e 0022     		movs	r2, #0
+ 976 0010 0023     		movs	r3, #0
+ 977 0012 FFF7FEFF 		bl	xQueueGenericReceive
+ 978 0016 0346     		mov	r3, r0
+ 979 0018 012B     		cmp	r3, #1
+ 980 001a 05D0     		beq	.L55
+ 587:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 588:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 981              		.loc 1 588 0
+ 982 001c 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 983 0020 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 984 0024 0122     		movs	r2, #1
+ 985 0026 1A60     		str	r2, [r3]
+ 986              	.L55:
+ 589:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 590:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 591:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Set the guarded variable to a known start value. */
+ 592:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	ulGuardedVariable = 0;
+ 987              		.loc 1 592 0
+ 988 0028 40F20003 		movw	r3, #:lower16:ulGuardedVariable
+ 989 002c C0F20003 		movt	r3, #:upper16:ulGuardedVariable
+ 990 0030 0022     		movs	r2, #0
+ 991 0032 1A60     		str	r2, [r3]
+ 593:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 594:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* This task's priority should be as per that assigned when the task was
+ 595:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	created. */
+ 596:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( uxTaskPriorityGet( NULL ) != genqMUTEX_LOW_PRIORITY )
+ 992              		.loc 1 596 0
+ 993 0034 0020     		movs	r0, #0
+ 994 0036 FFF7FEFF 		bl	uxTaskPriorityGet
+ 995 003a 0346     		mov	r3, r0
+ 996 003c 002B     		cmp	r3, #0
+ 997 003e 05D0     		beq	.L56
+ 597:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 598:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 998              		.loc 1 598 0
+ 999 0040 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1000 0044 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1001 0048 0122     		movs	r2, #1
+ 1002 004a 1A60     		str	r2, [r3]
+ 1003              	.L56:
+ 599:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 600:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 601:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Now unsuspend the high priority task.  This will attempt to take the
+ 602:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	mutex, and block when it finds it cannot obtain it. */
+ 603:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	vTaskResume( xHighPriorityMutexTask );
+ 1004              		.loc 1 603 0
+ 1005 004c 40F20003 		movw	r3, #:lower16:xHighPriorityMutexTask
+ 1006 0050 C0F20003 		movt	r3, #:upper16:xHighPriorityMutexTask
+ 1007 0054 1B68     		ldr	r3, [r3]
+ 1008 0056 1846     		mov	r0, r3
+ 1009 0058 FFF7FEFF 		bl	vTaskResume
+ 604:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 605:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#if configUSE_PREEMPTION == 0
+ 606:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		taskYIELD();
+ 607:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#endif
+ 608:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 609:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Ensure the task is reporting its priority as blocked and not
+ 610:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	suspended (as it would have done in versions up to V7.5.3). */
+ 611:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#if( INCLUDE_eTaskGetState == 1 )
+ 612:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 613:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		configASSERT( eTaskGetState( xHighPriorityMutexTask ) == eBlocked );
+ 614:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 615:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#endif /* INCLUDE_eTaskGetState */
+ 616:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 617:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* The priority of the high priority task should now have been inherited
+ 618:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	as by now it will have attempted to get the mutex. */
+ 619:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( uxTaskPriorityGet( NULL ) != genqMUTEX_HIGH_PRIORITY )
+ 1010              		.loc 1 619 0
+ 1011 005c 0020     		movs	r0, #0
+ 1012 005e FFF7FEFF 		bl	uxTaskPriorityGet
+ 1013 0062 0346     		mov	r3, r0
+ 1014 0064 032B     		cmp	r3, #3
+ 1015 0066 05D0     		beq	.L57
+ 620:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 621:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 1016              		.loc 1 621 0
+ 1017 0068 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1018 006c C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1019 0070 0122     		movs	r2, #1
+ 1020 0072 1A60     		str	r2, [r3]
+ 1021              	.L57:
+ 622:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 623:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 624:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Now unsuspend the medium priority task.  This should not run as the
+ 625:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	inherited priority of this task is above that of the medium priority
+ 626:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	task. */
+ 627:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	vTaskResume( xMediumPriorityMutexTask );
+ 1022              		.loc 1 627 0
+ 1023 0074 40F20003 		movw	r3, #:lower16:xMediumPriorityMutexTask
+ 1024 0078 C0F20003 		movt	r3, #:upper16:xMediumPriorityMutexTask
+ 1025 007c 1B68     		ldr	r3, [r3]
+ 1026 007e 1846     		mov	r0, r3
+ 1027 0080 FFF7FEFF 		bl	vTaskResume
+ 628:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 629:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* If the medium priority task did run then it will have incremented the
+ 630:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	guarded variable. */
+ 631:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( ulGuardedVariable != 0 )
+ 1028              		.loc 1 631 0
+ 1029 0084 40F20003 		movw	r3, #:lower16:ulGuardedVariable
+ 1030 0088 C0F20003 		movt	r3, #:upper16:ulGuardedVariable
+ 1031 008c 1B68     		ldr	r3, [r3]
+ 1032 008e 002B     		cmp	r3, #0
+ 1033 0090 05D0     		beq	.L58
+ 632:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 633:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 1034              		.loc 1 633 0
+ 1035 0092 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1036 0096 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1037 009a 0122     		movs	r2, #1
+ 1038 009c 1A60     		str	r2, [r3]
+ 1039              	.L58:
+ 634:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 635:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 636:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Take the local mutex too, so two mutexes are now held. */
+ 637:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( xSemaphoreTake( xLocalMutex, genqNO_BLOCK ) != pdPASS )
+ 1040              		.loc 1 637 0
+ 1041 009e 3868     		ldr	r0, [r7]
+ 1042 00a0 0021     		movs	r1, #0
+ 1043 00a2 0022     		movs	r2, #0
+ 1044 00a4 0023     		movs	r3, #0
+ 1045 00a6 FFF7FEFF 		bl	xQueueGenericReceive
+ 1046 00aa 0346     		mov	r3, r0
+ 1047 00ac 012B     		cmp	r3, #1
+ 1048 00ae 05D0     		beq	.L59
+ 638:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 639:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 1049              		.loc 1 639 0
+ 1050 00b0 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1051 00b4 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1052 00b8 0122     		movs	r2, #1
+ 1053 00ba 1A60     		str	r2, [r3]
+ 1054              	.L59:
+ 640:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 641:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 642:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* When the local semaphore is given back the priority of this task should
+ 643:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	not	yet be disinherited because the shared mutex is still held.  This is a
+ 644:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	simplification to allow FreeRTOS to be integrated with middleware that
+ 645:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	attempts to hold multiple mutexes without bloating the code with complex
+ 646:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	algorithms.  It is possible that the high priority mutex task will
+ 647:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	execute as it shares a priority with this task. */
+ 648:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( xSemaphoreGive( xLocalMutex ) != pdPASS )
+ 1055              		.loc 1 648 0
+ 1056 00bc 3868     		ldr	r0, [r7]
+ 1057 00be 0021     		movs	r1, #0
+ 1058 00c0 0022     		movs	r2, #0
+ 1059 00c2 0023     		movs	r3, #0
+ 1060 00c4 FFF7FEFF 		bl	xQueueGenericSend
+ 1061 00c8 0346     		mov	r3, r0
+ 1062 00ca 012B     		cmp	r3, #1
+ 1063 00cc 05D0     		beq	.L60
+ 649:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 650:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 1064              		.loc 1 650 0
+ 1065 00ce 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1066 00d2 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1067 00d6 0122     		movs	r2, #1
+ 1068 00d8 1A60     		str	r2, [r3]
+ 1069              	.L60:
+ 651:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 652:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 653:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#if configUSE_PREEMPTION == 0
+ 654:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		taskYIELD();
+ 655:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#endif
+ 656:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 657:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* The guarded variable is only incremented by the medium priority task,
+ 658:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	which still should not have executed as this task should remain at the
+ 659:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	higher priority, ensure this is the case. */
+ 660:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( ulGuardedVariable != 0 )
+ 1070              		.loc 1 660 0
+ 1071 00da 40F20003 		movw	r3, #:lower16:ulGuardedVariable
+ 1072 00de C0F20003 		movt	r3, #:upper16:ulGuardedVariable
+ 1073 00e2 1B68     		ldr	r3, [r3]
+ 1074 00e4 002B     		cmp	r3, #0
+ 1075 00e6 05D0     		beq	.L61
+ 661:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 662:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 1076              		.loc 1 662 0
+ 1077 00e8 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1078 00ec C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1079 00f0 0122     		movs	r2, #1
+ 1080 00f2 1A60     		str	r2, [r3]
+ 1081              	.L61:
+ 663:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 664:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 665:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( uxTaskPriorityGet( NULL ) != genqMUTEX_HIGH_PRIORITY )
+ 1082              		.loc 1 665 0
+ 1083 00f4 0020     		movs	r0, #0
+ 1084 00f6 FFF7FEFF 		bl	uxTaskPriorityGet
+ 1085 00fa 0346     		mov	r3, r0
+ 1086 00fc 032B     		cmp	r3, #3
+ 1087 00fe 05D0     		beq	.L62
+ 666:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 667:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 1088              		.loc 1 667 0
+ 1089 0100 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1090 0104 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1091 0108 0122     		movs	r2, #1
+ 1092 010a 1A60     		str	r2, [r3]
+ 1093              	.L62:
+ 668:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 669:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 670:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Now also give back the shared mutex, taking the held count back to 0.
+ 671:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	This time the priority of this task should be disinherited back to the
+ 672:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	priority at which it was created.  This means the medium priority task
+ 673:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	should execute and increment the guarded variable.  When this task next runs
+ 674:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	both the high and medium priority tasks will have been suspended again. */
+ 675:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( xSemaphoreGive( xMutex ) != pdPASS )
+ 1094              		.loc 1 675 0
+ 1095 010c 7868     		ldr	r0, [r7, #4]
+ 1096 010e 0021     		movs	r1, #0
+ 1097 0110 0022     		movs	r2, #0
+ 1098 0112 0023     		movs	r3, #0
+ 1099 0114 FFF7FEFF 		bl	xQueueGenericSend
+ 1100 0118 0346     		mov	r3, r0
+ 1101 011a 012B     		cmp	r3, #1
+ 1102 011c 05D0     		beq	.L63
+ 676:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 677:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 1103              		.loc 1 677 0
+ 1104 011e 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1105 0122 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1106 0126 0122     		movs	r2, #1
+ 1107 0128 1A60     		str	r2, [r3]
+ 1108              	.L63:
+ 678:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 679:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 680:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#if configUSE_PREEMPTION == 0
+ 681:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		taskYIELD();
+ 682:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#endif
+ 683:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 684:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Check the guarded variable did indeed increment... */
+ 685:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( ulGuardedVariable != 1 )
+ 1109              		.loc 1 685 0
+ 1110 012a 40F20003 		movw	r3, #:lower16:ulGuardedVariable
+ 1111 012e C0F20003 		movt	r3, #:upper16:ulGuardedVariable
+ 1112 0132 1B68     		ldr	r3, [r3]
+ 1113 0134 012B     		cmp	r3, #1
+ 1114 0136 05D0     		beq	.L64
+ 686:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 687:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 1115              		.loc 1 687 0
+ 1116 0138 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1117 013c C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1118 0140 0122     		movs	r2, #1
+ 1119 0142 1A60     		str	r2, [r3]
+ 1120              	.L64:
+ 688:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 689:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 690:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* ... and that the priority of this task has been disinherited to
+ 691:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	genqMUTEX_LOW_PRIORITY. */
+ 692:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( uxTaskPriorityGet( NULL ) != genqMUTEX_LOW_PRIORITY )
+ 1121              		.loc 1 692 0
+ 1122 0144 0020     		movs	r0, #0
+ 1123 0146 FFF7FEFF 		bl	uxTaskPriorityGet
+ 1124 014a 0346     		mov	r3, r0
+ 1125 014c 002B     		cmp	r3, #0
+ 1126 014e 05D0     		beq	.L54
+ 693:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 694:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 1127              		.loc 1 694 0
+ 1128 0150 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1129 0154 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1130 0158 0122     		movs	r2, #1
+ 1131 015a 1A60     		str	r2, [r3]
+ 1132              	.L54:
+ 695:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 696:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** }
+ 1133              		.loc 1 696 0
+ 1134 015c 0837     		adds	r7, r7, #8
+ 1135 015e BD46     		mov	sp, r7
+ 1136              		@ sp needed
+ 1137 0160 80BD     		pop	{r7, pc}
+ 1138              		.cfi_endproc
+ 1139              	.LFE4:
+ 1141 0162 00BF     		.section	.text.prvLowPriorityMutexTask,"ax",%progbits
+ 1142              		.align	2
+ 1143              		.thumb
+ 1144              		.thumb_func
+ 1146              	prvLowPriorityMutexTask:
+ 1147              	.LFB5:
+ 697:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*-----------------------------------------------------------*/
+ 698:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 699:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static void prvLowPriorityMutexTask( void *pvParameters )
+ 700:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** {
+ 1148              		.loc 1 700 0
+ 1149              		.cfi_startproc
+ 1150              		@ args = 0, pretend = 0, frame = 16
+ 1151              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1152 0000 80B5     		push	{r7, lr}
+ 1153              	.LCFI12:
+ 1154              		.cfi_def_cfa_offset 8
+ 1155              		.cfi_offset 7, -8
+ 1156              		.cfi_offset 14, -4
+ 1157 0002 84B0     		sub	sp, sp, #16
+ 1158              	.LCFI13:
+ 1159              		.cfi_def_cfa_offset 24
+ 1160 0004 00AF     		add	r7, sp, #0
+ 1161              	.LCFI14:
+ 1162              		.cfi_def_cfa_register 7
+ 1163 0006 7860     		str	r0, [r7, #4]
+ 701:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** SemaphoreHandle_t xMutex = ( SemaphoreHandle_t ) pvParameters, xLocalMutex;
+ 1164              		.loc 1 701 0
+ 1165 0008 7B68     		ldr	r3, [r7, #4]
+ 1166 000a FB60     		str	r3, [r7, #12]
+ 702:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 703:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#ifdef USE_STDIO
+ 704:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	void vPrintDisplayMessage( const char * const * ppcMessageToSend );
+ 705:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 706:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		const char * const pcTaskStartMsg = "Mutex with priority inheritance test started.\r\n";
+ 707:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 708:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Queue a message for printing to say the task has started. */
+ 709:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		vPrintDisplayMessage( &pcTaskStartMsg );
+ 710:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	#endif
+ 711:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 712:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* The local mutex is used to check the 'mutexs held' count. */
+ 713:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	xLocalMutex = xSemaphoreCreateMutex();
+ 1167              		.loc 1 713 0
+ 1168 000c 0120     		movs	r0, #1
+ 1169 000e FFF7FEFF 		bl	xQueueCreateMutex
+ 1170 0012 B860     		str	r0, [r7, #8]
+ 714:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	configASSERT( xLocalMutex );
+ 1171              		.loc 1 714 0
+ 1172 0014 BB68     		ldr	r3, [r7, #8]
+ 1173 0016 002B     		cmp	r3, #0
+ 1174 0018 02D1     		bne	.L67
+ 1175              		.loc 1 714 0 is_stmt 0 discriminator 1
+ 1176 001a FFF7FEFF 		bl	ulPortSetInterruptMask
+ 1177              	.L68:
+ 1178 001e FEE7     		b	.L68
+ 1179              	.L67:
+ 715:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 716:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	for( ;; )
+ 717:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 718:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* The first tests exercise the priority inheritance when two mutexes
+ 719:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		are taken then returned in a different order to which they were
+ 720:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		taken. */
+ 721:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		prvTakeTwoMutexesReturnInDifferentOrder( xMutex, xLocalMutex );
+ 1180              		.loc 1 721 0 is_stmt 1 discriminator 1
+ 1181 0020 F868     		ldr	r0, [r7, #12]
+ 1182 0022 B968     		ldr	r1, [r7, #8]
+ 1183 0024 FFF7FEFF 		bl	prvTakeTwoMutexesReturnInDifferentOrder
+ 722:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 723:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Just to show this task is still running. */
+ 724:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		ulLoopCounter2++;
+ 1184              		.loc 1 724 0 discriminator 1
+ 1185 0028 40F20003 		movw	r3, #:lower16:ulLoopCounter2
+ 1186 002c C0F20003 		movt	r3, #:upper16:ulLoopCounter2
+ 1187 0030 1B68     		ldr	r3, [r3]
+ 1188 0032 5A1C     		adds	r2, r3, #1
+ 1189 0034 40F20003 		movw	r3, #:lower16:ulLoopCounter2
+ 1190 0038 C0F20003 		movt	r3, #:upper16:ulLoopCounter2
+ 1191 003c 1A60     		str	r2, [r3]
+ 725:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 726:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		#if configUSE_PREEMPTION == 0
+ 727:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			taskYIELD();
+ 728:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		#endif
+ 729:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 730:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* The second tests exercise the priority inheritance when two mutexes
+ 731:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		are taken then returned in the same order in which they were taken. */
+ 732:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		prvTakeTwoMutexesReturnInSameOrder( xMutex, xLocalMutex );
+ 1192              		.loc 1 732 0 discriminator 1
+ 1193 003e F868     		ldr	r0, [r7, #12]
+ 1194 0040 B968     		ldr	r1, [r7, #8]
+ 1195 0042 FFF7FEFF 		bl	prvTakeTwoMutexesReturnInSameOrder
+ 733:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 734:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Just to show this task is still running. */
+ 735:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		ulLoopCounter2++;
+ 1196              		.loc 1 735 0 discriminator 1
+ 1197 0046 40F20003 		movw	r3, #:lower16:ulLoopCounter2
+ 1198 004a C0F20003 		movt	r3, #:upper16:ulLoopCounter2
+ 1199 004e 1B68     		ldr	r3, [r3]
+ 1200 0050 5A1C     		adds	r2, r3, #1
+ 1201 0052 40F20003 		movw	r3, #:lower16:ulLoopCounter2
+ 1202 0056 C0F20003 		movt	r3, #:upper16:ulLoopCounter2
+ 1203 005a 1A60     		str	r2, [r3]
+ 736:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 737:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		#if configUSE_PREEMPTION == 0
+ 738:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			taskYIELD();
+ 739:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		#endif
+ 740:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 1204              		.loc 1 740 0 discriminator 1
+ 1205 005c E0E7     		b	.L67
+ 1206              		.cfi_endproc
+ 1207              	.LFE5:
+ 1209 005e 00BF     		.section	.text.prvMediumPriorityMutexTask,"ax",%progbits
+ 1210              		.align	2
+ 1211              		.thumb
+ 1212              		.thumb_func
+ 1214              	prvMediumPriorityMutexTask:
+ 1215              	.LFB6:
+ 741:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** }
+ 742:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*-----------------------------------------------------------*/
+ 743:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 744:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static void prvMediumPriorityMutexTask( void *pvParameters )
+ 745:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** {
+ 1216              		.loc 1 745 0
+ 1217              		.cfi_startproc
+ 1218              		@ args = 0, pretend = 0, frame = 8
+ 1219              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1220 0000 80B5     		push	{r7, lr}
+ 1221              	.LCFI15:
+ 1222              		.cfi_def_cfa_offset 8
+ 1223              		.cfi_offset 7, -8
+ 1224              		.cfi_offset 14, -4
+ 1225 0002 82B0     		sub	sp, sp, #8
+ 1226              	.LCFI16:
+ 1227              		.cfi_def_cfa_offset 16
+ 1228 0004 00AF     		add	r7, sp, #0
+ 1229              	.LCFI17:
+ 1230              		.cfi_def_cfa_register 7
+ 1231 0006 7860     		str	r0, [r7, #4]
+ 1232              	.L70:
+ 746:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	( void ) pvParameters;
+ 747:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 748:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	for( ;; )
+ 749:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 750:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* The medium priority task starts by suspending itself.  The low
+ 751:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		priority task will unsuspend this task when required. */
+ 752:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		vTaskSuspend( NULL );
+ 1233              		.loc 1 752 0 discriminator 1
+ 1234 0008 0020     		movs	r0, #0
+ 1235 000a FFF7FEFF 		bl	vTaskSuspend
+ 753:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 754:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* When this task unsuspends all it does is increment the guarded
+ 755:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		variable, this is so the low priority task knows that it has
+ 756:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		executed. */
+ 757:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		ulGuardedVariable++;
+ 1236              		.loc 1 757 0 discriminator 1
+ 1237 000e 40F20003 		movw	r3, #:lower16:ulGuardedVariable
+ 1238 0012 C0F20003 		movt	r3, #:upper16:ulGuardedVariable
+ 1239 0016 1B68     		ldr	r3, [r3]
+ 1240 0018 5A1C     		adds	r2, r3, #1
+ 1241 001a 40F20003 		movw	r3, #:lower16:ulGuardedVariable
+ 1242 001e C0F20003 		movt	r3, #:upper16:ulGuardedVariable
+ 1243 0022 1A60     		str	r2, [r3]
+ 758:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 1244              		.loc 1 758 0 discriminator 1
+ 1245 0024 F0E7     		b	.L70
+ 1246              		.cfi_endproc
+ 1247              	.LFE6:
+ 1249 0026 00BF     		.section	.text.prvHighPriorityMutexTask,"ax",%progbits
+ 1250              		.align	2
+ 1251              		.thumb
+ 1252              		.thumb_func
+ 1254              	prvHighPriorityMutexTask:
+ 1255              	.LFB7:
+ 759:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** }
+ 760:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*-----------------------------------------------------------*/
+ 761:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 762:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static void prvHighPriorityMutexTask( void *pvParameters )
+ 763:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** {
+ 1256              		.loc 1 763 0
+ 1257              		.cfi_startproc
+ 1258              		@ args = 0, pretend = 0, frame = 16
+ 1259              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1260 0000 80B5     		push	{r7, lr}
+ 1261              	.LCFI18:
+ 1262              		.cfi_def_cfa_offset 8
+ 1263              		.cfi_offset 7, -8
+ 1264              		.cfi_offset 14, -4
+ 1265 0002 84B0     		sub	sp, sp, #16
+ 1266              	.LCFI19:
+ 1267              		.cfi_def_cfa_offset 24
+ 1268 0004 00AF     		add	r7, sp, #0
+ 1269              	.LCFI20:
+ 1270              		.cfi_def_cfa_register 7
+ 1271 0006 7860     		str	r0, [r7, #4]
+ 764:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** SemaphoreHandle_t xMutex = ( SemaphoreHandle_t ) pvParameters;
+ 1272              		.loc 1 764 0
+ 1273 0008 7B68     		ldr	r3, [r7, #4]
+ 1274 000a FB60     		str	r3, [r7, #12]
+ 1275              	.L74:
+ 765:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 766:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	for( ;; )
+ 767:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 768:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* The high priority task starts by suspending itself.  The low
+ 769:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		priority task will unsuspend this task when required. */
+ 770:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		vTaskSuspend( NULL );
+ 1276              		.loc 1 770 0
+ 1277 000c 0020     		movs	r0, #0
+ 1278 000e FFF7FEFF 		bl	vTaskSuspend
+ 771:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 772:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* When this task unsuspends all it does is attempt to obtain
+ 773:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		the mutex.  It should find the mutex is not available so a
+ 774:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		block time is specified. */
+ 775:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( xSemaphoreTake( xMutex, portMAX_DELAY ) != pdPASS )
+ 1279              		.loc 1 775 0
+ 1280 0012 F868     		ldr	r0, [r7, #12]
+ 1281 0014 0021     		movs	r1, #0
+ 1282 0016 4FF0FF32 		mov	r2, #-1
+ 1283 001a 0023     		movs	r3, #0
+ 1284 001c FFF7FEFF 		bl	xQueueGenericReceive
+ 1285 0020 0346     		mov	r3, r0
+ 1286 0022 012B     		cmp	r3, #1
+ 1287 0024 05D0     		beq	.L72
+ 776:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 777:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 1288              		.loc 1 777 0
+ 1289 0026 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1290 002a C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1291 002e 0122     		movs	r2, #1
+ 1292 0030 1A60     		str	r2, [r3]
+ 1293              	.L72:
+ 778:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 779:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 780:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* When the mutex is eventually obtained it is just given back before
+ 781:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		returning to suspend ready for the next cycle. */
+ 782:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( xSemaphoreGive( xMutex ) != pdPASS )
+ 1294              		.loc 1 782 0
+ 1295 0032 F868     		ldr	r0, [r7, #12]
+ 1296 0034 0021     		movs	r1, #0
+ 1297 0036 0022     		movs	r2, #0
+ 1298 0038 0023     		movs	r3, #0
+ 1299 003a FFF7FEFF 		bl	xQueueGenericSend
+ 1300 003e 0346     		mov	r3, r0
+ 1301 0040 012B     		cmp	r3, #1
+ 1302 0042 06D0     		beq	.L73
+ 783:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 784:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 1303              		.loc 1 784 0
+ 1304 0044 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1305 0048 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1306 004c 0122     		movs	r2, #1
+ 1307 004e 1A60     		str	r2, [r3]
+ 785:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 786:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 1308              		.loc 1 786 0
+ 1309 0050 DCE7     		b	.L74
+ 1310              	.L73:
+ 1311 0052 DBE7     		b	.L74
+ 1312              		.cfi_endproc
+ 1313              	.LFE7:
+ 1315              		.section	.text.vInterruptMutexTask,"ax",%progbits
+ 1316              		.align	2
+ 1317              		.global	vInterruptMutexTask
+ 1318              		.thumb
+ 1319              		.thumb_func
+ 1321              	vInterruptMutexTask:
+ 1322              	.LFB8:
+ 787:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** }
+ 788:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*-----------------------------------------------------------*/
+ 789:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 790:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /* NOTE: This function is not declared static to prevent compiler warnings in
+ 791:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** demos where the function is declared but not used. */
+ 792:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** void vInterruptMutexTask( void *pvParameters )
+ 793:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** {
+ 1323              		.loc 1 793 0
+ 1324              		.cfi_startproc
+ 1325              		@ args = 0, pretend = 0, frame = 16
+ 1326              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1327 0000 80B5     		push	{r7, lr}
+ 1328              	.LCFI21:
+ 1329              		.cfi_def_cfa_offset 8
+ 1330              		.cfi_offset 7, -8
+ 1331              		.cfi_offset 14, -4
+ 1332 0002 84B0     		sub	sp, sp, #16
+ 1333              	.LCFI22:
+ 1334              		.cfi_def_cfa_offset 24
+ 1335 0004 00AF     		add	r7, sp, #0
+ 1336              	.LCFI23:
+ 1337              		.cfi_def_cfa_register 7
+ 1338 0006 7860     		str	r0, [r7, #4]
+ 794:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** const TickType_t xInterruptGivePeriod = pdMS_TO_TICKS( genqINTERRUPT_MUTEX_GIVE_PERIOD_MS );
+ 1339              		.loc 1 794 0
+ 1340 0008 6423     		movs	r3, #100
+ 1341 000a FB60     		str	r3, [r7, #12]
+ 795:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** volatile uint32_t ulLoops = 0;
+ 1342              		.loc 1 795 0
+ 1343 000c 0023     		movs	r3, #0
+ 1344 000e BB60     		str	r3, [r7, #8]
+ 1345              	.L78:
+ 796:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 797:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Just to avoid compiler warnings. */
+ 798:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	( void ) pvParameters;
+ 799:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 800:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	for( ;; )
+ 801:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 802:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		/* Has to wait longer than the time between gives to make sure it
+ 803:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		should definitely have received the mutex. */
+ 804:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		if( xSemaphoreTake( xISRMutex, ( xInterruptGivePeriod * 2 ) ) != pdPASS )
+ 1346              		.loc 1 804 0
+ 1347 0010 40F20003 		movw	r3, #:lower16:xISRMutex
+ 1348 0014 C0F20003 		movt	r3, #:upper16:xISRMutex
+ 1349 0018 1A68     		ldr	r2, [r3]
+ 1350 001a FB68     		ldr	r3, [r7, #12]
+ 1351 001c 5B00     		lsls	r3, r3, #1
+ 1352 001e 1046     		mov	r0, r2
+ 1353 0020 0021     		movs	r1, #0
+ 1354 0022 1A46     		mov	r2, r3
+ 1355 0024 0023     		movs	r3, #0
+ 1356 0026 FFF7FEFF 		bl	xQueueGenericReceive
+ 1357 002a 0346     		mov	r3, r0
+ 1358 002c 012B     		cmp	r3, #1
+ 1359 002e 06D0     		beq	.L76
+ 805:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 806:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			xErrorDetected = pdTRUE;
+ 1360              		.loc 1 806 0
+ 1361 0030 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1362 0034 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1363 0038 0122     		movs	r2, #1
+ 1364 003a 1A60     		str	r2, [r3]
+ 807:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 808:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		else
+ 809:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		{
+ 810:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 			ulLoops++;
+ 811:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 812:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 1365              		.loc 1 812 0
+ 1366 003c E8E7     		b	.L78
+ 1367              	.L76:
+ 810:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		}
+ 1368              		.loc 1 810 0
+ 1369 003e BB68     		ldr	r3, [r7, #8]
+ 1370 0040 0133     		adds	r3, r3, #1
+ 1371 0042 BB60     		str	r3, [r7, #8]
+ 1372              		.loc 1 812 0
+ 1373 0044 E4E7     		b	.L78
+ 1374              		.cfi_endproc
+ 1375              	.LFE8:
+ 1377 0046 00BF     		.section	.text.vMutexISRInteractionTest,"ax",%progbits
+ 1378              		.align	2
+ 1379              		.global	vMutexISRInteractionTest
+ 1380              		.thumb
+ 1381              		.thumb_func
+ 1383              	vMutexISRInteractionTest:
+ 1384              	.LFB9:
+ 813:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** }
+ 814:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*-----------------------------------------------------------*/
+ 815:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 816:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** void vMutexISRInteractionTest( void )
+ 817:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** {
+ 1385              		.loc 1 817 0
+ 1386              		.cfi_startproc
+ 1387              		@ args = 0, pretend = 0, frame = 8
+ 1388              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1389 0000 80B5     		push	{r7, lr}
+ 1390              	.LCFI24:
+ 1391              		.cfi_def_cfa_offset 8
+ 1392              		.cfi_offset 7, -8
+ 1393              		.cfi_offset 14, -4
+ 1394 0002 82B0     		sub	sp, sp, #8
+ 1395              	.LCFI25:
+ 1396              		.cfi_def_cfa_offset 16
+ 1397 0004 00AF     		add	r7, sp, #0
+ 1398              	.LCFI26:
+ 1399              		.cfi_def_cfa_register 7
+ 818:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static TickType_t xLastGiveTime = 0;
+ 819:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** TickType_t xTimeNow;
+ 820:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 821:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	xTimeNow = xTaskGetTickCountFromISR();
+ 1400              		.loc 1 821 0
+ 1401 0006 FFF7FEFF 		bl	xTaskGetTickCountFromISR
+ 1402 000a 7860     		str	r0, [r7, #4]
+ 822:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( ( xTimeNow - xLastGiveTime ) >= pdMS_TO_TICKS( genqINTERRUPT_MUTEX_GIVE_PERIOD_MS ) )
+ 1403              		.loc 1 822 0
+ 1404 000c 40F20003 		movw	r3, #:lower16:xLastGiveTime.5093
+ 1405 0010 C0F20003 		movt	r3, #:upper16:xLastGiveTime.5093
+ 1406 0014 1B68     		ldr	r3, [r3]
+ 1407 0016 7A68     		ldr	r2, [r7, #4]
+ 1408 0018 D31A     		subs	r3, r2, r3
+ 1409 001a 632B     		cmp	r3, #99
+ 1410 001c 1AD9     		bls	.L79
+ 823:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 824:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		configASSERT( xISRMutex );
+ 1411              		.loc 1 824 0
+ 1412 001e 40F20003 		movw	r3, #:lower16:xISRMutex
+ 1413 0022 C0F20003 		movt	r3, #:upper16:xISRMutex
+ 1414 0026 1B68     		ldr	r3, [r3]
+ 1415 0028 002B     		cmp	r3, #0
+ 1416 002a 02D1     		bne	.L81
+ 1417              		.loc 1 824 0 is_stmt 0 discriminator 1
+ 1418 002c FFF7FEFF 		bl	ulPortSetInterruptMask
+ 1419              	.L82:
+ 1420 0030 FEE7     		b	.L82
+ 1421              	.L81:
+ 825:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xSemaphoreGiveFromISR( xISRMutex, NULL );
+ 1422              		.loc 1 825 0 is_stmt 1
+ 1423 0032 40F20003 		movw	r3, #:lower16:xISRMutex
+ 1424 0036 C0F20003 		movt	r3, #:upper16:xISRMutex
+ 1425 003a 1B68     		ldr	r3, [r3]
+ 1426 003c 1846     		mov	r0, r3
+ 1427 003e 0021     		movs	r1, #0
+ 1428 0040 0022     		movs	r2, #0
+ 1429 0042 0023     		movs	r3, #0
+ 1430 0044 FFF7FEFF 		bl	xQueueGenericSendFromISR
+ 826:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xLastGiveTime = xTimeNow;
+ 1431              		.loc 1 826 0
+ 1432 0048 40F20003 		movw	r3, #:lower16:xLastGiveTime.5093
+ 1433 004c C0F20003 		movt	r3, #:upper16:xLastGiveTime.5093
+ 1434 0050 7A68     		ldr	r2, [r7, #4]
+ 1435 0052 1A60     		str	r2, [r3]
+ 1436              	.L79:
+ 827:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 828:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** }
+ 1437              		.loc 1 828 0
+ 1438 0054 0837     		adds	r7, r7, #8
+ 1439 0056 BD46     		mov	sp, r7
+ 1440              		@ sp needed
+ 1441 0058 80BD     		pop	{r7, pc}
+ 1442              		.cfi_endproc
+ 1443              	.LFE9:
+ 1445 005a 00BF     		.section	.text.xAreGenericQueueTasksStillRunning,"ax",%progbits
+ 1446              		.align	2
+ 1447              		.global	xAreGenericQueueTasksStillRunning
+ 1448              		.thumb
+ 1449              		.thumb_func
+ 1451              	xAreGenericQueueTasksStillRunning:
+ 1452              	.LFB10:
+ 829:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /*-----------------------------------------------------------*/
+ 830:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 831:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** /* This is called to check that all the created tasks are still running. */
+ 832:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** BaseType_t xAreGenericQueueTasksStillRunning( void )
+ 833:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** {
+ 1453              		.loc 1 833 0
+ 1454              		.cfi_startproc
+ 1455              		@ args = 0, pretend = 0, frame = 0
+ 1456              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1457              		@ link register save eliminated.
+ 1458 0000 80B4     		push	{r7}
+ 1459              	.LCFI27:
+ 1460              		.cfi_def_cfa_offset 4
+ 1461              		.cfi_offset 7, -4
+ 1462 0002 00AF     		add	r7, sp, #0
+ 1463              	.LCFI28:
+ 1464              		.cfi_def_cfa_register 7
+ 834:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** static uint32_t ulLastLoopCounter = 0, ulLastLoopCounter2 = 0;
+ 835:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 836:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* If the demo task is still running then we expect the loop counters to
+ 837:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	have incremented since this function was last called. */
+ 838:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( ulLastLoopCounter == ulLoopCounter )
+ 1465              		.loc 1 838 0
+ 1466 0004 40F20003 		movw	r3, #:lower16:ulLastLoopCounter.5099
+ 1467 0008 C0F20003 		movt	r3, #:upper16:ulLastLoopCounter.5099
+ 1468 000c 1A68     		ldr	r2, [r3]
+ 1469 000e 40F20003 		movw	r3, #:lower16:ulLoopCounter
+ 1470 0012 C0F20003 		movt	r3, #:upper16:ulLoopCounter
+ 1471 0016 1B68     		ldr	r3, [r3]
+ 1472 0018 9A42     		cmp	r2, r3
+ 1473 001a 05D1     		bne	.L84
+ 839:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 840:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 1474              		.loc 1 840 0
+ 1475 001c 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1476 0020 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1477 0024 0122     		movs	r2, #1
+ 1478 0026 1A60     		str	r2, [r3]
+ 1479              	.L84:
+ 841:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 842:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 843:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	if( ulLastLoopCounter2 == ulLoopCounter2 )
+ 1480              		.loc 1 843 0
+ 1481 0028 40F20003 		movw	r3, #:lower16:ulLastLoopCounter2.5100
+ 1482 002c C0F20003 		movt	r3, #:upper16:ulLastLoopCounter2.5100
+ 1483 0030 1A68     		ldr	r2, [r3]
+ 1484 0032 40F20003 		movw	r3, #:lower16:ulLoopCounter2
+ 1485 0036 C0F20003 		movt	r3, #:upper16:ulLoopCounter2
+ 1486 003a 1B68     		ldr	r3, [r3]
+ 1487 003c 9A42     		cmp	r2, r3
+ 1488 003e 05D1     		bne	.L85
+ 844:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	{
+ 845:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 		xErrorDetected = pdTRUE;
+ 1489              		.loc 1 845 0
+ 1490 0040 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1491 0044 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1492 0048 0122     		movs	r2, #1
+ 1493 004a 1A60     		str	r2, [r3]
+ 1494              	.L85:
+ 846:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	}
+ 847:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 848:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	ulLastLoopCounter = ulLoopCounter;
+ 1495              		.loc 1 848 0
+ 1496 004c 40F20003 		movw	r3, #:lower16:ulLoopCounter
+ 1497 0050 C0F20003 		movt	r3, #:upper16:ulLoopCounter
+ 1498 0054 1A68     		ldr	r2, [r3]
+ 1499 0056 40F20003 		movw	r3, #:lower16:ulLastLoopCounter.5099
+ 1500 005a C0F20003 		movt	r3, #:upper16:ulLastLoopCounter.5099
+ 1501 005e 1A60     		str	r2, [r3]
+ 849:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	ulLastLoopCounter2 = ulLoopCounter2;
+ 1502              		.loc 1 849 0
+ 1503 0060 40F20003 		movw	r3, #:lower16:ulLoopCounter2
+ 1504 0064 C0F20003 		movt	r3, #:upper16:ulLoopCounter2
+ 1505 0068 1A68     		ldr	r2, [r3]
+ 1506 006a 40F20003 		movw	r3, #:lower16:ulLastLoopCounter2.5100
+ 1507 006e C0F20003 		movt	r3, #:upper16:ulLastLoopCounter2.5100
+ 1508 0072 1A60     		str	r2, [r3]
+ 850:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 851:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	/* Errors detected in the task itself will have latched xErrorDetected
+ 852:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	to true. */
+ 853:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 
+ 854:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** 	return ( BaseType_t ) !xErrorDetected;
+ 1509              		.loc 1 854 0
+ 1510 0074 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 1511 0078 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 1512 007c 1B68     		ldr	r3, [r3]
+ 1513 007e 002B     		cmp	r3, #0
+ 1514 0080 14BF     		ite	ne
+ 1515 0082 0023     		movne	r3, #0
+ 1516 0084 0123     		moveq	r3, #1
+ 1517 0086 DBB2     		uxtb	r3, r3
+ 855:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/GenQTest.c **** }
+ 1518              		.loc 1 855 0
+ 1519 0088 1846     		mov	r0, r3
+ 1520 008a BD46     		mov	sp, r7
+ 1521              		@ sp needed
+ 1522 008c 5DF8047B 		ldr	r7, [sp], #4
+ 1523 0090 7047     		bx	lr
+ 1524              		.cfi_endproc
+ 1525              	.LFE10:
+ 1527 0092 00BF     		.section	.bss.xLastGiveTime.5093,"aw",%nobits
+ 1528              		.align	2
+ 1531              	xLastGiveTime.5093:
+ 1532 0000 00000000 		.space	4
+ 1533              		.section	.bss.ulLastLoopCounter.5099,"aw",%nobits
+ 1534              		.align	2
+ 1537              	ulLastLoopCounter.5099:
+ 1538 0000 00000000 		.space	4
+ 1539              		.section	.bss.ulLastLoopCounter2.5100,"aw",%nobits
+ 1540              		.align	2
+ 1543              	ulLastLoopCounter2.5100:
+ 1544 0000 00000000 		.space	4
+ 1545              		.text
+ 1546              	.Letext0:
+ 1547              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 1548              		.file 3 "/usr/include/newlib/stdint.h"
+ 1549              		.file 4 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 1550              		.file 5 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/task.h"
+ 1551              		.file 6 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/queue.h"
+ 1552              		.file 7 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/semphr.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 GenQTest.c
+     /tmp/ccsAthsd.s:20     .bss.xErrorDetected:00000000 $d
+     /tmp/ccsAthsd.s:23     .bss.xErrorDetected:00000000 xErrorDetected
+     /tmp/ccsAthsd.s:26     .bss.ulLoopCounter:00000000 $d
+     /tmp/ccsAthsd.s:29     .bss.ulLoopCounter:00000000 ulLoopCounter
+     /tmp/ccsAthsd.s:32     .bss.ulLoopCounter2:00000000 $d
+     /tmp/ccsAthsd.s:35     .bss.ulLoopCounter2:00000000 ulLoopCounter2
+     /tmp/ccsAthsd.s:38     .bss.ulGuardedVariable:00000000 $d
+     /tmp/ccsAthsd.s:41     .bss.ulGuardedVariable:00000000 ulGuardedVariable
+     /tmp/ccsAthsd.s:44     .bss.xHighPriorityMutexTask:00000000 $d
+     /tmp/ccsAthsd.s:47     .bss.xHighPriorityMutexTask:00000000 xHighPriorityMutexTask
+     /tmp/ccsAthsd.s:50     .bss.xMediumPriorityMutexTask:00000000 $d
+     /tmp/ccsAthsd.s:53     .bss.xMediumPriorityMutexTask:00000000 xMediumPriorityMutexTask
+     /tmp/ccsAthsd.s:56     .bss.xISRMutex:00000000 $d
+     /tmp/ccsAthsd.s:59     .bss.xISRMutex:00000000 xISRMutex
+     /tmp/ccsAthsd.s:62     .rodata:00000000 $d
+     /tmp/ccsAthsd.s:63     .rodata:00000000 .LC0
+     /tmp/ccsAthsd.s:66     .rodata:00000010 .LC1
+     /tmp/ccsAthsd.s:69     .rodata:00000018 .LC2
+     /tmp/ccsAthsd.s:72     .rodata:00000028 .LC3
+     /tmp/ccsAthsd.s:75     .rodata:00000030 .LC4
+     /tmp/ccsAthsd.s:78     .rodata:00000038 .LC5
+     /tmp/ccsAthsd.s:81     .text.vStartGenericQueueTasks:00000000 $t
+     /tmp/ccsAthsd.s:86     .text.vStartGenericQueueTasks:00000000 vStartGenericQueueTasks
+     /tmp/ccsAthsd.s:222    .text.prvSendFrontAndBackTest:00000000 prvSendFrontAndBackTest
+     /tmp/ccsAthsd.s:1146   .text.prvLowPriorityMutexTask:00000000 prvLowPriorityMutexTask
+     /tmp/ccsAthsd.s:1214   .text.prvMediumPriorityMutexTask:00000000 prvMediumPriorityMutexTask
+     /tmp/ccsAthsd.s:1254   .text.prvHighPriorityMutexTask:00000000 prvHighPriorityMutexTask
+     /tmp/ccsAthsd.s:218    .text.prvSendFrontAndBackTest:00000000 $t
+     /tmp/ccsAthsd.s:736    .text.prvTakeTwoMutexesReturnInDifferentOrder:00000000 $t
+     /tmp/ccsAthsd.s:740    .text.prvTakeTwoMutexesReturnInDifferentOrder:00000000 prvTakeTwoMutexesReturnInDifferentOrder
+     /tmp/ccsAthsd.s:949    .text.prvTakeTwoMutexesReturnInSameOrder:00000000 $t
+     /tmp/ccsAthsd.s:953    .text.prvTakeTwoMutexesReturnInSameOrder:00000000 prvTakeTwoMutexesReturnInSameOrder
+     /tmp/ccsAthsd.s:1142   .text.prvLowPriorityMutexTask:00000000 $t
+     /tmp/ccsAthsd.s:1210   .text.prvMediumPriorityMutexTask:00000000 $t
+     /tmp/ccsAthsd.s:1250   .text.prvHighPriorityMutexTask:00000000 $t
+     /tmp/ccsAthsd.s:1316   .text.vInterruptMutexTask:00000000 $t
+     /tmp/ccsAthsd.s:1321   .text.vInterruptMutexTask:00000000 vInterruptMutexTask
+     /tmp/ccsAthsd.s:1378   .text.vMutexISRInteractionTest:00000000 $t
+     /tmp/ccsAthsd.s:1383   .text.vMutexISRInteractionTest:00000000 vMutexISRInteractionTest
+     /tmp/ccsAthsd.s:1531   .bss.xLastGiveTime.5093:00000000 xLastGiveTime.5093
+     /tmp/ccsAthsd.s:1446   .text.xAreGenericQueueTasksStillRunning:00000000 $t
+     /tmp/ccsAthsd.s:1451   .text.xAreGenericQueueTasksStillRunning:00000000 xAreGenericQueueTasksStillRunning
+     /tmp/ccsAthsd.s:1537   .bss.ulLastLoopCounter.5099:00000000 ulLastLoopCounter.5099
+     /tmp/ccsAthsd.s:1543   .bss.ulLastLoopCounter2.5100:00000000 ulLastLoopCounter2.5100
+     /tmp/ccsAthsd.s:1528   .bss.xLastGiveTime.5093:00000000 $d
+     /tmp/ccsAthsd.s:1534   .bss.ulLastLoopCounter.5099:00000000 $d
+     /tmp/ccsAthsd.s:1540   .bss.ulLastLoopCounter2.5100:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+xQueueCreateMutex
+ulPortSetInterruptMask
+xQueueGenericCreate
+vQueueAddToRegistry
+xTaskGenericCreate
+xQueueGenericSend
+uxQueueMessagesWaiting
+xQueueGenericReceive
+uxTaskPriorityGet
+vTaskResume
+vTaskPrioritySet
+vTaskSuspend
+xTaskGetTickCountFromISR
+xQueueGenericSendFromISR

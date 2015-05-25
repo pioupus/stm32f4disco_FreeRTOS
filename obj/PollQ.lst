@@ -1,0 +1,680 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 3
+   4              		.fpu fpv4-sp-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.file	"PollQ.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.bss.xPollingConsumerCount,"aw",%nobits
+  20              		.align	2
+  23              	xPollingConsumerCount:
+  24 0000 00000000 		.space	4
+  25              		.section	.bss.xPollingProducerCount,"aw",%nobits
+  26              		.align	2
+  29              	xPollingProducerCount:
+  30 0000 00000000 		.space	4
+  31              		.section	.rodata
+  32              		.align	2
+  33              	.LC0:
+  34 0000 506F6C6C 		.ascii	"Poll_Test_Queue\000"
+  34      5F546573 
+  34      745F5175 
+  34      65756500 
+  35              		.align	2
+  36              	.LC1:
+  37 0010 51436F6E 		.ascii	"QConsNB\000"
+  37      734E4200 
+  38              		.align	2
+  39              	.LC2:
+  40 0018 5150726F 		.ascii	"QProdNB\000"
+  40      644E4200 
+  41              		.section	.text.vStartPolledQueueTasks,"ax",%progbits
+  42              		.align	2
+  43              		.global	vStartPolledQueueTasks
+  44              		.thumb
+  45              		.thumb_func
+  47              	vStartPolledQueueTasks:
+  48              	.LFB1:
+  49              		.file 1 "lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c"
+   1:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** /*
+   2:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     FreeRTOS V8.1.2 - Copyright (C) 2014 Real Time Engineers Ltd. 
+   3:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     All rights reserved
+   4:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+   5:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
+   6:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+   7:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     ***************************************************************************
+   8:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *                                                                       *
+   9:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *    FreeRTOS provides completely free yet professionally developed,    *
+  10:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *    robust, strictly quality controlled, supported, and cross          *
+  11:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *    platform software that has become a de facto standard.             *
+  12:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *                                                                       *
+  13:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *    Help yourself get started quickly and support the FreeRTOS         *
+  14:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *    project by purchasing a FreeRTOS tutorial book, reference          *
+  15:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
+  16:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *                                                                       *
+  17:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *    Thank you!                                                         *
+  18:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *                                                                       *
+  19:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     ***************************************************************************
+  20:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  21:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     This file is part of the FreeRTOS distribution.
+  22:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  23:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  24:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     the terms of the GNU General Public License (version 2) as published by the
+  25:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+  26:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  27:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     >>!   NOTE: The modification to the GPL is included to allow you to     !<<
+  28:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     >>!   distribute a combined work that includes FreeRTOS without being   !<<
+  29:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     >>!   obliged to provide the source code for proprietary components     !<<
+  30:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     >>!   outside of the FreeRTOS kernel.                                   !<<
+  31:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  32:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
+  33:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  34:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     FOR A PARTICULAR PURPOSE.  Full license text is available from the following
+  35:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     link: http://www.freertos.org/a00114.html
+  36:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  37:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     1 tab == 4 spaces!
+  38:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  39:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     ***************************************************************************
+  40:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *                                                                       *
+  41:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *    Having a problem?  Start by reading the FAQ "My application does   *
+  42:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *    not run, what could be wrong?"                                     *
+  43:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *                                                                       *
+  44:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *    http://www.FreeRTOS.org/FAQHelp.html                               *
+  45:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****      *                                                                       *
+  46:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     ***************************************************************************
+  47:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  48:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     http://www.FreeRTOS.org - Documentation, books, training, latest versions,
+  49:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     license and Real Time Engineers Ltd. contact details.
+  50:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  51:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
+  52:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     including FreeRTOS+Trace - an indispensable productivity tool, a DOS
+  53:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     compatible FAT file system, and our tiny thread aware UDP/IP stack.
+  54:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  55:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
+  56:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     Integrity Systems to sell under the OpenRTOS brand.  Low cost OpenRTOS
+  57:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     licenses offer ticketed support, indemnification and middleware.
+  58:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  59:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     http://www.SafeRTOS.com - High Integrity Systems also provide a safety
+  60:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     engineered and independently SIL3 certified version for use in safety and
+  61:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     mission critical applications that require provable dependability.
+  62:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  63:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****     1 tab == 4 spaces!
+  64:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** */
+  65:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  66:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** /*
+  67:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * This version of PollQ. c is for use on systems that have limited stack
+  68:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * space and no display facilities.  The complete version can be found in
+  69:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * the Demo/Common/Full directory.
+  70:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  *
+  71:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * Creates two tasks that communicate over a single queue.  One task acts as a
+  72:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * producer, the other a consumer.
+  73:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  *
+  74:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * The producer loops for three iteration, posting an incrementing number onto the
+  75:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * queue each cycle.  It then delays for a fixed period before doing exactly the
+  76:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * same again.
+  77:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  *
+  78:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * The consumer loops emptying the queue.  Each item removed from the queue is
+  79:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * checked to ensure it contains the expected value.  When the queue is empty it
+  80:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * blocks for a fixed period, then does the same again.
+  81:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  *
+  82:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * All queue access is performed without blocking.  The consumer completely empties
+  83:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * the queue each time it runs so the producer should never find the queue full.
+  84:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  *
+  85:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * An error is flagged if the consumer obtains an unexpected value or the producer
+  86:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  * find the queue is full.
+  87:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c ****  */
+  88:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  89:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** /*
+  90:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** Changes from V2.0.0
+  91:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  92:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	+ Delay periods are now specified using variables and constants of
+  93:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	  TickType_t rather than uint32_t.
+  94:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** */
+  95:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  96:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** #include <stdlib.h>
+  97:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+  98:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** /* Scheduler include files. */
+  99:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** #include "FreeRTOS.h"
+ 100:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** #include "task.h"
+ 101:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** #include "queue.h"
+ 102:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 103:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** /* Demo program include files. */
+ 104:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** #include "PollQ.h"
+ 105:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 106:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** #define pollqSTACK_SIZE			configMINIMAL_STACK_SIZE
+ 107:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** #define pollqQUEUE_SIZE			( 10 )
+ 108:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** #define pollqPRODUCER_DELAY		( ( TickType_t ) 200 / portTICK_PERIOD_MS )
+ 109:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** #define pollqCONSUMER_DELAY		( pollqPRODUCER_DELAY - ( TickType_t ) ( 20 / portTICK_PERIOD_MS ) )
+ 110:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** #define pollqNO_DELAY			( ( TickType_t ) 0 )
+ 111:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** #define pollqVALUES_TO_PRODUCE	( ( BaseType_t ) 3 )
+ 112:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** #define pollqINITIAL_VALUE		( ( BaseType_t ) 0 )
+ 113:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 114:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** /* The task that posts the incrementing number onto the queue. */
+ 115:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** static portTASK_FUNCTION_PROTO( vPolledQueueProducer, pvParameters );
+ 116:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 117:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** /* The task that empties the queue. */
+ 118:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** static portTASK_FUNCTION_PROTO( vPolledQueueConsumer, pvParameters );
+ 119:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 120:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** /* Variables that are used to check that the tasks are still running with no
+ 121:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** errors. */
+ 122:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** static volatile BaseType_t xPollingConsumerCount = pollqINITIAL_VALUE, xPollingProducerCount = poll
+ 123:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 124:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** /*-----------------------------------------------------------*/
+ 125:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 126:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** void vStartPolledQueueTasks( UBaseType_t uxPriority )
+ 127:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** {
+  50              		.loc 1 127 0
+  51              		.cfi_startproc
+  52              		@ args = 0, pretend = 0, frame = 8
+  53              		@ frame_needed = 1, uses_anonymous_args = 0
+  54 0000 80B5     		push	{r7, lr}
+  55              	.LCFI0:
+  56              		.cfi_def_cfa_offset 8
+  57              		.cfi_offset 7, -8
+  58              		.cfi_offset 14, -4
+  59 0002 86B0     		sub	sp, sp, #24
+  60              	.LCFI1:
+  61              		.cfi_def_cfa_offset 32
+  62 0004 04AF     		add	r7, sp, #16
+  63              	.LCFI2:
+  64              		.cfi_def_cfa 7, 16
+  65 0006 7860     		str	r0, [r7, #4]
+ 128:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** static QueueHandle_t xPolledQueue;
+ 129:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 130:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	/* Create the queue used by the producer and consumer. */
+ 131:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	xPolledQueue = xQueueCreate( pollqQUEUE_SIZE, ( UBaseType_t ) sizeof( uint16_t ) );
+  66              		.loc 1 131 0
+  67 0008 0A20     		movs	r0, #10
+  68 000a 0221     		movs	r1, #2
+  69 000c 0022     		movs	r2, #0
+  70 000e FFF7FEFF 		bl	xQueueGenericCreate
+  71 0012 0246     		mov	r2, r0
+  72 0014 40F20003 		movw	r3, #:lower16:xPolledQueue.5018
+  73 0018 C0F20003 		movt	r3, #:upper16:xPolledQueue.5018
+  74 001c 1A60     		str	r2, [r3]
+ 132:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 133:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	/* vQueueAddToRegistry() adds the queue to the queue registry, if one is
+ 134:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	in use.  The queue registry is provided as a means for kernel aware 
+ 135:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	debuggers to locate queues and has no purpose if a kernel aware debugger
+ 136:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	is not being used.  The call to vQueueAddToRegistry() will be removed
+ 137:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	by the pre-processor if configQUEUE_REGISTRY_SIZE is not defined or is 
+ 138:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	defined to be less than 1. */
+ 139:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	vQueueAddToRegistry( xPolledQueue, "Poll_Test_Queue" );
+  75              		.loc 1 139 0
+  76 001e 40F20003 		movw	r3, #:lower16:xPolledQueue.5018
+  77 0022 C0F20003 		movt	r3, #:upper16:xPolledQueue.5018
+  78 0026 1B68     		ldr	r3, [r3]
+  79 0028 1846     		mov	r0, r3
+  80 002a 40F20001 		movw	r1, #:lower16:.LC0
+  81 002e C0F20001 		movt	r1, #:upper16:.LC0
+  82 0032 FFF7FEFF 		bl	vQueueAddToRegistry
+ 140:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 141:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	/* Spawn the producer and consumer. */
+ 142:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	xTaskCreate( vPolledQueueConsumer, "QConsNB", pollqSTACK_SIZE, ( void * ) &xPolledQueue, uxPriorit
+  83              		.loc 1 142 0
+  84 0036 7B68     		ldr	r3, [r7, #4]
+  85 0038 0093     		str	r3, [sp]
+  86 003a 0023     		movs	r3, #0
+  87 003c 0193     		str	r3, [sp, #4]
+  88 003e 0023     		movs	r3, #0
+  89 0040 0293     		str	r3, [sp, #8]
+  90 0042 0023     		movs	r3, #0
+  91 0044 0393     		str	r3, [sp, #12]
+  92 0046 40F20000 		movw	r0, #:lower16:vPolledQueueConsumer
+  93 004a C0F20000 		movt	r0, #:upper16:vPolledQueueConsumer
+  94 004e 40F20001 		movw	r1, #:lower16:.LC1
+  95 0052 C0F20001 		movt	r1, #:upper16:.LC1
+  96 0056 8222     		movs	r2, #130
+  97 0058 40F20003 		movw	r3, #:lower16:xPolledQueue.5018
+  98 005c C0F20003 		movt	r3, #:upper16:xPolledQueue.5018
+  99 0060 FFF7FEFF 		bl	xTaskGenericCreate
+ 143:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	xTaskCreate( vPolledQueueProducer, "QProdNB", pollqSTACK_SIZE, ( void * ) &xPolledQueue, uxPriorit
+ 100              		.loc 1 143 0
+ 101 0064 7B68     		ldr	r3, [r7, #4]
+ 102 0066 0093     		str	r3, [sp]
+ 103 0068 0023     		movs	r3, #0
+ 104 006a 0193     		str	r3, [sp, #4]
+ 105 006c 0023     		movs	r3, #0
+ 106 006e 0293     		str	r3, [sp, #8]
+ 107 0070 0023     		movs	r3, #0
+ 108 0072 0393     		str	r3, [sp, #12]
+ 109 0074 40F20000 		movw	r0, #:lower16:vPolledQueueProducer
+ 110 0078 C0F20000 		movt	r0, #:upper16:vPolledQueueProducer
+ 111 007c 40F20001 		movw	r1, #:lower16:.LC2
+ 112 0080 C0F20001 		movt	r1, #:upper16:.LC2
+ 113 0084 8222     		movs	r2, #130
+ 114 0086 40F20003 		movw	r3, #:lower16:xPolledQueue.5018
+ 115 008a C0F20003 		movt	r3, #:upper16:xPolledQueue.5018
+ 116 008e FFF7FEFF 		bl	xTaskGenericCreate
+ 144:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** }
+ 117              		.loc 1 144 0
+ 118 0092 0837     		adds	r7, r7, #8
+ 119 0094 BD46     		mov	sp, r7
+ 120              		@ sp needed
+ 121 0096 80BD     		pop	{r7, pc}
+ 122              		.cfi_endproc
+ 123              	.LFE1:
+ 125              		.section	.text.vPolledQueueProducer,"ax",%progbits
+ 126              		.align	2
+ 127              		.thumb
+ 128              		.thumb_func
+ 130              	vPolledQueueProducer:
+ 131              	.LFB2:
+ 145:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** /*-----------------------------------------------------------*/
+ 146:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 147:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** static portTASK_FUNCTION( vPolledQueueProducer, pvParameters )
+ 148:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** {
+ 132              		.loc 1 148 0
+ 133              		.cfi_startproc
+ 134              		@ args = 0, pretend = 0, frame = 24
+ 135              		@ frame_needed = 1, uses_anonymous_args = 0
+ 136 0000 80B5     		push	{r7, lr}
+ 137              	.LCFI3:
+ 138              		.cfi_def_cfa_offset 8
+ 139              		.cfi_offset 7, -8
+ 140              		.cfi_offset 14, -4
+ 141 0002 86B0     		sub	sp, sp, #24
+ 142              	.LCFI4:
+ 143              		.cfi_def_cfa_offset 32
+ 144 0004 00AF     		add	r7, sp, #0
+ 145              	.LCFI5:
+ 146              		.cfi_def_cfa_register 7
+ 147 0006 7860     		str	r0, [r7, #4]
+ 149:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** uint16_t usValue = ( uint16_t ) 0;
+ 148              		.loc 1 149 0
+ 149 0008 0023     		movs	r3, #0
+ 150 000a FB81     		strh	r3, [r7, #14]	@ movhi
+ 150:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** BaseType_t xError = pdFALSE, xLoop;
+ 151              		.loc 1 150 0
+ 152 000c 0023     		movs	r3, #0
+ 153 000e 7B61     		str	r3, [r7, #20]
+ 154              	.L8:
+ 151:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 152:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	for( ;; )
+ 153:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	{		
+ 154:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		for( xLoop = 0; xLoop < pollqVALUES_TO_PRODUCE; xLoop++ )
+ 155              		.loc 1 154 0
+ 156 0010 0023     		movs	r3, #0
+ 157 0012 3B61     		str	r3, [r7, #16]
+ 158 0014 28E0     		b	.L3
+ 159              	.L7:
+ 155:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		{
+ 156:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 			/* Send an incrementing number on the queue without blocking. */
+ 157:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 			if( xQueueSend( *( ( QueueHandle_t * ) pvParameters ), ( void * ) &usValue, pollqNO_DELAY ) != p
+ 160              		.loc 1 157 0
+ 161 0016 7B68     		ldr	r3, [r7, #4]
+ 162 0018 1A68     		ldr	r2, [r3]
+ 163 001a 07F10E03 		add	r3, r7, #14
+ 164 001e 1046     		mov	r0, r2
+ 165 0020 1946     		mov	r1, r3
+ 166 0022 0022     		movs	r2, #0
+ 167 0024 0023     		movs	r3, #0
+ 168 0026 FFF7FEFF 		bl	xQueueGenericSend
+ 169 002a 0346     		mov	r3, r0
+ 170 002c 012B     		cmp	r3, #1
+ 171 002e 02D0     		beq	.L4
+ 158:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 			{
+ 159:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				/* We should never find the queue full so if we get here there
+ 160:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				has been an error. */
+ 161:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				xError = pdTRUE;
+ 172              		.loc 1 161 0
+ 173 0030 0123     		movs	r3, #1
+ 174 0032 7B61     		str	r3, [r7, #20]
+ 175 0034 15E0     		b	.L5
+ 176              	.L4:
+ 162:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 			}
+ 163:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 			else
+ 164:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 			{
+ 165:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				if( xError == pdFALSE )
+ 177              		.loc 1 165 0
+ 178 0036 7B69     		ldr	r3, [r7, #20]
+ 179 0038 002B     		cmp	r3, #0
+ 180 003a 0ED1     		bne	.L6
+ 166:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				{
+ 167:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 					/* If an error has ever been recorded we stop incrementing the
+ 168:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 					check variable. */
+ 169:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 					portENTER_CRITICAL();
+ 181              		.loc 1 169 0
+ 182 003c FFF7FEFF 		bl	vPortEnterCritical
+ 170:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 						xPollingProducerCount++;
+ 183              		.loc 1 170 0
+ 184 0040 40F20003 		movw	r3, #:lower16:xPollingProducerCount
+ 185 0044 C0F20003 		movt	r3, #:upper16:xPollingProducerCount
+ 186 0048 1B68     		ldr	r3, [r3]
+ 187 004a 5A1C     		adds	r2, r3, #1
+ 188 004c 40F20003 		movw	r3, #:lower16:xPollingProducerCount
+ 189 0050 C0F20003 		movt	r3, #:upper16:xPollingProducerCount
+ 190 0054 1A60     		str	r2, [r3]
+ 171:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 					portEXIT_CRITICAL();
+ 191              		.loc 1 171 0
+ 192 0056 FFF7FEFF 		bl	vPortExitCritical
+ 193              	.L6:
+ 172:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				}
+ 173:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 174:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				/* Update the value we are going to post next time around. */
+ 175:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				usValue++;
+ 194              		.loc 1 175 0
+ 195 005a FB89     		ldrh	r3, [r7, #14]
+ 196 005c 0133     		adds	r3, r3, #1
+ 197 005e 9BB2     		uxth	r3, r3
+ 198 0060 FB81     		strh	r3, [r7, #14]	@ movhi
+ 199              	.L5:
+ 154:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		{
+ 200              		.loc 1 154 0
+ 201 0062 3B69     		ldr	r3, [r7, #16]
+ 202 0064 0133     		adds	r3, r3, #1
+ 203 0066 3B61     		str	r3, [r7, #16]
+ 204              	.L3:
+ 154:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		{
+ 205              		.loc 1 154 0 is_stmt 0 discriminator 1
+ 206 0068 3B69     		ldr	r3, [r7, #16]
+ 207 006a 022B     		cmp	r3, #2
+ 208 006c D3DD     		ble	.L7
+ 176:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 			}
+ 177:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		}
+ 178:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 179:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		/* Wait before we start posting again to ensure the consumer runs and
+ 180:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		empties the queue. */
+ 181:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		vTaskDelay( pollqPRODUCER_DELAY );
+ 209              		.loc 1 181 0 is_stmt 1
+ 210 006e C820     		movs	r0, #200
+ 211 0070 FFF7FEFF 		bl	vTaskDelay
+ 182:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	}
+ 212              		.loc 1 182 0
+ 213 0074 CCE7     		b	.L8
+ 214              		.cfi_endproc
+ 215              	.LFE2:
+ 217 0076 00BF     		.section	.text.vPolledQueueConsumer,"ax",%progbits
+ 218              		.align	2
+ 219              		.thumb
+ 220              		.thumb_func
+ 222              	vPolledQueueConsumer:
+ 223              	.LFB3:
+ 183:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** }  /*lint !e818 Function prototype must conform to API. */
+ 184:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** /*-----------------------------------------------------------*/
+ 185:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 186:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** static portTASK_FUNCTION( vPolledQueueConsumer, pvParameters )
+ 187:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** {
+ 224              		.loc 1 187 0
+ 225              		.cfi_startproc
+ 226              		@ args = 0, pretend = 0, frame = 24
+ 227              		@ frame_needed = 1, uses_anonymous_args = 0
+ 228 0000 80B5     		push	{r7, lr}
+ 229              	.LCFI6:
+ 230              		.cfi_def_cfa_offset 8
+ 231              		.cfi_offset 7, -8
+ 232              		.cfi_offset 14, -4
+ 233 0002 86B0     		sub	sp, sp, #24
+ 234              	.LCFI7:
+ 235              		.cfi_def_cfa_offset 32
+ 236 0004 00AF     		add	r7, sp, #0
+ 237              	.LCFI8:
+ 238              		.cfi_def_cfa_register 7
+ 239 0006 7860     		str	r0, [r7, #4]
+ 188:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** uint16_t usData, usExpectedValue = ( uint16_t ) 0;
+ 240              		.loc 1 188 0
+ 241 0008 0023     		movs	r3, #0
+ 242 000a FB82     		strh	r3, [r7, #22]	@ movhi
+ 189:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** BaseType_t xError = pdFALSE;
+ 243              		.loc 1 189 0
+ 244 000c 0023     		movs	r3, #0
+ 245 000e 3B61     		str	r3, [r7, #16]
+ 190:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 191:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	for( ;; )
+ 192:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	{		
+ 193:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		/* Loop until the queue is empty. */
+ 194:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		while( uxQueueMessagesWaiting( *( ( QueueHandle_t * ) pvParameters ) ) )
+ 246              		.loc 1 194 0
+ 247 0010 2AE0     		b	.L10
+ 248              	.L13:
+ 195:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		{
+ 196:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 			if( xQueueReceive( *( ( QueueHandle_t * ) pvParameters ), &usData, pollqNO_DELAY ) == pdPASS )
+ 249              		.loc 1 196 0
+ 250 0012 7B68     		ldr	r3, [r7, #4]
+ 251 0014 1A68     		ldr	r2, [r3]
+ 252 0016 07F10E03 		add	r3, r7, #14
+ 253 001a 1046     		mov	r0, r2
+ 254 001c 1946     		mov	r1, r3
+ 255 001e 0022     		movs	r2, #0
+ 256 0020 0023     		movs	r3, #0
+ 257 0022 FFF7FEFF 		bl	xQueueGenericReceive
+ 258 0026 0346     		mov	r3, r0
+ 259 0028 012B     		cmp	r3, #1
+ 260 002a 1DD1     		bne	.L10
+ 197:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 			{
+ 198:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				if( usData != usExpectedValue )
+ 261              		.loc 1 198 0
+ 262 002c FB89     		ldrh	r3, [r7, #14]
+ 263 002e FA8A     		ldrh	r2, [r7, #22]
+ 264 0030 9A42     		cmp	r2, r3
+ 265 0032 04D0     		beq	.L11
+ 199:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				{
+ 200:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 					/* This is not what we expected to receive so an error has
+ 201:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 					occurred. */
+ 202:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 					xError = pdTRUE;
+ 266              		.loc 1 202 0
+ 267 0034 0123     		movs	r3, #1
+ 268 0036 3B61     		str	r3, [r7, #16]
+ 203:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 204:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 					/* Catch-up to the value we received so our next expected
+ 205:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 					value should again be correct. */
+ 206:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 					usExpectedValue = usData;
+ 269              		.loc 1 206 0
+ 270 0038 FB89     		ldrh	r3, [r7, #14]	@ movhi
+ 271 003a FB82     		strh	r3, [r7, #22]	@ movhi
+ 272 003c 11E0     		b	.L12
+ 273              	.L11:
+ 207:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				}
+ 208:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				else
+ 209:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				{
+ 210:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 					if( xError == pdFALSE )
+ 274              		.loc 1 210 0
+ 275 003e 3B69     		ldr	r3, [r7, #16]
+ 276 0040 002B     		cmp	r3, #0
+ 277 0042 0ED1     		bne	.L12
+ 211:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 					{
+ 212:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 						/* Only increment the check variable if no errors have
+ 213:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 						occurred. */
+ 214:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 						portENTER_CRITICAL();
+ 278              		.loc 1 214 0
+ 279 0044 FFF7FEFF 		bl	vPortEnterCritical
+ 215:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 							xPollingConsumerCount++;
+ 280              		.loc 1 215 0
+ 281 0048 40F20003 		movw	r3, #:lower16:xPollingConsumerCount
+ 282 004c C0F20003 		movt	r3, #:upper16:xPollingConsumerCount
+ 283 0050 1B68     		ldr	r3, [r3]
+ 284 0052 5A1C     		adds	r2, r3, #1
+ 285 0054 40F20003 		movw	r3, #:lower16:xPollingConsumerCount
+ 286 0058 C0F20003 		movt	r3, #:upper16:xPollingConsumerCount
+ 287 005c 1A60     		str	r2, [r3]
+ 216:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 						portEXIT_CRITICAL();
+ 288              		.loc 1 216 0
+ 289 005e FFF7FEFF 		bl	vPortExitCritical
+ 290              	.L12:
+ 217:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 					}
+ 218:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				}
+ 219:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 220:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				/* Next time round we would expect the number to be one higher. */
+ 221:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 				usExpectedValue++;
+ 291              		.loc 1 221 0
+ 292 0062 FB8A     		ldrh	r3, [r7, #22]
+ 293 0064 0133     		adds	r3, r3, #1
+ 294 0066 FB82     		strh	r3, [r7, #22]	@ movhi
+ 295              	.L10:
+ 194:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		{
+ 296              		.loc 1 194 0 discriminator 1
+ 297 0068 7B68     		ldr	r3, [r7, #4]
+ 298 006a 1B68     		ldr	r3, [r3]
+ 299 006c 1846     		mov	r0, r3
+ 300 006e FFF7FEFF 		bl	uxQueueMessagesWaiting
+ 301 0072 0346     		mov	r3, r0
+ 302 0074 002B     		cmp	r3, #0
+ 303 0076 CCD1     		bne	.L13
+ 222:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 			}
+ 223:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		}
+ 224:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 225:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		/* Now the queue is empty we block, allowing the producer to place more
+ 226:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		items in the queue. */
+ 227:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		vTaskDelay( pollqCONSUMER_DELAY );
+ 304              		.loc 1 227 0
+ 305 0078 B420     		movs	r0, #180
+ 306 007a FFF7FEFF 		bl	vTaskDelay
+ 228:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	}
+ 307              		.loc 1 228 0
+ 308 007e 00BF     		nop
+ 194:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		{
+ 309              		.loc 1 194 0
+ 310 0080 F2E7     		b	.L10
+ 311              		.cfi_endproc
+ 312              	.LFE3:
+ 314 0082 00BF     		.section	.text.xArePollingQueuesStillRunning,"ax",%progbits
+ 315              		.align	2
+ 316              		.global	xArePollingQueuesStillRunning
+ 317              		.thumb
+ 318              		.thumb_func
+ 320              	xArePollingQueuesStillRunning:
+ 321              	.LFB4:
+ 229:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** } /*lint !e818 Function prototype must conform to API. */
+ 230:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** /*-----------------------------------------------------------*/
+ 231:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 232:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** /* This is called to check that all the created tasks are still running with no errors. */
+ 233:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** BaseType_t xArePollingQueuesStillRunning( void )
+ 234:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** {
+ 322              		.loc 1 234 0
+ 323              		.cfi_startproc
+ 324              		@ args = 0, pretend = 0, frame = 8
+ 325              		@ frame_needed = 1, uses_anonymous_args = 0
+ 326              		@ link register save eliminated.
+ 327 0000 80B4     		push	{r7}
+ 328              	.LCFI9:
+ 329              		.cfi_def_cfa_offset 4
+ 330              		.cfi_offset 7, -4
+ 331 0002 83B0     		sub	sp, sp, #12
+ 332              	.LCFI10:
+ 333              		.cfi_def_cfa_offset 16
+ 334 0004 00AF     		add	r7, sp, #0
+ 335              	.LCFI11:
+ 336              		.cfi_def_cfa_register 7
+ 235:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** BaseType_t xReturn;
+ 236:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 237:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	/* Check both the consumer and producer poll count to check they have both
+ 238:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	been changed since out last trip round.  We do not need a critical section
+ 239:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	around the check variables as this is called from a higher priority than
+ 240:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	the other tasks that access the same variables. */
+ 241:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	if( ( xPollingConsumerCount == pollqINITIAL_VALUE ) ||
+ 337              		.loc 1 241 0
+ 338 0006 40F20003 		movw	r3, #:lower16:xPollingConsumerCount
+ 339 000a C0F20003 		movt	r3, #:upper16:xPollingConsumerCount
+ 340 000e 1B68     		ldr	r3, [r3]
+ 341 0010 002B     		cmp	r3, #0
+ 342 0012 06D0     		beq	.L16
+ 242:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		( xPollingProducerCount == pollqINITIAL_VALUE )
+ 343              		.loc 1 242 0 discriminator 1
+ 344 0014 40F20003 		movw	r3, #:lower16:xPollingProducerCount
+ 345 0018 C0F20003 		movt	r3, #:upper16:xPollingProducerCount
+ 346 001c 1B68     		ldr	r3, [r3]
+ 241:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		( xPollingProducerCount == pollqINITIAL_VALUE )
+ 347              		.loc 1 241 0 discriminator 1
+ 348 001e 002B     		cmp	r3, #0
+ 349 0020 02D1     		bne	.L17
+ 350              	.L16:
+ 243:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	  )
+ 244:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	{
+ 245:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		xReturn = pdFALSE;
+ 351              		.loc 1 245 0
+ 352 0022 0023     		movs	r3, #0
+ 353 0024 7B60     		str	r3, [r7, #4]
+ 354 0026 01E0     		b	.L18
+ 355              	.L17:
+ 246:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	}
+ 247:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	else
+ 248:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	{
+ 249:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 		xReturn = pdTRUE;
+ 356              		.loc 1 249 0
+ 357 0028 0123     		movs	r3, #1
+ 358 002a 7B60     		str	r3, [r7, #4]
+ 359              	.L18:
+ 250:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	}
+ 251:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 252:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	/* Set the check variables back down so we know if they have been
+ 253:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	incremented the next time around. */
+ 254:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	xPollingConsumerCount = pollqINITIAL_VALUE;
+ 360              		.loc 1 254 0
+ 361 002c 40F20003 		movw	r3, #:lower16:xPollingConsumerCount
+ 362 0030 C0F20003 		movt	r3, #:upper16:xPollingConsumerCount
+ 363 0034 0022     		movs	r2, #0
+ 364 0036 1A60     		str	r2, [r3]
+ 255:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	xPollingProducerCount = pollqINITIAL_VALUE;
+ 365              		.loc 1 255 0
+ 366 0038 40F20003 		movw	r3, #:lower16:xPollingProducerCount
+ 367 003c C0F20003 		movt	r3, #:upper16:xPollingProducerCount
+ 368 0040 0022     		movs	r2, #0
+ 369 0042 1A60     		str	r2, [r3]
+ 256:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 
+ 257:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** 	return xReturn;
+ 370              		.loc 1 257 0
+ 371 0044 7B68     		ldr	r3, [r7, #4]
+ 258:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/PollQ.c **** }
+ 372              		.loc 1 258 0
+ 373 0046 1846     		mov	r0, r3
+ 374 0048 0C37     		adds	r7, r7, #12
+ 375 004a BD46     		mov	sp, r7
+ 376              		@ sp needed
+ 377 004c 5DF8047B 		ldr	r7, [sp], #4
+ 378 0050 7047     		bx	lr
+ 379              		.cfi_endproc
+ 380              	.LFE4:
+ 382 0052 00BF     		.section	.bss.xPolledQueue.5018,"aw",%nobits
+ 383              		.align	2
+ 386              	xPolledQueue.5018:
+ 387 0000 00000000 		.space	4
+ 388              		.text
+ 389              	.Letext0:
+ 390              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 391              		.file 3 "/usr/include/newlib/stdint.h"
+ 392              		.file 4 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 393              		.file 5 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/task.h"
+ 394              		.file 6 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/queue.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 PollQ.c
+     /tmp/ccqwcY2m.s:20     .bss.xPollingConsumerCount:00000000 $d
+     /tmp/ccqwcY2m.s:23     .bss.xPollingConsumerCount:00000000 xPollingConsumerCount
+     /tmp/ccqwcY2m.s:26     .bss.xPollingProducerCount:00000000 $d
+     /tmp/ccqwcY2m.s:29     .bss.xPollingProducerCount:00000000 xPollingProducerCount
+     /tmp/ccqwcY2m.s:32     .rodata:00000000 $d
+     /tmp/ccqwcY2m.s:33     .rodata:00000000 .LC0
+     /tmp/ccqwcY2m.s:36     .rodata:00000010 .LC1
+     /tmp/ccqwcY2m.s:39     .rodata:00000018 .LC2
+     /tmp/ccqwcY2m.s:42     .text.vStartPolledQueueTasks:00000000 $t
+     /tmp/ccqwcY2m.s:47     .text.vStartPolledQueueTasks:00000000 vStartPolledQueueTasks
+     /tmp/ccqwcY2m.s:386    .bss.xPolledQueue.5018:00000000 xPolledQueue.5018
+     /tmp/ccqwcY2m.s:222    .text.vPolledQueueConsumer:00000000 vPolledQueueConsumer
+     /tmp/ccqwcY2m.s:130    .text.vPolledQueueProducer:00000000 vPolledQueueProducer
+     /tmp/ccqwcY2m.s:126    .text.vPolledQueueProducer:00000000 $t
+     /tmp/ccqwcY2m.s:218    .text.vPolledQueueConsumer:00000000 $t
+     /tmp/ccqwcY2m.s:315    .text.xArePollingQueuesStillRunning:00000000 $t
+     /tmp/ccqwcY2m.s:320    .text.xArePollingQueuesStillRunning:00000000 xArePollingQueuesStillRunning
+     /tmp/ccqwcY2m.s:383    .bss.xPolledQueue.5018:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+xQueueGenericCreate
+vQueueAddToRegistry
+xTaskGenericCreate
+xQueueGenericSend
+vPortEnterCritical
+vPortExitCritical
+vTaskDelay
+xQueueGenericReceive
+uxQueueMessagesWaiting

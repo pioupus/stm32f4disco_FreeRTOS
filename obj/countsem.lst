@@ -1,0 +1,912 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 3
+   4              		.fpu fpv4-sp-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.file	"countsem.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.bss.xErrorDetected,"aw",%nobits
+  20              		.align	2
+  23              	xErrorDetected:
+  24 0000 00000000 		.space	4
+  25              		.section	.bss.xParameters,"aw",%nobits
+  26              		.align	2
+  29              	xParameters:
+  30 0000 00000000 		.space	24
+  30      00000000 
+  30      00000000 
+  30      00000000 
+  30      00000000 
+  31              		.section	.rodata
+  32              		.align	2
+  33              	.LC0:
+  34 0000 436F756E 		.ascii	"Counting_Sem_1\000"
+  34      74696E67 
+  34      5F53656D 
+  34      5F3100
+  35 000f 00       		.align	2
+  36              	.LC1:
+  37 0010 436F756E 		.ascii	"Counting_Sem_2\000"
+  37      74696E67 
+  37      5F53656D 
+  37      5F3200
+  38 001f 00       		.align	2
+  39              	.LC2:
+  40 0020 434E5431 		.ascii	"CNT1\000"
+  40      00
+  41 0025 000000   		.align	2
+  42              	.LC3:
+  43 0028 434E5432 		.ascii	"CNT2\000"
+  43      00
+  44 002d 000000   		.section	.text.vStartCountingSemaphoreTasks,"ax",%progbits
+  45              		.align	2
+  46              		.global	vStartCountingSemaphoreTasks
+  47              		.thumb
+  48              		.thumb_func
+  50              	vStartCountingSemaphoreTasks:
+  51              	.LFB1:
+  52              		.file 1 "lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c"
+   1:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /*
+   2:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     FreeRTOS V8.1.2 - Copyright (C) 2014 Real Time Engineers Ltd. 
+   3:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     All rights reserved
+   4:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+   5:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
+   6:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+   7:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     ***************************************************************************
+   8:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *                                                                       *
+   9:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *    FreeRTOS provides completely free yet professionally developed,    *
+  10:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *    robust, strictly quality controlled, supported, and cross          *
+  11:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *    platform software that has become a de facto standard.             *
+  12:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *                                                                       *
+  13:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *    Help yourself get started quickly and support the FreeRTOS         *
+  14:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *    project by purchasing a FreeRTOS tutorial book, reference          *
+  15:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
+  16:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *                                                                       *
+  17:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *    Thank you!                                                         *
+  18:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *                                                                       *
+  19:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     ***************************************************************************
+  20:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  21:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     This file is part of the FreeRTOS distribution.
+  22:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  23:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  24:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     the terms of the GNU General Public License (version 2) as published by the
+  25:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+  26:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  27:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     >>!   NOTE: The modification to the GPL is included to allow you to     !<<
+  28:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     >>!   distribute a combined work that includes FreeRTOS without being   !<<
+  29:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     >>!   obliged to provide the source code for proprietary components     !<<
+  30:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     >>!   outside of the FreeRTOS kernel.                                   !<<
+  31:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  32:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
+  33:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  34:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     FOR A PARTICULAR PURPOSE.  Full license text is available from the following
+  35:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     link: http://www.freertos.org/a00114.html
+  36:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  37:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     1 tab == 4 spaces!
+  38:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  39:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     ***************************************************************************
+  40:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *                                                                       *
+  41:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *    Having a problem?  Start by reading the FAQ "My application does   *
+  42:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *    not run, what could be wrong?"                                     *
+  43:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *                                                                       *
+  44:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *    http://www.FreeRTOS.org/FAQHelp.html                               *
+  45:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****      *                                                                       *
+  46:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     ***************************************************************************
+  47:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  48:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     http://www.FreeRTOS.org - Documentation, books, training, latest versions,
+  49:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     license and Real Time Engineers Ltd. contact details.
+  50:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  51:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
+  52:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     including FreeRTOS+Trace - an indispensable productivity tool, a DOS
+  53:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     compatible FAT file system, and our tiny thread aware UDP/IP stack.
+  54:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  55:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
+  56:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     Integrity Systems to sell under the OpenRTOS brand.  Low cost OpenRTOS
+  57:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     licenses offer ticketed support, indemnification and middleware.
+  58:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  59:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     http://www.SafeRTOS.com - High Integrity Systems also provide a safety
+  60:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     engineered and independently SIL3 certified version for use in safety and
+  61:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     mission critical applications that require provable dependability.
+  62:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  63:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****     1 tab == 4 spaces!
+  64:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** */
+  65:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  66:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  67:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /* 
+  68:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****  * Simple demonstration of the usage of counting semaphore.
+  69:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****  */
+  70:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  71:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /* Scheduler include files. */
+  72:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** #include "FreeRTOS.h"
+  73:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** #include "task.h"
+  74:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** #include "semphr.h"
+  75:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  76:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /* Demo program include files. */
+  77:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** #include "countsem.h"
+  78:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  79:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /* The maximum count value that the semaphore used for the demo can hold. */
+  80:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** #define countMAX_COUNT_VALUE	( 200 )
+  81:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  82:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /* Constants used to indicate whether or not the semaphore should have been
+  83:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** created with its maximum count value, or its minimum count value.  These 
+  84:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** numbers are used to ensure that the pointers passed in as the task parameters
+  85:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** are valid. */
+  86:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** #define countSTART_AT_MAX_COUNT	( 0xaa )
+  87:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** #define countSTART_AT_ZERO		( 0x55 )
+  88:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  89:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /* Two tasks are created for the test.  One uses a semaphore created with its
+  90:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** count value set to the maximum, and one with the count value set to zero. */
+  91:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** #define countNUM_TEST_TASKS		( 2 )
+  92:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** #define countDONT_BLOCK			( 0 )
+  93:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  94:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /*-----------------------------------------------------------*/
+  95:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+  96:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /* Flag that will be latched to pdTRUE should any unexpected behaviour be
+  97:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** detected in any of the tasks. */
+  98:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** static volatile BaseType_t xErrorDetected = pdFALSE;
+  99:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 100:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /*-----------------------------------------------------------*/
+ 101:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 102:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /*
+ 103:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****  * The demo task.  This simply counts the semaphore up to its maximum value,
+ 104:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****  * the counts it back down again.  The result of each semaphore 'give' and
+ 105:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****  * 'take' is inspected, with an error being flagged if it is found not to be
+ 106:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****  * the expected result.
+ 107:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****  */
+ 108:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** static void prvCountingSemaphoreTask( void *pvParameters );
+ 109:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 110:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /*
+ 111:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****  * Utility function to increment the semaphore count value up from zero to
+ 112:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****  * countMAX_COUNT_VALUE.
+ 113:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****  */
+ 114:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** static void prvIncrementSemaphoreCount( SemaphoreHandle_t xSemaphore, UBaseType_t *puxLoopCounter )
+ 115:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 116:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /*
+ 117:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****  * Utility function to decrement the semaphore count value up from 
+ 118:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****  * countMAX_COUNT_VALUE to zero.
+ 119:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c ****  */
+ 120:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** static void prvDecrementSemaphoreCount( SemaphoreHandle_t xSemaphore, UBaseType_t *puxLoopCounter )
+ 121:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 122:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /*-----------------------------------------------------------*/
+ 123:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 124:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /* The structure that is passed into the task as the task parameter. */
+ 125:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** typedef struct COUNT_SEM_STRUCT
+ 126:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** {
+ 127:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* The semaphore to be used for the demo. */
+ 128:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	SemaphoreHandle_t xSemaphore;
+ 129:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 130:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* Set to countSTART_AT_MAX_COUNT if the semaphore should be created with
+ 131:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	its count value set to its max count value, or countSTART_AT_ZERO if it
+ 132:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	should have been created with its count value set to 0. */
+ 133:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	UBaseType_t uxExpectedStartCount;	
+ 134:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 135:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* Incremented on each cycle of the demo task.  Used to detect a stalled
+ 136:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	task. */
+ 137:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	UBaseType_t uxLoopCounter;			
+ 138:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** } xCountSemStruct;
+ 139:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 140:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /* Two structures are defined, one is passed to each test task. */
+ 141:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** static volatile xCountSemStruct xParameters[ countNUM_TEST_TASKS ];
+ 142:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 143:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /*-----------------------------------------------------------*/
+ 144:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 145:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** void vStartCountingSemaphoreTasks( void )
+ 146:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** {
+  53              		.loc 1 146 0
+  54              		.cfi_startproc
+  55              		@ args = 0, pretend = 0, frame = 0
+  56              		@ frame_needed = 1, uses_anonymous_args = 0
+  57 0000 80B5     		push	{r7, lr}
+  58              	.LCFI0:
+  59              		.cfi_def_cfa_offset 8
+  60              		.cfi_offset 7, -8
+  61              		.cfi_offset 14, -4
+  62 0002 84B0     		sub	sp, sp, #16
+  63              	.LCFI1:
+  64              		.cfi_def_cfa_offset 24
+  65 0004 04AF     		add	r7, sp, #16
+  66              	.LCFI2:
+  67              		.cfi_def_cfa 7, 8
+ 147:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* Create the semaphores that we are going to use for the test/demo.  The
+ 148:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	first should be created such that it starts at its maximum count value,
+ 149:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	the second should be created such that it starts with a count value of zero. */
+ 150:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	xParameters[ 0 ].xSemaphore = xSemaphoreCreateCounting( countMAX_COUNT_VALUE, countMAX_COUNT_VALUE
+  68              		.loc 1 150 0
+  69 0006 C820     		movs	r0, #200
+  70 0008 C821     		movs	r1, #200
+  71 000a FFF7FEFF 		bl	xQueueCreateCountingSemaphore
+  72 000e 0246     		mov	r2, r0
+  73 0010 40F20003 		movw	r3, #:lower16:xParameters
+  74 0014 C0F20003 		movt	r3, #:upper16:xParameters
+  75 0018 1A60     		str	r2, [r3]
+ 151:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	xParameters[ 0 ].uxExpectedStartCount = countSTART_AT_MAX_COUNT;
+  76              		.loc 1 151 0
+  77 001a 40F20003 		movw	r3, #:lower16:xParameters
+  78 001e C0F20003 		movt	r3, #:upper16:xParameters
+  79 0022 AA22     		movs	r2, #170
+  80 0024 5A60     		str	r2, [r3, #4]
+ 152:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	xParameters[ 0 ].uxLoopCounter = 0;
+  81              		.loc 1 152 0
+  82 0026 40F20003 		movw	r3, #:lower16:xParameters
+  83 002a C0F20003 		movt	r3, #:upper16:xParameters
+  84 002e 0022     		movs	r2, #0
+  85 0030 9A60     		str	r2, [r3, #8]
+ 153:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 154:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	xParameters[ 1 ].xSemaphore = xSemaphoreCreateCounting( countMAX_COUNT_VALUE, 0 );
+  86              		.loc 1 154 0
+  87 0032 C820     		movs	r0, #200
+  88 0034 0021     		movs	r1, #0
+  89 0036 FFF7FEFF 		bl	xQueueCreateCountingSemaphore
+  90 003a 0246     		mov	r2, r0
+  91 003c 40F20003 		movw	r3, #:lower16:xParameters
+  92 0040 C0F20003 		movt	r3, #:upper16:xParameters
+  93 0044 DA60     		str	r2, [r3, #12]
+ 155:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	xParameters[ 1 ].uxExpectedStartCount = 0;
+  94              		.loc 1 155 0
+  95 0046 40F20003 		movw	r3, #:lower16:xParameters
+  96 004a C0F20003 		movt	r3, #:upper16:xParameters
+  97 004e 0022     		movs	r2, #0
+  98 0050 1A61     		str	r2, [r3, #16]
+ 156:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	xParameters[ 1 ].uxLoopCounter = 0;
+  99              		.loc 1 156 0
+ 100 0052 40F20003 		movw	r3, #:lower16:xParameters
+ 101 0056 C0F20003 		movt	r3, #:upper16:xParameters
+ 102 005a 0022     		movs	r2, #0
+ 103 005c 5A61     		str	r2, [r3, #20]
+ 157:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 158:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* vQueueAddToRegistry() adds the semaphore to the registry, if one is
+ 159:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	in use.  The registry is provided as a means for kernel aware 
+ 160:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	debuggers to locate semaphores and has no purpose if a kernel aware debugger
+ 161:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	is not being used.  The call to vQueueAddToRegistry() will be removed
+ 162:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	by the pre-processor if configQUEUE_REGISTRY_SIZE is not defined or is 
+ 163:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	defined to be less than 1. */
+ 164:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	vQueueAddToRegistry( ( QueueHandle_t ) xParameters[ 0 ].xSemaphore, "Counting_Sem_1" );
+ 104              		.loc 1 164 0
+ 105 005e 40F20003 		movw	r3, #:lower16:xParameters
+ 106 0062 C0F20003 		movt	r3, #:upper16:xParameters
+ 107 0066 1B68     		ldr	r3, [r3]
+ 108 0068 1846     		mov	r0, r3
+ 109 006a 40F20001 		movw	r1, #:lower16:.LC0
+ 110 006e C0F20001 		movt	r1, #:upper16:.LC0
+ 111 0072 FFF7FEFF 		bl	vQueueAddToRegistry
+ 165:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	vQueueAddToRegistry( ( QueueHandle_t ) xParameters[ 1 ].xSemaphore, "Counting_Sem_2" );
+ 112              		.loc 1 165 0
+ 113 0076 40F20003 		movw	r3, #:lower16:xParameters
+ 114 007a C0F20003 		movt	r3, #:upper16:xParameters
+ 115 007e DB68     		ldr	r3, [r3, #12]
+ 116 0080 1846     		mov	r0, r3
+ 117 0082 40F20001 		movw	r1, #:lower16:.LC1
+ 118 0086 C0F20001 		movt	r1, #:upper16:.LC1
+ 119 008a FFF7FEFF 		bl	vQueueAddToRegistry
+ 166:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 167:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 168:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* Were the semaphores created? */
+ 169:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	if( ( xParameters[ 0 ].xSemaphore != NULL ) || ( xParameters[ 1 ].xSemaphore != NULL ) )
+ 120              		.loc 1 169 0
+ 121 008e 40F20003 		movw	r3, #:lower16:xParameters
+ 122 0092 C0F20003 		movt	r3, #:upper16:xParameters
+ 123 0096 1B68     		ldr	r3, [r3]
+ 124 0098 002B     		cmp	r3, #0
+ 125 009a 06D1     		bne	.L2
+ 126              		.loc 1 169 0 is_stmt 0 discriminator 1
+ 127 009c 40F20003 		movw	r3, #:lower16:xParameters
+ 128 00a0 C0F20003 		movt	r3, #:upper16:xParameters
+ 129 00a4 DB68     		ldr	r3, [r3, #12]
+ 130 00a6 002B     		cmp	r3, #0
+ 131 00a8 2AD0     		beq	.L1
+ 132              	.L2:
+ 170:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 171:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		/* Create the demo tasks, passing in the semaphore to use as the parameter. */
+ 172:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		xTaskCreate( prvCountingSemaphoreTask, "CNT1", configMINIMAL_STACK_SIZE, ( void * ) &( xParameter
+ 133              		.loc 1 172 0 is_stmt 1
+ 134 00aa 0023     		movs	r3, #0
+ 135 00ac 0093     		str	r3, [sp]
+ 136 00ae 0023     		movs	r3, #0
+ 137 00b0 0193     		str	r3, [sp, #4]
+ 138 00b2 0023     		movs	r3, #0
+ 139 00b4 0293     		str	r3, [sp, #8]
+ 140 00b6 0023     		movs	r3, #0
+ 141 00b8 0393     		str	r3, [sp, #12]
+ 142 00ba 40F20000 		movw	r0, #:lower16:prvCountingSemaphoreTask
+ 143 00be C0F20000 		movt	r0, #:upper16:prvCountingSemaphoreTask
+ 144 00c2 40F20001 		movw	r1, #:lower16:.LC2
+ 145 00c6 C0F20001 		movt	r1, #:upper16:.LC2
+ 146 00ca 8222     		movs	r2, #130
+ 147 00cc 40F20003 		movw	r3, #:lower16:xParameters
+ 148 00d0 C0F20003 		movt	r3, #:upper16:xParameters
+ 149 00d4 FFF7FEFF 		bl	xTaskGenericCreate
+ 173:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		xTaskCreate( prvCountingSemaphoreTask, "CNT2", configMINIMAL_STACK_SIZE, ( void * ) &( xParameter
+ 150              		.loc 1 173 0
+ 151 00d8 0023     		movs	r3, #0
+ 152 00da 0093     		str	r3, [sp]
+ 153 00dc 0023     		movs	r3, #0
+ 154 00de 0193     		str	r3, [sp, #4]
+ 155 00e0 0023     		movs	r3, #0
+ 156 00e2 0293     		str	r3, [sp, #8]
+ 157 00e4 0023     		movs	r3, #0
+ 158 00e6 0393     		str	r3, [sp, #12]
+ 159 00e8 40F20000 		movw	r0, #:lower16:prvCountingSemaphoreTask
+ 160 00ec C0F20000 		movt	r0, #:upper16:prvCountingSemaphoreTask
+ 161 00f0 40F20001 		movw	r1, #:lower16:.LC3
+ 162 00f4 C0F20001 		movt	r1, #:upper16:.LC3
+ 163 00f8 8222     		movs	r2, #130
+ 164 00fa 024B     		ldr	r3, .L4
+ 165 00fc FFF7FEFF 		bl	xTaskGenericCreate
+ 166              	.L1:
+ 174:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 175:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** }
+ 167              		.loc 1 175 0
+ 168 0100 BD46     		mov	sp, r7
+ 169              		@ sp needed
+ 170 0102 80BD     		pop	{r7, pc}
+ 171              	.L5:
+ 172              		.align	2
+ 173              	.L4:
+ 174 0104 0C000000 		.word	xParameters+12
+ 175              		.cfi_endproc
+ 176              	.LFE1:
+ 178              		.section	.text.prvDecrementSemaphoreCount,"ax",%progbits
+ 179              		.align	2
+ 180              		.thumb
+ 181              		.thumb_func
+ 183              	prvDecrementSemaphoreCount:
+ 184              	.LFB2:
+ 176:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /*-----------------------------------------------------------*/
+ 177:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 178:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** static void prvDecrementSemaphoreCount( SemaphoreHandle_t xSemaphore, UBaseType_t *puxLoopCounter )
+ 179:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** {
+ 185              		.loc 1 179 0
+ 186              		.cfi_startproc
+ 187              		@ args = 0, pretend = 0, frame = 16
+ 188              		@ frame_needed = 1, uses_anonymous_args = 0
+ 189 0000 80B5     		push	{r7, lr}
+ 190              	.LCFI3:
+ 191              		.cfi_def_cfa_offset 8
+ 192              		.cfi_offset 7, -8
+ 193              		.cfi_offset 14, -4
+ 194 0002 84B0     		sub	sp, sp, #16
+ 195              	.LCFI4:
+ 196              		.cfi_def_cfa_offset 24
+ 197 0004 00AF     		add	r7, sp, #0
+ 198              	.LCFI5:
+ 199              		.cfi_def_cfa_register 7
+ 200 0006 7860     		str	r0, [r7, #4]
+ 201 0008 3960     		str	r1, [r7]
+ 180:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** UBaseType_t ux;
+ 181:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 182:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* If the semaphore count is at its maximum then we should not be able to
+ 183:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	'give' the semaphore. */
+ 184:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	if( xSemaphoreGive( xSemaphore ) == pdPASS )
+ 202              		.loc 1 184 0
+ 203 000a 7868     		ldr	r0, [r7, #4]
+ 204 000c 0021     		movs	r1, #0
+ 205 000e 0022     		movs	r2, #0
+ 206 0010 0023     		movs	r3, #0
+ 207 0012 FFF7FEFF 		bl	xQueueGenericSend
+ 208 0016 0346     		mov	r3, r0
+ 209 0018 012B     		cmp	r3, #1
+ 210 001a 05D1     		bne	.L7
+ 185:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 186:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		xErrorDetected = pdTRUE;
+ 211              		.loc 1 186 0
+ 212 001c 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 213 0020 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 214 0024 0122     		movs	r2, #1
+ 215 0026 1A60     		str	r2, [r3]
+ 216              	.L7:
+ 187:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 188:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 189:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* We should be able to 'take' the semaphore countMAX_COUNT_VALUE times. */
+ 190:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	for( ux = 0; ux < countMAX_COUNT_VALUE; ux++ )
+ 217              		.loc 1 190 0
+ 218 0028 0023     		movs	r3, #0
+ 219 002a FB60     		str	r3, [r7, #12]
+ 220 002c 16E0     		b	.L8
+ 221              	.L10:
+ 191:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 192:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		if( xSemaphoreTake( xSemaphore, countDONT_BLOCK ) != pdPASS )
+ 222              		.loc 1 192 0
+ 223 002e 7868     		ldr	r0, [r7, #4]
+ 224 0030 0021     		movs	r1, #0
+ 225 0032 0022     		movs	r2, #0
+ 226 0034 0023     		movs	r3, #0
+ 227 0036 FFF7FEFF 		bl	xQueueGenericReceive
+ 228 003a 0346     		mov	r3, r0
+ 229 003c 012B     		cmp	r3, #1
+ 230 003e 05D0     		beq	.L9
+ 193:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		{
+ 194:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 			/* We expected to be able to take the semaphore. */
+ 195:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 			xErrorDetected = pdTRUE;
+ 231              		.loc 1 195 0
+ 232 0040 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 233 0044 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 234 0048 0122     		movs	r2, #1
+ 235 004a 1A60     		str	r2, [r3]
+ 236              	.L9:
+ 196:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		}
+ 197:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 198:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		( *puxLoopCounter )++;
+ 237              		.loc 1 198 0
+ 238 004c 3B68     		ldr	r3, [r7]
+ 239 004e 1B68     		ldr	r3, [r3]
+ 240 0050 5A1C     		adds	r2, r3, #1
+ 241 0052 3B68     		ldr	r3, [r7]
+ 242 0054 1A60     		str	r2, [r3]
+ 190:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 243              		.loc 1 190 0
+ 244 0056 FB68     		ldr	r3, [r7, #12]
+ 245 0058 0133     		adds	r3, r3, #1
+ 246 005a FB60     		str	r3, [r7, #12]
+ 247              	.L8:
+ 190:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 248              		.loc 1 190 0 is_stmt 0 discriminator 1
+ 249 005c FB68     		ldr	r3, [r7, #12]
+ 250 005e C72B     		cmp	r3, #199
+ 251 0060 E5D9     		bls	.L10
+ 199:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 200:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 201:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	#if configUSE_PREEMPTION == 0
+ 202:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		taskYIELD();
+ 203:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	#endif
+ 204:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 205:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* If the semaphore count is zero then we should not be able to	'take' 
+ 206:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	the semaphore. */
+ 207:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	if( xSemaphoreTake( xSemaphore, countDONT_BLOCK ) == pdPASS )
+ 252              		.loc 1 207 0 is_stmt 1
+ 253 0062 7868     		ldr	r0, [r7, #4]
+ 254 0064 0021     		movs	r1, #0
+ 255 0066 0022     		movs	r2, #0
+ 256 0068 0023     		movs	r3, #0
+ 257 006a FFF7FEFF 		bl	xQueueGenericReceive
+ 258 006e 0346     		mov	r3, r0
+ 259 0070 012B     		cmp	r3, #1
+ 260 0072 05D1     		bne	.L6
+ 208:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 209:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		xErrorDetected = pdTRUE;
+ 261              		.loc 1 209 0
+ 262 0074 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 263 0078 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 264 007c 0122     		movs	r2, #1
+ 265 007e 1A60     		str	r2, [r3]
+ 266              	.L6:
+ 210:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 211:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** }
+ 267              		.loc 1 211 0
+ 268 0080 1037     		adds	r7, r7, #16
+ 269 0082 BD46     		mov	sp, r7
+ 270              		@ sp needed
+ 271 0084 80BD     		pop	{r7, pc}
+ 272              		.cfi_endproc
+ 273              	.LFE2:
+ 275 0086 00BF     		.section	.text.prvIncrementSemaphoreCount,"ax",%progbits
+ 276              		.align	2
+ 277              		.thumb
+ 278              		.thumb_func
+ 280              	prvIncrementSemaphoreCount:
+ 281              	.LFB3:
+ 212:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /*-----------------------------------------------------------*/
+ 213:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 214:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** static void prvIncrementSemaphoreCount( SemaphoreHandle_t xSemaphore, UBaseType_t *puxLoopCounter )
+ 215:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** {
+ 282              		.loc 1 215 0
+ 283              		.cfi_startproc
+ 284              		@ args = 0, pretend = 0, frame = 16
+ 285              		@ frame_needed = 1, uses_anonymous_args = 0
+ 286 0000 80B5     		push	{r7, lr}
+ 287              	.LCFI6:
+ 288              		.cfi_def_cfa_offset 8
+ 289              		.cfi_offset 7, -8
+ 290              		.cfi_offset 14, -4
+ 291 0002 84B0     		sub	sp, sp, #16
+ 292              	.LCFI7:
+ 293              		.cfi_def_cfa_offset 24
+ 294 0004 00AF     		add	r7, sp, #0
+ 295              	.LCFI8:
+ 296              		.cfi_def_cfa_register 7
+ 297 0006 7860     		str	r0, [r7, #4]
+ 298 0008 3960     		str	r1, [r7]
+ 216:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** UBaseType_t ux;
+ 217:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 218:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* If the semaphore count is zero then we should not be able to	'take' 
+ 219:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	the semaphore. */
+ 220:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	if( xSemaphoreTake( xSemaphore, countDONT_BLOCK ) == pdPASS )
+ 299              		.loc 1 220 0
+ 300 000a 7868     		ldr	r0, [r7, #4]
+ 301 000c 0021     		movs	r1, #0
+ 302 000e 0022     		movs	r2, #0
+ 303 0010 0023     		movs	r3, #0
+ 304 0012 FFF7FEFF 		bl	xQueueGenericReceive
+ 305 0016 0346     		mov	r3, r0
+ 306 0018 012B     		cmp	r3, #1
+ 307 001a 05D1     		bne	.L13
+ 221:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 222:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		xErrorDetected = pdTRUE;
+ 308              		.loc 1 222 0
+ 309 001c 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 310 0020 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 311 0024 0122     		movs	r2, #1
+ 312 0026 1A60     		str	r2, [r3]
+ 313              	.L13:
+ 223:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 224:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 225:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* We should be able to 'give' the semaphore countMAX_COUNT_VALUE times. */
+ 226:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	for( ux = 0; ux < countMAX_COUNT_VALUE; ux++ )
+ 314              		.loc 1 226 0
+ 315 0028 0023     		movs	r3, #0
+ 316 002a FB60     		str	r3, [r7, #12]
+ 317 002c 16E0     		b	.L14
+ 318              	.L16:
+ 227:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 228:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		if( xSemaphoreGive( xSemaphore ) != pdPASS )
+ 319              		.loc 1 228 0
+ 320 002e 7868     		ldr	r0, [r7, #4]
+ 321 0030 0021     		movs	r1, #0
+ 322 0032 0022     		movs	r2, #0
+ 323 0034 0023     		movs	r3, #0
+ 324 0036 FFF7FEFF 		bl	xQueueGenericSend
+ 325 003a 0346     		mov	r3, r0
+ 326 003c 012B     		cmp	r3, #1
+ 327 003e 05D0     		beq	.L15
+ 229:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		{
+ 230:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 			/* We expected to be able to take the semaphore. */
+ 231:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 			xErrorDetected = pdTRUE;
+ 328              		.loc 1 231 0
+ 329 0040 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 330 0044 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 331 0048 0122     		movs	r2, #1
+ 332 004a 1A60     		str	r2, [r3]
+ 333              	.L15:
+ 232:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		}
+ 233:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 234:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		( *puxLoopCounter )++;
+ 334              		.loc 1 234 0
+ 335 004c 3B68     		ldr	r3, [r7]
+ 336 004e 1B68     		ldr	r3, [r3]
+ 337 0050 5A1C     		adds	r2, r3, #1
+ 338 0052 3B68     		ldr	r3, [r7]
+ 339 0054 1A60     		str	r2, [r3]
+ 226:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 340              		.loc 1 226 0
+ 341 0056 FB68     		ldr	r3, [r7, #12]
+ 342 0058 0133     		adds	r3, r3, #1
+ 343 005a FB60     		str	r3, [r7, #12]
+ 344              	.L14:
+ 226:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 345              		.loc 1 226 0 is_stmt 0 discriminator 1
+ 346 005c FB68     		ldr	r3, [r7, #12]
+ 347 005e C72B     		cmp	r3, #199
+ 348 0060 E5D9     		bls	.L16
+ 235:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 236:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 237:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	#if configUSE_PREEMPTION == 0
+ 238:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		taskYIELD();
+ 239:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	#endif
+ 240:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 241:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* If the semaphore count is at its maximum then we should not be able to
+ 242:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	'give' the semaphore. */
+ 243:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	if( xSemaphoreGive( xSemaphore ) == pdPASS )
+ 349              		.loc 1 243 0 is_stmt 1
+ 350 0062 7868     		ldr	r0, [r7, #4]
+ 351 0064 0021     		movs	r1, #0
+ 352 0066 0022     		movs	r2, #0
+ 353 0068 0023     		movs	r3, #0
+ 354 006a FFF7FEFF 		bl	xQueueGenericSend
+ 355 006e 0346     		mov	r3, r0
+ 356 0070 012B     		cmp	r3, #1
+ 357 0072 05D1     		bne	.L12
+ 244:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 245:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		xErrorDetected = pdTRUE;
+ 358              		.loc 1 245 0
+ 359 0074 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 360 0078 C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 361 007c 0122     		movs	r2, #1
+ 362 007e 1A60     		str	r2, [r3]
+ 363              	.L12:
+ 246:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 247:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** }
+ 364              		.loc 1 247 0
+ 365 0080 1037     		adds	r7, r7, #16
+ 366 0082 BD46     		mov	sp, r7
+ 367              		@ sp needed
+ 368 0084 80BD     		pop	{r7, pc}
+ 369              		.cfi_endproc
+ 370              	.LFE3:
+ 372 0086 00BF     		.section	.text.prvCountingSemaphoreTask,"ax",%progbits
+ 373              		.align	2
+ 374              		.thumb
+ 375              		.thumb_func
+ 377              	prvCountingSemaphoreTask:
+ 378              	.LFB4:
+ 248:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /*-----------------------------------------------------------*/
+ 249:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 250:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** static void prvCountingSemaphoreTask( void *pvParameters )
+ 251:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** {
+ 379              		.loc 1 251 0
+ 380              		.cfi_startproc
+ 381              		@ args = 0, pretend = 0, frame = 16
+ 382              		@ frame_needed = 1, uses_anonymous_args = 0
+ 383 0000 80B5     		push	{r7, lr}
+ 384              	.LCFI9:
+ 385              		.cfi_def_cfa_offset 8
+ 386              		.cfi_offset 7, -8
+ 387              		.cfi_offset 14, -4
+ 388 0002 84B0     		sub	sp, sp, #16
+ 389              	.LCFI10:
+ 390              		.cfi_def_cfa_offset 24
+ 391 0004 00AF     		add	r7, sp, #0
+ 392              	.LCFI11:
+ 393              		.cfi_def_cfa_register 7
+ 394 0006 7860     		str	r0, [r7, #4]
+ 252:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** xCountSemStruct *pxParameter;
+ 253:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 254:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	#ifdef USE_STDIO
+ 255:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	void vPrintDisplayMessage( const char * const * ppcMessageToSend );
+ 256:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	
+ 257:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		const char * const pcTaskStartMsg = "Counting semaphore demo started.\r\n";
+ 258:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 259:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		/* Queue a message for printing to say the task has started. */
+ 260:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		vPrintDisplayMessage( &pcTaskStartMsg );
+ 261:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	#endif
+ 262:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 263:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* The semaphore to be used was passed as the parameter. */
+ 264:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	pxParameter = ( xCountSemStruct * ) pvParameters;
+ 395              		.loc 1 264 0
+ 396 0008 7B68     		ldr	r3, [r7, #4]
+ 397 000a FB60     		str	r3, [r7, #12]
+ 265:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 266:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* Did we expect to find the semaphore already at its max count value, or
+ 267:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	at zero? */
+ 268:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	if( pxParameter->uxExpectedStartCount == countSTART_AT_MAX_COUNT )
+ 398              		.loc 1 268 0
+ 399 000c FB68     		ldr	r3, [r7, #12]
+ 400 000e 5B68     		ldr	r3, [r3, #4]
+ 401 0010 AA2B     		cmp	r3, #170
+ 402 0012 07D1     		bne	.L19
+ 269:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 270:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		prvDecrementSemaphoreCount( pxParameter->xSemaphore, &( pxParameter->uxLoopCounter ) );
+ 403              		.loc 1 270 0
+ 404 0014 FB68     		ldr	r3, [r7, #12]
+ 405 0016 1A68     		ldr	r2, [r3]
+ 406 0018 FB68     		ldr	r3, [r7, #12]
+ 407 001a 0833     		adds	r3, r3, #8
+ 408 001c 1046     		mov	r0, r2
+ 409 001e 1946     		mov	r1, r3
+ 410 0020 FFF7FEFF 		bl	prvDecrementSemaphoreCount
+ 411              	.L19:
+ 271:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 272:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 273:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* Now we expect the semaphore count to be 0, so this time there is an
+ 274:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	error if we can take the semaphore. */
+ 275:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	if( xSemaphoreTake( pxParameter->xSemaphore, 0 ) == pdPASS )
+ 412              		.loc 1 275 0
+ 413 0024 FB68     		ldr	r3, [r7, #12]
+ 414 0026 1B68     		ldr	r3, [r3]
+ 415 0028 1846     		mov	r0, r3
+ 416 002a 0021     		movs	r1, #0
+ 417 002c 0022     		movs	r2, #0
+ 418 002e 0023     		movs	r3, #0
+ 419 0030 FFF7FEFF 		bl	xQueueGenericReceive
+ 420 0034 0346     		mov	r3, r0
+ 421 0036 012B     		cmp	r3, #1
+ 422 0038 05D1     		bne	.L20
+ 276:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 277:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		xErrorDetected = pdTRUE;
+ 423              		.loc 1 277 0
+ 424 003a 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 425 003e C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 426 0042 0122     		movs	r2, #1
+ 427 0044 1A60     		str	r2, [r3]
+ 428              	.L20:
+ 278:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 279:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 280:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	for( ;; )
+ 281:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 282:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		prvIncrementSemaphoreCount( pxParameter->xSemaphore, &( pxParameter->uxLoopCounter ) );
+ 429              		.loc 1 282 0 discriminator 1
+ 430 0046 FB68     		ldr	r3, [r7, #12]
+ 431 0048 1A68     		ldr	r2, [r3]
+ 432 004a FB68     		ldr	r3, [r7, #12]
+ 433 004c 0833     		adds	r3, r3, #8
+ 434 004e 1046     		mov	r0, r2
+ 435 0050 1946     		mov	r1, r3
+ 436 0052 FFF7FEFF 		bl	prvIncrementSemaphoreCount
+ 283:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		prvDecrementSemaphoreCount( pxParameter->xSemaphore, &( pxParameter->uxLoopCounter ) );
+ 437              		.loc 1 283 0 discriminator 1
+ 438 0056 FB68     		ldr	r3, [r7, #12]
+ 439 0058 1A68     		ldr	r2, [r3]
+ 440 005a FB68     		ldr	r3, [r7, #12]
+ 441 005c 0833     		adds	r3, r3, #8
+ 442 005e 1046     		mov	r0, r2
+ 443 0060 1946     		mov	r1, r3
+ 444 0062 FFF7FEFF 		bl	prvDecrementSemaphoreCount
+ 284:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 445              		.loc 1 284 0 discriminator 1
+ 446 0066 EEE7     		b	.L20
+ 447              		.cfi_endproc
+ 448              	.LFE4:
+ 450              		.section	.text.xAreCountingSemaphoreTasksStillRunning,"ax",%progbits
+ 451              		.align	2
+ 452              		.global	xAreCountingSemaphoreTasksStillRunning
+ 453              		.thumb
+ 454              		.thumb_func
+ 456              	xAreCountingSemaphoreTasksStillRunning:
+ 457              	.LFB5:
+ 285:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** }
+ 286:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** /*-----------------------------------------------------------*/
+ 287:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 288:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** BaseType_t xAreCountingSemaphoreTasksStillRunning( void )
+ 289:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** {
+ 458              		.loc 1 289 0
+ 459              		.cfi_startproc
+ 460              		@ args = 0, pretend = 0, frame = 8
+ 461              		@ frame_needed = 1, uses_anonymous_args = 0
+ 462              		@ link register save eliminated.
+ 463 0000 80B4     		push	{r7}
+ 464              	.LCFI12:
+ 465              		.cfi_def_cfa_offset 4
+ 466              		.cfi_offset 7, -4
+ 467 0002 83B0     		sub	sp, sp, #12
+ 468              	.LCFI13:
+ 469              		.cfi_def_cfa_offset 16
+ 470 0004 00AF     		add	r7, sp, #0
+ 471              	.LCFI14:
+ 472              		.cfi_def_cfa_register 7
+ 290:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** static UBaseType_t uxLastCount0 = 0, uxLastCount1 = 0;
+ 291:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** BaseType_t xReturn = pdPASS;
+ 473              		.loc 1 291 0
+ 474 0006 0123     		movs	r3, #1
+ 475 0008 7B60     		str	r3, [r7, #4]
+ 292:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 293:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* Return fail if any 'give' or 'take' did not result in the expected
+ 294:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	behaviour. */
+ 295:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	if( xErrorDetected != pdFALSE )
+ 476              		.loc 1 295 0
+ 477 000a 40F20003 		movw	r3, #:lower16:xErrorDetected
+ 478 000e C0F20003 		movt	r3, #:upper16:xErrorDetected
+ 479 0012 1B68     		ldr	r3, [r3]
+ 480 0014 002B     		cmp	r3, #0
+ 481 0016 01D0     		beq	.L22
+ 296:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 297:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		xReturn = pdFAIL;
+ 482              		.loc 1 297 0
+ 483 0018 0023     		movs	r3, #0
+ 484 001a 7B60     		str	r3, [r7, #4]
+ 485              	.L22:
+ 298:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 299:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 300:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	/* Return fail if either task is not still incrementing its loop counter. */
+ 301:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	if( uxLastCount0 == xParameters[ 0 ].uxLoopCounter )
+ 486              		.loc 1 301 0
+ 487 001c 40F20003 		movw	r3, #:lower16:xParameters
+ 488 0020 C0F20003 		movt	r3, #:upper16:xParameters
+ 489 0024 9A68     		ldr	r2, [r3, #8]
+ 490 0026 40F20003 		movw	r3, #:lower16:uxLastCount0.4494
+ 491 002a C0F20003 		movt	r3, #:upper16:uxLastCount0.4494
+ 492 002e 1B68     		ldr	r3, [r3]
+ 493 0030 9A42     		cmp	r2, r3
+ 494 0032 02D1     		bne	.L23
+ 302:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 303:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		xReturn = pdFAIL;
+ 495              		.loc 1 303 0
+ 496 0034 0023     		movs	r3, #0
+ 497 0036 7B60     		str	r3, [r7, #4]
+ 498 0038 09E0     		b	.L24
+ 499              	.L23:
+ 304:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 305:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	else
+ 306:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 307:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		uxLastCount0 = xParameters[ 0 ].uxLoopCounter;
+ 500              		.loc 1 307 0
+ 501 003a 40F20003 		movw	r3, #:lower16:xParameters
+ 502 003e C0F20003 		movt	r3, #:upper16:xParameters
+ 503 0042 9A68     		ldr	r2, [r3, #8]
+ 504 0044 40F20003 		movw	r3, #:lower16:uxLastCount0.4494
+ 505 0048 C0F20003 		movt	r3, #:upper16:uxLastCount0.4494
+ 506 004c 1A60     		str	r2, [r3]
+ 507              	.L24:
+ 308:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 309:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 310:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	if( uxLastCount1 == xParameters[ 1 ].uxLoopCounter )
+ 508              		.loc 1 310 0
+ 509 004e 40F20003 		movw	r3, #:lower16:xParameters
+ 510 0052 C0F20003 		movt	r3, #:upper16:xParameters
+ 511 0056 5A69     		ldr	r2, [r3, #20]
+ 512 0058 40F20003 		movw	r3, #:lower16:uxLastCount1.4495
+ 513 005c C0F20003 		movt	r3, #:upper16:uxLastCount1.4495
+ 514 0060 1B68     		ldr	r3, [r3]
+ 515 0062 9A42     		cmp	r2, r3
+ 516 0064 02D1     		bne	.L25
+ 311:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 312:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		xReturn = pdFAIL;
+ 517              		.loc 1 312 0
+ 518 0066 0023     		movs	r3, #0
+ 519 0068 7B60     		str	r3, [r7, #4]
+ 520 006a 09E0     		b	.L26
+ 521              	.L25:
+ 313:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 314:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	else
+ 315:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	{
+ 316:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 		uxLastCount1 = xParameters[ 1 ].uxLoopCounter;
+ 522              		.loc 1 316 0
+ 523 006c 40F20003 		movw	r3, #:lower16:xParameters
+ 524 0070 C0F20003 		movt	r3, #:upper16:xParameters
+ 525 0074 5A69     		ldr	r2, [r3, #20]
+ 526 0076 40F20003 		movw	r3, #:lower16:uxLastCount1.4495
+ 527 007a C0F20003 		movt	r3, #:upper16:uxLastCount1.4495
+ 528 007e 1A60     		str	r2, [r3]
+ 529              	.L26:
+ 317:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	}
+ 318:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 
+ 319:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** 	return xReturn;
+ 530              		.loc 1 319 0
+ 531 0080 7B68     		ldr	r3, [r7, #4]
+ 320:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/countsem.c **** }
+ 532              		.loc 1 320 0
+ 533 0082 1846     		mov	r0, r3
+ 534 0084 0C37     		adds	r7, r7, #12
+ 535 0086 BD46     		mov	sp, r7
+ 536              		@ sp needed
+ 537 0088 5DF8047B 		ldr	r7, [sp], #4
+ 538 008c 7047     		bx	lr
+ 539              		.cfi_endproc
+ 540              	.LFE5:
+ 542 008e 00BF     		.section	.bss.uxLastCount0.4494,"aw",%nobits
+ 543              		.align	2
+ 546              	uxLastCount0.4494:
+ 547 0000 00000000 		.space	4
+ 548              		.section	.bss.uxLastCount1.4495,"aw",%nobits
+ 549              		.align	2
+ 552              	uxLastCount1.4495:
+ 553 0000 00000000 		.space	4
+ 554              		.text
+ 555              	.Letext0:
+ 556              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 557              		.file 3 "/usr/include/newlib/stdint.h"
+ 558              		.file 4 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 559              		.file 5 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/queue.h"
+ 560              		.file 6 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/semphr.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 countsem.c
+     /tmp/cctNmNoX.s:20     .bss.xErrorDetected:00000000 $d
+     /tmp/cctNmNoX.s:23     .bss.xErrorDetected:00000000 xErrorDetected
+     /tmp/cctNmNoX.s:26     .bss.xParameters:00000000 $d
+     /tmp/cctNmNoX.s:29     .bss.xParameters:00000000 xParameters
+     /tmp/cctNmNoX.s:32     .rodata:00000000 $d
+     /tmp/cctNmNoX.s:33     .rodata:00000000 .LC0
+     /tmp/cctNmNoX.s:36     .rodata:00000010 .LC1
+     /tmp/cctNmNoX.s:39     .rodata:00000020 .LC2
+     /tmp/cctNmNoX.s:42     .rodata:00000028 .LC3
+     /tmp/cctNmNoX.s:45     .text.vStartCountingSemaphoreTasks:00000000 $t
+     /tmp/cctNmNoX.s:50     .text.vStartCountingSemaphoreTasks:00000000 vStartCountingSemaphoreTasks
+     /tmp/cctNmNoX.s:377    .text.prvCountingSemaphoreTask:00000000 prvCountingSemaphoreTask
+     /tmp/cctNmNoX.s:174    .text.vStartCountingSemaphoreTasks:00000104 $d
+     /tmp/cctNmNoX.s:179    .text.prvDecrementSemaphoreCount:00000000 $t
+     /tmp/cctNmNoX.s:183    .text.prvDecrementSemaphoreCount:00000000 prvDecrementSemaphoreCount
+     /tmp/cctNmNoX.s:276    .text.prvIncrementSemaphoreCount:00000000 $t
+     /tmp/cctNmNoX.s:280    .text.prvIncrementSemaphoreCount:00000000 prvIncrementSemaphoreCount
+     /tmp/cctNmNoX.s:373    .text.prvCountingSemaphoreTask:00000000 $t
+     /tmp/cctNmNoX.s:451    .text.xAreCountingSemaphoreTasksStillRunning:00000000 $t
+     /tmp/cctNmNoX.s:456    .text.xAreCountingSemaphoreTasksStillRunning:00000000 xAreCountingSemaphoreTasksStillRunning
+     /tmp/cctNmNoX.s:546    .bss.uxLastCount0.4494:00000000 uxLastCount0.4494
+     /tmp/cctNmNoX.s:552    .bss.uxLastCount1.4495:00000000 uxLastCount1.4495
+     /tmp/cctNmNoX.s:543    .bss.uxLastCount0.4494:00000000 $d
+     /tmp/cctNmNoX.s:549    .bss.uxLastCount1.4495:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+xQueueCreateCountingSemaphore
+vQueueAddToRegistry
+xTaskGenericCreate
+xQueueGenericSend
+xQueueGenericReceive

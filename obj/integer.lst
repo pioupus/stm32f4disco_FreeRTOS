@@ -1,0 +1,466 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 3
+   4              		.fpu fpv4-sp-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.file	"integer.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.bss.xTaskCheck,"aw",%nobits
+  20              		.align	2
+  23              	xTaskCheck:
+  24 0000 00000000 		.space	4
+  25              		.section	.rodata
+  26              		.align	2
+  27              	.LC0:
+  28 0000 496E744D 		.ascii	"IntMath\000"
+  28      61746800 
+  29              		.section	.text.vStartIntegerMathTasks,"ax",%progbits
+  30              		.align	2
+  31              		.global	vStartIntegerMathTasks
+  32              		.thumb
+  33              		.thumb_func
+  35              	vStartIntegerMathTasks:
+  36              	.LFB1:
+  37              		.file 1 "lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c"
+   1:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** /*
+   2:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     FreeRTOS V8.1.2 - Copyright (C) 2014 Real Time Engineers Ltd. 
+   3:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     All rights reserved
+   4:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+   5:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
+   6:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+   7:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     ***************************************************************************
+   8:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *                                                                       *
+   9:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *    FreeRTOS provides completely free yet professionally developed,    *
+  10:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *    robust, strictly quality controlled, supported, and cross          *
+  11:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *    platform software that has become a de facto standard.             *
+  12:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *                                                                       *
+  13:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *    Help yourself get started quickly and support the FreeRTOS         *
+  14:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *    project by purchasing a FreeRTOS tutorial book, reference          *
+  15:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
+  16:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *                                                                       *
+  17:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *    Thank you!                                                         *
+  18:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *                                                                       *
+  19:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     ***************************************************************************
+  20:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  21:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     This file is part of the FreeRTOS distribution.
+  22:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  23:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  24:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     the terms of the GNU General Public License (version 2) as published by the
+  25:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+  26:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  27:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     >>!   NOTE: The modification to the GPL is included to allow you to     !<<
+  28:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     >>!   distribute a combined work that includes FreeRTOS without being   !<<
+  29:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     >>!   obliged to provide the source code for proprietary components     !<<
+  30:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     >>!   outside of the FreeRTOS kernel.                                   !<<
+  31:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  32:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
+  33:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  34:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     FOR A PARTICULAR PURPOSE.  Full license text is available from the following
+  35:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     link: http://www.freertos.org/a00114.html
+  36:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  37:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     1 tab == 4 spaces!
+  38:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  39:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     ***************************************************************************
+  40:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *                                                                       *
+  41:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *    Having a problem?  Start by reading the FAQ "My application does   *
+  42:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *    not run, what could be wrong?"                                     *
+  43:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *                                                                       *
+  44:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *    http://www.FreeRTOS.org/FAQHelp.html                               *
+  45:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****      *                                                                       *
+  46:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     ***************************************************************************
+  47:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  48:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     http://www.FreeRTOS.org - Documentation, books, training, latest versions,
+  49:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     license and Real Time Engineers Ltd. contact details.
+  50:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  51:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
+  52:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     including FreeRTOS+Trace - an indispensable productivity tool, a DOS
+  53:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     compatible FAT file system, and our tiny thread aware UDP/IP stack.
+  54:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  55:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
+  56:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     Integrity Systems to sell under the OpenRTOS brand.  Low cost OpenRTOS
+  57:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     licenses offer ticketed support, indemnification and middleware.
+  58:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  59:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     http://www.SafeRTOS.com - High Integrity Systems also provide a safety
+  60:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     engineered and independently SIL3 certified version for use in safety and
+  61:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     mission critical applications that require provable dependability.
+  62:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  63:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****     1 tab == 4 spaces!
+  64:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** */
+  65:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  66:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** /*
+  67:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****  * Creates one or more tasks that repeatedly perform a set of integer
+  68:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****  * calculations.  The result of each run-time calculation is compared to the 
+  69:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****  * known expected result - with a mismatch being indicative of an error in the
+  70:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****  * context switch mechanism.
+  71:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c ****  */
+  72:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  73:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** #include <stdlib.h>
+  74:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  75:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** /* Scheduler include files. */
+  76:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** #include "FreeRTOS.h"
+  77:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** #include "task.h"
+  78:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  79:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** /* Demo program include files. */
+  80:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** #include "integer.h"
+  81:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  82:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** /* The constants used in the calculation. */
+  83:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** #define intgCONST1				( ( long ) 123 )
+  84:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** #define intgCONST2				( ( long ) 234567 )
+  85:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** #define intgCONST3				( ( long ) -3 )
+  86:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** #define intgCONST4				( ( long ) 7 )
+  87:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** #define intgEXPECTED_ANSWER		( ( ( intgCONST1 + intgCONST2 ) * intgCONST3 ) / intgCONST4 )
+  88:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  89:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** #define intgSTACK_SIZE			configMINIMAL_STACK_SIZE
+  90:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  91:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** /* As this is the minimal version, we will only create one task. */
+  92:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** #define intgNUMBER_OF_TASKS		( 1 )
+  93:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  94:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** /* The task function.  Repeatedly performs a 32 bit calculation, checking the
+  95:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** result against the expected result.  If the result is incorrect then the
+  96:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** context switch must have caused some corruption. */
+  97:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** static portTASK_FUNCTION_PROTO( vCompeteingIntMathTask, pvParameters );
+  98:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+  99:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** /* Variables that are set to true within the calculation task to indicate
+ 100:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** that the task is still executing.  The check task sets the variable back to
+ 101:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** false, flagging an error if the variable is still false the next time it
+ 102:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** is called. */
+ 103:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** static volatile BaseType_t xTaskCheck[ intgNUMBER_OF_TASKS ] = { ( BaseType_t ) pdFALSE };
+ 104:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 105:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** /*-----------------------------------------------------------*/
+ 106:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 107:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** void vStartIntegerMathTasks( UBaseType_t uxPriority )
+ 108:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** {
+  38              		.loc 1 108 0
+  39              		.cfi_startproc
+  40              		@ args = 0, pretend = 0, frame = 16
+  41              		@ frame_needed = 1, uses_anonymous_args = 0
+  42 0000 80B5     		push	{r7, lr}
+  43              	.LCFI0:
+  44              		.cfi_def_cfa_offset 8
+  45              		.cfi_offset 7, -8
+  46              		.cfi_offset 14, -4
+  47 0002 88B0     		sub	sp, sp, #32
+  48              	.LCFI1:
+  49              		.cfi_def_cfa_offset 40
+  50 0004 04AF     		add	r7, sp, #16
+  51              	.LCFI2:
+  52              		.cfi_def_cfa 7, 24
+  53 0006 7860     		str	r0, [r7, #4]
+ 109:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** short sTask;
+ 110:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 111:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	for( sTask = 0; sTask < intgNUMBER_OF_TASKS; sTask++ )
+  54              		.loc 1 111 0
+  55 0008 0023     		movs	r3, #0
+  56 000a FB81     		strh	r3, [r7, #14]	@ movhi
+  57 000c 1DE0     		b	.L2
+  58              	.L3:
+ 112:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	{
+ 113:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		xTaskCreate( vCompeteingIntMathTask, "IntMath", intgSTACK_SIZE, ( void * ) &( xTaskCheck[ sTask ]
+  59              		.loc 1 113 0 discriminator 2
+  60 000e B7F90E30 		ldrsh	r3, [r7, #14]
+  61 0012 9A00     		lsls	r2, r3, #2
+  62 0014 40F20003 		movw	r3, #:lower16:xTaskCheck
+  63 0018 C0F20003 		movt	r3, #:upper16:xTaskCheck
+  64 001c 1344     		add	r3, r3, r2
+  65 001e 7A68     		ldr	r2, [r7, #4]
+  66 0020 0092     		str	r2, [sp]
+  67 0022 0022     		movs	r2, #0
+  68 0024 0192     		str	r2, [sp, #4]
+  69 0026 0022     		movs	r2, #0
+  70 0028 0292     		str	r2, [sp, #8]
+  71 002a 0022     		movs	r2, #0
+  72 002c 0392     		str	r2, [sp, #12]
+  73 002e 40F20000 		movw	r0, #:lower16:vCompeteingIntMathTask
+  74 0032 C0F20000 		movt	r0, #:upper16:vCompeteingIntMathTask
+  75 0036 40F20001 		movw	r1, #:lower16:.LC0
+  76 003a C0F20001 		movt	r1, #:upper16:.LC0
+  77 003e 8222     		movs	r2, #130
+  78 0040 FFF7FEFF 		bl	xTaskGenericCreate
+ 111:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	{
+  79              		.loc 1 111 0 discriminator 2
+  80 0044 FB89     		ldrh	r3, [r7, #14]
+  81 0046 0133     		adds	r3, r3, #1
+  82 0048 FB81     		strh	r3, [r7, #14]	@ movhi
+  83              	.L2:
+ 111:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	{
+  84              		.loc 1 111 0 is_stmt 0 discriminator 1
+  85 004a B7F90E30 		ldrsh	r3, [r7, #14]
+  86 004e 002B     		cmp	r3, #0
+  87 0050 DDDD     		ble	.L3
+ 114:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	}
+ 115:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** }
+  88              		.loc 1 115 0 is_stmt 1
+  89 0052 1037     		adds	r7, r7, #16
+  90 0054 BD46     		mov	sp, r7
+  91              		@ sp needed
+  92 0056 80BD     		pop	{r7, pc}
+  93              		.cfi_endproc
+  94              	.LFE1:
+  96              		.section	.text.vCompeteingIntMathTask,"ax",%progbits
+  97              		.align	2
+  98              		.thumb
+  99              		.thumb_func
+ 101              	vCompeteingIntMathTask:
+ 102              	.LFB2:
+ 116:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** /*-----------------------------------------------------------*/
+ 117:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 118:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** static portTASK_FUNCTION( vCompeteingIntMathTask, pvParameters )
+ 119:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** {
+ 103              		.loc 1 119 0
+ 104              		.cfi_startproc
+ 105              		@ args = 0, pretend = 0, frame = 24
+ 106              		@ frame_needed = 1, uses_anonymous_args = 0
+ 107 0000 80B5     		push	{r7, lr}
+ 108              	.LCFI3:
+ 109              		.cfi_def_cfa_offset 8
+ 110              		.cfi_offset 7, -8
+ 111              		.cfi_offset 14, -4
+ 112 0002 86B0     		sub	sp, sp, #24
+ 113              	.LCFI4:
+ 114              		.cfi_def_cfa_offset 32
+ 115 0004 00AF     		add	r7, sp, #0
+ 116              	.LCFI5:
+ 117              		.cfi_def_cfa_register 7
+ 118 0006 7860     		str	r0, [r7, #4]
+ 120:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** /* These variables are all effectively set to constants so they are volatile to
+ 121:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** ensure the compiler does not just get rid of them. */
+ 122:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** volatile long lValue;
+ 123:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** short sError = pdFALSE;
+ 119              		.loc 1 123 0
+ 120 0008 0023     		movs	r3, #0
+ 121 000a FB82     		strh	r3, [r7, #22]	@ movhi
+ 124:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** volatile BaseType_t *pxTaskHasExecuted;
+ 125:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 126:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	/* Set a pointer to the variable we are going to set to true each
+ 127:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	iteration.  This is also a good test of the parameter passing mechanism
+ 128:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	within each port. */
+ 129:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	pxTaskHasExecuted = ( volatile BaseType_t * ) pvParameters;
+ 122              		.loc 1 129 0
+ 123 000c 7B68     		ldr	r3, [r7, #4]
+ 124 000e 3B61     		str	r3, [r7, #16]
+ 125              	.L7:
+ 130:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 131:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	/* Keep performing a calculation and checking the result against a constant. */
+ 132:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	for( ;; )
+ 133:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	{
+ 134:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		/* Perform the calculation.  This will store partial value in
+ 135:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		registers, resulting in a good test of the context switch mechanism. */
+ 136:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		lValue = intgCONST1;
+ 126              		.loc 1 136 0
+ 127 0010 7B23     		movs	r3, #123
+ 128 0012 FB60     		str	r3, [r7, #12]
+ 137:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		lValue += intgCONST2;
+ 129              		.loc 1 137 0
+ 130 0014 FB68     		ldr	r3, [r7, #12]
+ 131 0016 03F56533 		add	r3, r3, #234496
+ 132 001a 4733     		adds	r3, r3, #71
+ 133 001c FB60     		str	r3, [r7, #12]
+ 138:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 139:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		/* Yield in case cooperative scheduling is being used. */
+ 140:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		#if configUSE_PREEMPTION == 0
+ 141:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		{
+ 142:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 			taskYIELD();
+ 143:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		}
+ 144:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		#endif
+ 145:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 146:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		/* Finish off the calculation. */
+ 147:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		lValue *= intgCONST3;
+ 134              		.loc 1 147 0
+ 135 001e FB68     		ldr	r3, [r7, #12]
+ 136 0020 1A46     		mov	r2, r3
+ 137 0022 9B00     		lsls	r3, r3, #2
+ 138 0024 D31A     		subs	r3, r2, r3
+ 139 0026 FB60     		str	r3, [r7, #12]
+ 148:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		lValue /= intgCONST4;
+ 140              		.loc 1 148 0
+ 141 0028 FB68     		ldr	r3, [r7, #12]
+ 142 002a 42F29342 		movw	r2, #9363
+ 143 002e C9F24922 		movt	r2, 37449
+ 144 0032 82FB0312 		smull	r1, r2, r2, r3
+ 145 0036 1A44     		add	r2, r2, r3
+ 146 0038 9210     		asrs	r2, r2, #2
+ 147 003a DB17     		asrs	r3, r3, #31
+ 148 003c D31A     		subs	r3, r2, r3
+ 149 003e FB60     		str	r3, [r7, #12]
+ 149:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 150:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		/* If the calculation is found to be incorrect we stop setting the 
+ 151:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		TaskHasExecuted variable so the check task can see an error has 
+ 152:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		occurred. */
+ 153:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		if( lValue != intgEXPECTED_ANSWER ) /*lint !e774 volatile used to prevent this being optimised ou
+ 150              		.loc 1 153 0
+ 151 0040 FA68     		ldr	r2, [r7, #12]
+ 152 0042 47F21B73 		movw	r3, #30491
+ 153 0046 CFF6FE73 		movt	r3, 65534
+ 154 004a 9A42     		cmp	r2, r3
+ 155 004c 01D0     		beq	.L5
+ 154:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		{
+ 155:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 			sError = pdTRUE;
+ 156              		.loc 1 155 0
+ 157 004e 0123     		movs	r3, #1
+ 158 0050 FB82     		strh	r3, [r7, #22]	@ movhi
+ 159              	.L5:
+ 156:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		}
+ 157:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 158:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		if( sError == pdFALSE )
+ 160              		.loc 1 158 0
+ 161 0052 B7F91630 		ldrsh	r3, [r7, #22]
+ 162 0056 002B     		cmp	r3, #0
+ 163 0058 07D1     		bne	.L6
+ 159:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		{
+ 160:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 			/* We have not encountered any errors, so set the flag that show
+ 161:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 			we are still executing.  This will be periodically cleared by
+ 162:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 			the check task. */
+ 163:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 			portENTER_CRITICAL();
+ 164              		.loc 1 163 0
+ 165 005a FFF7FEFF 		bl	vPortEnterCritical
+ 164:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 				*pxTaskHasExecuted = pdTRUE;
+ 166              		.loc 1 164 0
+ 167 005e 3B69     		ldr	r3, [r7, #16]
+ 168 0060 0122     		movs	r2, #1
+ 169 0062 1A60     		str	r2, [r3]
+ 165:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 			portEXIT_CRITICAL();
+ 170              		.loc 1 165 0
+ 171 0064 FFF7FEFF 		bl	vPortExitCritical
+ 166:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		}
+ 167:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 168:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		/* Yield in case cooperative scheduling is being used. */
+ 169:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		#if configUSE_PREEMPTION == 0
+ 170:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		{
+ 171:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 			taskYIELD();
+ 172:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		}
+ 173:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		#endif
+ 174:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	}
+ 172              		.loc 1 174 0
+ 173 0068 D2E7     		b	.L7
+ 174              	.L6:
+ 175 006a D1E7     		b	.L7
+ 176              		.cfi_endproc
+ 177              	.LFE2:
+ 179              		.section	.text.xAreIntegerMathsTaskStillRunning,"ax",%progbits
+ 180              		.align	2
+ 181              		.global	xAreIntegerMathsTaskStillRunning
+ 182              		.thumb
+ 183              		.thumb_func
+ 185              	xAreIntegerMathsTaskStillRunning:
+ 186              	.LFB3:
+ 175:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** }
+ 176:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** /*-----------------------------------------------------------*/
+ 177:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 178:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** /* This is called to check that all the created tasks are still running. */
+ 179:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** BaseType_t xAreIntegerMathsTaskStillRunning( void )
+ 180:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** {
+ 187              		.loc 1 180 0
+ 188              		.cfi_startproc
+ 189              		@ args = 0, pretend = 0, frame = 8
+ 190              		@ frame_needed = 1, uses_anonymous_args = 0
+ 191              		@ link register save eliminated.
+ 192 0000 80B4     		push	{r7}
+ 193              	.LCFI6:
+ 194              		.cfi_def_cfa_offset 4
+ 195              		.cfi_offset 7, -4
+ 196 0002 83B0     		sub	sp, sp, #12
+ 197              	.LCFI7:
+ 198              		.cfi_def_cfa_offset 16
+ 199 0004 00AF     		add	r7, sp, #0
+ 200              	.LCFI8:
+ 201              		.cfi_def_cfa_register 7
+ 181:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** BaseType_t xReturn = pdTRUE;
+ 202              		.loc 1 181 0
+ 203 0006 0123     		movs	r3, #1
+ 204 0008 7B60     		str	r3, [r7, #4]
+ 182:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** short sTask;
+ 183:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 184:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	/* Check the maths tasks are still running by ensuring their check variables 
+ 185:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	are still being set to true. */
+ 186:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	for( sTask = 0; sTask < intgNUMBER_OF_TASKS; sTask++ )
+ 205              		.loc 1 186 0
+ 206 000a 0023     		movs	r3, #0
+ 207 000c 7B80     		strh	r3, [r7, #2]	@ movhi
+ 208 000e 17E0     		b	.L9
+ 209              	.L11:
+ 187:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	{
+ 188:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		if( xTaskCheck[ sTask ] == pdFALSE )
+ 210              		.loc 1 188 0
+ 211 0010 B7F90220 		ldrsh	r2, [r7, #2]
+ 212 0014 40F20003 		movw	r3, #:lower16:xTaskCheck
+ 213 0018 C0F20003 		movt	r3, #:upper16:xTaskCheck
+ 214 001c 53F82230 		ldr	r3, [r3, r2, lsl #2]
+ 215 0020 002B     		cmp	r3, #0
+ 216 0022 01D1     		bne	.L10
+ 189:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		{
+ 190:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 			/* The check has not incremented so an error exists. */
+ 191:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 			xReturn = pdFALSE;
+ 217              		.loc 1 191 0
+ 218 0024 0023     		movs	r3, #0
+ 219 0026 7B60     		str	r3, [r7, #4]
+ 220              	.L10:
+ 192:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		}
+ 193:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 194:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		/* Reset the check variable so we can tell if it has been set by
+ 195:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		the next time around. */
+ 196:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 		xTaskCheck[ sTask ] = pdFALSE;
+ 221              		.loc 1 196 0
+ 222 0028 B7F90220 		ldrsh	r2, [r7, #2]
+ 223 002c 40F20003 		movw	r3, #:lower16:xTaskCheck
+ 224 0030 C0F20003 		movt	r3, #:upper16:xTaskCheck
+ 225 0034 0021     		movs	r1, #0
+ 226 0036 43F82210 		str	r1, [r3, r2, lsl #2]
+ 186:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	{
+ 227              		.loc 1 186 0
+ 228 003a 7B88     		ldrh	r3, [r7, #2]
+ 229 003c 0133     		adds	r3, r3, #1
+ 230 003e 7B80     		strh	r3, [r7, #2]	@ movhi
+ 231              	.L9:
+ 186:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	{
+ 232              		.loc 1 186 0 is_stmt 0 discriminator 1
+ 233 0040 B7F90230 		ldrsh	r3, [r7, #2]
+ 234 0044 002B     		cmp	r3, #0
+ 235 0046 E3DD     		ble	.L11
+ 197:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	}
+ 198:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 
+ 199:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** 	return xReturn;
+ 236              		.loc 1 199 0 is_stmt 1
+ 237 0048 7B68     		ldr	r3, [r7, #4]
+ 200:lib/FreeRTOSV8.1.2/FreeRTOS/Demo/Common/Minimal/integer.c **** }
+ 238              		.loc 1 200 0
+ 239 004a 1846     		mov	r0, r3
+ 240 004c 0C37     		adds	r7, r7, #12
+ 241 004e BD46     		mov	sp, r7
+ 242              		@ sp needed
+ 243 0050 5DF8047B 		ldr	r7, [sp], #4
+ 244 0054 7047     		bx	lr
+ 245              		.cfi_endproc
+ 246              	.LFE3:
+ 248 0056 00BF     		.text
+ 249              	.Letext0:
+ 250              		.file 2 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 251              		.file 3 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/task.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 integer.c
+     /tmp/ccSQfUim.s:20     .bss.xTaskCheck:00000000 $d
+     /tmp/ccSQfUim.s:23     .bss.xTaskCheck:00000000 xTaskCheck
+     /tmp/ccSQfUim.s:26     .rodata:00000000 $d
+     /tmp/ccSQfUim.s:27     .rodata:00000000 .LC0
+     /tmp/ccSQfUim.s:30     .text.vStartIntegerMathTasks:00000000 $t
+     /tmp/ccSQfUim.s:35     .text.vStartIntegerMathTasks:00000000 vStartIntegerMathTasks
+     /tmp/ccSQfUim.s:101    .text.vCompeteingIntMathTask:00000000 vCompeteingIntMathTask
+     /tmp/ccSQfUim.s:97     .text.vCompeteingIntMathTask:00000000 $t
+     /tmp/ccSQfUim.s:180    .text.xAreIntegerMathsTaskStillRunning:00000000 $t
+     /tmp/ccSQfUim.s:185    .text.xAreIntegerMathsTaskStillRunning:00000000 xAreIntegerMathsTaskStillRunning
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+xTaskGenericCreate
+vPortEnterCritical
+vPortExitCritical

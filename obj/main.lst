@@ -1,0 +1,2901 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 3
+   4              		.fpu fpv4-sp-d16
+   5              		.eabi_attribute 20, 1
+   6              		.eabi_attribute 21, 1
+   7              		.eabi_attribute 23, 3
+   8              		.eabi_attribute 24, 1
+   9              		.eabi_attribute 25, 1
+  10              		.eabi_attribute 26, 1
+  11              		.eabi_attribute 30, 6
+  12              		.eabi_attribute 34, 1
+  13              		.eabi_attribute 18, 4
+  14              		.thumb
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.NVIC_SetPendingIRQ,"ax",%progbits
+  20              		.align	2
+  21              		.thumb
+  22              		.thumb_func
+  24              	NVIC_SetPendingIRQ:
+  25              	.LFB99:
+  26              		.file 1 "lib/chip/CMSIS/Include/core_cm4.h"
+   1:lib/chip/CMSIS/Include/core_cm4.h **** /**************************************************************************//**
+   2:lib/chip/CMSIS/Include/core_cm4.h ****  * @file     core_cm4.h
+   3:lib/chip/CMSIS/Include/core_cm4.h ****  * @brief    CMSIS Cortex-M4 Core Peripheral Access Layer Header File
+   4:lib/chip/CMSIS/Include/core_cm4.h ****  * @version  V2.10
+   5:lib/chip/CMSIS/Include/core_cm4.h ****  * @date     19. July 2011
+   6:lib/chip/CMSIS/Include/core_cm4.h ****  *
+   7:lib/chip/CMSIS/Include/core_cm4.h ****  * @note
+   8:lib/chip/CMSIS/Include/core_cm4.h ****  * Copyright (C) 2009-2011 ARM Limited. All rights reserved.
+   9:lib/chip/CMSIS/Include/core_cm4.h ****  *
+  10:lib/chip/CMSIS/Include/core_cm4.h ****  * @par
+  11:lib/chip/CMSIS/Include/core_cm4.h ****  * ARM Limited (ARM) is supplying this software for use with Cortex-M
+  12:lib/chip/CMSIS/Include/core_cm4.h ****  * processor based microcontrollers.  This file can be freely distributed
+  13:lib/chip/CMSIS/Include/core_cm4.h ****  * within development tools that are supporting such ARM based processors.
+  14:lib/chip/CMSIS/Include/core_cm4.h ****  *
+  15:lib/chip/CMSIS/Include/core_cm4.h ****  * @par
+  16:lib/chip/CMSIS/Include/core_cm4.h ****  * THIS SOFTWARE IS PROVIDED "AS IS".  NO WARRANTIES, WHETHER EXPRESS, IMPLIED
+  17:lib/chip/CMSIS/Include/core_cm4.h ****  * OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF
+  18:lib/chip/CMSIS/Include/core_cm4.h ****  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE.
+  19:lib/chip/CMSIS/Include/core_cm4.h ****  * ARM SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR
+  20:lib/chip/CMSIS/Include/core_cm4.h ****  * CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+  21:lib/chip/CMSIS/Include/core_cm4.h ****  *
+  22:lib/chip/CMSIS/Include/core_cm4.h ****  ******************************************************************************/
+  23:lib/chip/CMSIS/Include/core_cm4.h **** #if defined ( __ICCARM__ )
+  24:lib/chip/CMSIS/Include/core_cm4.h ****  #pragma system_include  /* treat file as system include file for MISRA check */
+  25:lib/chip/CMSIS/Include/core_cm4.h **** #endif
+  26:lib/chip/CMSIS/Include/core_cm4.h **** 
+  27:lib/chip/CMSIS/Include/core_cm4.h **** #ifdef __cplusplus
+  28:lib/chip/CMSIS/Include/core_cm4.h ****  extern "C" {
+  29:lib/chip/CMSIS/Include/core_cm4.h **** #endif
+  30:lib/chip/CMSIS/Include/core_cm4.h **** 
+  31:lib/chip/CMSIS/Include/core_cm4.h **** #ifndef __CORE_CM4_H_GENERIC
+  32:lib/chip/CMSIS/Include/core_cm4.h **** #define __CORE_CM4_H_GENERIC
+  33:lib/chip/CMSIS/Include/core_cm4.h **** 
+  34:lib/chip/CMSIS/Include/core_cm4.h **** 
+  35:lib/chip/CMSIS/Include/core_cm4.h **** /** \mainpage CMSIS Cortex-M4
+  36:lib/chip/CMSIS/Include/core_cm4.h **** 
+  37:lib/chip/CMSIS/Include/core_cm4.h ****   This documentation describes the CMSIS Cortex-M Core Peripheral Access Layer.
+  38:lib/chip/CMSIS/Include/core_cm4.h ****   It consists of:
+  39:lib/chip/CMSIS/Include/core_cm4.h **** 
+  40:lib/chip/CMSIS/Include/core_cm4.h ****      - Cortex-M Core Register Definitions
+  41:lib/chip/CMSIS/Include/core_cm4.h ****      - Cortex-M functions
+  42:lib/chip/CMSIS/Include/core_cm4.h ****      - Cortex-M instructions
+  43:lib/chip/CMSIS/Include/core_cm4.h ****      - Cortex-M SIMD instructions
+  44:lib/chip/CMSIS/Include/core_cm4.h **** 
+  45:lib/chip/CMSIS/Include/core_cm4.h ****   The CMSIS Cortex-M4 Core Peripheral Access Layer contains C and assembly functions that ease
+  46:lib/chip/CMSIS/Include/core_cm4.h ****   access to the Cortex-M Core
+  47:lib/chip/CMSIS/Include/core_cm4.h ****  */
+  48:lib/chip/CMSIS/Include/core_cm4.h **** 
+  49:lib/chip/CMSIS/Include/core_cm4.h **** /** \defgroup CMSIS_MISRA_Exceptions  CMSIS MISRA-C:2004 Compliance Exceptions
+  50:lib/chip/CMSIS/Include/core_cm4.h ****   CMSIS violates following MISRA-C2004 Rules:
+  51:lib/chip/CMSIS/Include/core_cm4.h ****   
+  52:lib/chip/CMSIS/Include/core_cm4.h ****    - Violates MISRA 2004 Required Rule 8.5, object/function definition in header file.<br>
+  53:lib/chip/CMSIS/Include/core_cm4.h ****      Function definitions in header files are used to allow 'inlining'. 
+  54:lib/chip/CMSIS/Include/core_cm4.h **** 
+  55:lib/chip/CMSIS/Include/core_cm4.h ****    - Violates MISRA 2004 Required Rule 18.4, declaration of union type or object of union type: '{.
+  56:lib/chip/CMSIS/Include/core_cm4.h ****      Unions are used for effective representation of core registers.
+  57:lib/chip/CMSIS/Include/core_cm4.h ****    
+  58:lib/chip/CMSIS/Include/core_cm4.h ****    - Violates MISRA 2004 Advisory Rule 19.7, Function-like macro defined.<br>
+  59:lib/chip/CMSIS/Include/core_cm4.h ****      Function-like macros are used to allow more efficient code. 
+  60:lib/chip/CMSIS/Include/core_cm4.h **** 
+  61:lib/chip/CMSIS/Include/core_cm4.h ****  */
+  62:lib/chip/CMSIS/Include/core_cm4.h **** 
+  63:lib/chip/CMSIS/Include/core_cm4.h **** 
+  64:lib/chip/CMSIS/Include/core_cm4.h **** /*******************************************************************************
+  65:lib/chip/CMSIS/Include/core_cm4.h ****  *                 CMSIS definitions
+  66:lib/chip/CMSIS/Include/core_cm4.h ****  ******************************************************************************/
+  67:lib/chip/CMSIS/Include/core_cm4.h **** /** \defgroup CMSIS_core_definitions CMSIS Core Definitions
+  68:lib/chip/CMSIS/Include/core_cm4.h ****   This file defines all structures and symbols for CMSIS core:
+  69:lib/chip/CMSIS/Include/core_cm4.h ****    - CMSIS version number
+  70:lib/chip/CMSIS/Include/core_cm4.h ****    - Cortex-M core
+  71:lib/chip/CMSIS/Include/core_cm4.h ****    - Cortex-M core Revision Number
+  72:lib/chip/CMSIS/Include/core_cm4.h ****   @{
+  73:lib/chip/CMSIS/Include/core_cm4.h ****  */
+  74:lib/chip/CMSIS/Include/core_cm4.h **** 
+  75:lib/chip/CMSIS/Include/core_cm4.h **** /*  CMSIS CM4 definitions */
+  76:lib/chip/CMSIS/Include/core_cm4.h **** #define __CM4_CMSIS_VERSION_MAIN  (0x02)                                                       /*!<
+  77:lib/chip/CMSIS/Include/core_cm4.h **** #define __CM4_CMSIS_VERSION_SUB   (0x10)                                                       /*!<
+  78:lib/chip/CMSIS/Include/core_cm4.h **** #define __CM4_CMSIS_VERSION       ((__CM4_CMSIS_VERSION_MAIN << 16) | __CM4_CMSIS_VERSION_SUB) /*!<
+  79:lib/chip/CMSIS/Include/core_cm4.h **** 
+  80:lib/chip/CMSIS/Include/core_cm4.h **** #define __CORTEX_M                (0x04)                                                       /*!<
+  81:lib/chip/CMSIS/Include/core_cm4.h **** 
+  82:lib/chip/CMSIS/Include/core_cm4.h **** 
+  83:lib/chip/CMSIS/Include/core_cm4.h **** #if   defined ( __CC_ARM )
+  84:lib/chip/CMSIS/Include/core_cm4.h ****   #define __ASM            __asm                                      /*!< asm keyword for ARM Comp
+  85:lib/chip/CMSIS/Include/core_cm4.h ****   #define __INLINE         __inline                                   /*!< inline keyword for ARM C
+  86:lib/chip/CMSIS/Include/core_cm4.h **** 
+  87:lib/chip/CMSIS/Include/core_cm4.h **** #elif defined ( __ICCARM__ )
+  88:lib/chip/CMSIS/Include/core_cm4.h ****   #define __ASM           __asm                                       /*!< asm keyword for IAR Comp
+  89:lib/chip/CMSIS/Include/core_cm4.h ****   #define __INLINE        inline                                      /*!< inline keyword for IAR C
+  90:lib/chip/CMSIS/Include/core_cm4.h **** 
+  91:lib/chip/CMSIS/Include/core_cm4.h **** #elif defined ( __GNUC__ )
+  92:lib/chip/CMSIS/Include/core_cm4.h ****   #define __ASM            __asm                                      /*!< asm keyword for GNU Comp
+  93:lib/chip/CMSIS/Include/core_cm4.h ****   #define __INLINE         inline                                     /*!< inline keyword for GNU C
+  94:lib/chip/CMSIS/Include/core_cm4.h **** 
+  95:lib/chip/CMSIS/Include/core_cm4.h **** #elif defined ( __TASKING__ )
+  96:lib/chip/CMSIS/Include/core_cm4.h ****   #define __ASM            __asm                                      /*!< asm keyword for TASKING 
+  97:lib/chip/CMSIS/Include/core_cm4.h ****   #define __INLINE         inline                                     /*!< inline keyword for TASKI
+  98:lib/chip/CMSIS/Include/core_cm4.h **** 
+  99:lib/chip/CMSIS/Include/core_cm4.h **** #endif
+ 100:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 101:lib/chip/CMSIS/Include/core_cm4.h **** /*!< __FPU_USED to be checked prior to making use of FPU specific registers and functions */
+ 102:lib/chip/CMSIS/Include/core_cm4.h **** #if defined ( __CC_ARM )
+ 103:lib/chip/CMSIS/Include/core_cm4.h ****   #if defined __TARGET_FPU_VFP
+ 104:lib/chip/CMSIS/Include/core_cm4.h ****     #if (__FPU_PRESENT == 1)
+ 105:lib/chip/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       1
+ 106:lib/chip/CMSIS/Include/core_cm4.h ****     #else
+ 107:lib/chip/CMSIS/Include/core_cm4.h ****       #warning "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESEN
+ 108:lib/chip/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       0
+ 109:lib/chip/CMSIS/Include/core_cm4.h ****     #endif
+ 110:lib/chip/CMSIS/Include/core_cm4.h ****   #else
+ 111:lib/chip/CMSIS/Include/core_cm4.h ****     #define __FPU_USED         0
+ 112:lib/chip/CMSIS/Include/core_cm4.h ****   #endif
+ 113:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 114:lib/chip/CMSIS/Include/core_cm4.h **** #elif defined ( __ICCARM__ )
+ 115:lib/chip/CMSIS/Include/core_cm4.h ****   #if defined __ARMVFP__
+ 116:lib/chip/CMSIS/Include/core_cm4.h ****     #if (__FPU_PRESENT == 1)
+ 117:lib/chip/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       1
+ 118:lib/chip/CMSIS/Include/core_cm4.h ****     #else
+ 119:lib/chip/CMSIS/Include/core_cm4.h ****       #warning "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESEN
+ 120:lib/chip/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       0
+ 121:lib/chip/CMSIS/Include/core_cm4.h ****     #endif
+ 122:lib/chip/CMSIS/Include/core_cm4.h ****   #else
+ 123:lib/chip/CMSIS/Include/core_cm4.h ****     #define __FPU_USED         0
+ 124:lib/chip/CMSIS/Include/core_cm4.h ****   #endif
+ 125:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 126:lib/chip/CMSIS/Include/core_cm4.h **** #elif defined ( __GNUC__ )
+ 127:lib/chip/CMSIS/Include/core_cm4.h ****   #if defined (__VFP_FP__) && !defined(__SOFTFP__)
+ 128:lib/chip/CMSIS/Include/core_cm4.h ****     #if (__FPU_PRESENT == 1)
+ 129:lib/chip/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       1
+ 130:lib/chip/CMSIS/Include/core_cm4.h ****     #else
+ 131:lib/chip/CMSIS/Include/core_cm4.h ****       #warning "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESEN
+ 132:lib/chip/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       0
+ 133:lib/chip/CMSIS/Include/core_cm4.h ****     #endif
+ 134:lib/chip/CMSIS/Include/core_cm4.h ****   #else
+ 135:lib/chip/CMSIS/Include/core_cm4.h ****     #define __FPU_USED         0
+ 136:lib/chip/CMSIS/Include/core_cm4.h ****   #endif
+ 137:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 138:lib/chip/CMSIS/Include/core_cm4.h **** #elif defined ( __TASKING__ )
+ 139:lib/chip/CMSIS/Include/core_cm4.h ****     /* add preprocessor checks to define __FPU_USED */
+ 140:lib/chip/CMSIS/Include/core_cm4.h ****     #define __FPU_USED         0
+ 141:lib/chip/CMSIS/Include/core_cm4.h **** #endif
+ 142:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 143:lib/chip/CMSIS/Include/core_cm4.h **** #include <stdint.h>                      /*!< standard types definitions                      */
+ 144:lib/chip/CMSIS/Include/core_cm4.h **** #include <core_cmInstr.h>                /*!< Core Instruction Access                         */
+ 145:lib/chip/CMSIS/Include/core_cm4.h **** #include <core_cmFunc.h>                 /*!< Core Function Access                            */
+ 146:lib/chip/CMSIS/Include/core_cm4.h **** #include <core_cm4_simd.h>               /*!< Compiler specific SIMD Intrinsics               */
+ 147:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 148:lib/chip/CMSIS/Include/core_cm4.h **** #endif /* __CORE_CM4_H_GENERIC */
+ 149:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 150:lib/chip/CMSIS/Include/core_cm4.h **** #ifndef __CMSIS_GENERIC
+ 151:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 152:lib/chip/CMSIS/Include/core_cm4.h **** #ifndef __CORE_CM4_H_DEPENDANT
+ 153:lib/chip/CMSIS/Include/core_cm4.h **** #define __CORE_CM4_H_DEPENDANT
+ 154:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 155:lib/chip/CMSIS/Include/core_cm4.h **** /* check device defines and use defaults */
+ 156:lib/chip/CMSIS/Include/core_cm4.h **** #if defined __CHECK_DEVICE_DEFINES
+ 157:lib/chip/CMSIS/Include/core_cm4.h ****   #ifndef __CM4_REV
+ 158:lib/chip/CMSIS/Include/core_cm4.h ****     #define __CM4_REV               0x0000
+ 159:lib/chip/CMSIS/Include/core_cm4.h ****     #warning "__CM4_REV not defined in device header file; using default!"
+ 160:lib/chip/CMSIS/Include/core_cm4.h ****   #endif
+ 161:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 162:lib/chip/CMSIS/Include/core_cm4.h ****   #ifndef __FPU_PRESENT
+ 163:lib/chip/CMSIS/Include/core_cm4.h ****     #define __FPU_PRESENT             0
+ 164:lib/chip/CMSIS/Include/core_cm4.h ****     #warning "__FPU_PRESENT not defined in device header file; using default!"
+ 165:lib/chip/CMSIS/Include/core_cm4.h ****   #endif
+ 166:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 167:lib/chip/CMSIS/Include/core_cm4.h ****   #ifndef __MPU_PRESENT
+ 168:lib/chip/CMSIS/Include/core_cm4.h ****     #define __MPU_PRESENT             0
+ 169:lib/chip/CMSIS/Include/core_cm4.h ****     #warning "__MPU_PRESENT not defined in device header file; using default!"
+ 170:lib/chip/CMSIS/Include/core_cm4.h ****   #endif
+ 171:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 172:lib/chip/CMSIS/Include/core_cm4.h ****   #ifndef __NVIC_PRIO_BITS
+ 173:lib/chip/CMSIS/Include/core_cm4.h ****     #define __NVIC_PRIO_BITS          4
+ 174:lib/chip/CMSIS/Include/core_cm4.h ****     #warning "__NVIC_PRIO_BITS not defined in device header file; using default!"
+ 175:lib/chip/CMSIS/Include/core_cm4.h ****   #endif
+ 176:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 177:lib/chip/CMSIS/Include/core_cm4.h ****   #ifndef __Vendor_SysTickConfig
+ 178:lib/chip/CMSIS/Include/core_cm4.h ****     #define __Vendor_SysTickConfig    0
+ 179:lib/chip/CMSIS/Include/core_cm4.h ****     #warning "__Vendor_SysTickConfig not defined in device header file; using default!"
+ 180:lib/chip/CMSIS/Include/core_cm4.h ****   #endif
+ 181:lib/chip/CMSIS/Include/core_cm4.h **** #endif
+ 182:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 183:lib/chip/CMSIS/Include/core_cm4.h **** /* IO definitions (access restrictions to peripheral registers) */
+ 184:lib/chip/CMSIS/Include/core_cm4.h **** #ifdef __cplusplus
+ 185:lib/chip/CMSIS/Include/core_cm4.h ****   #define   __I     volatile             /*!< defines 'read only' permissions                 */
+ 186:lib/chip/CMSIS/Include/core_cm4.h **** #else
+ 187:lib/chip/CMSIS/Include/core_cm4.h ****   #define   __I     volatile const       /*!< defines 'read only' permissions                 */
+ 188:lib/chip/CMSIS/Include/core_cm4.h **** #endif
+ 189:lib/chip/CMSIS/Include/core_cm4.h **** #define     __O     volatile             /*!< defines 'write only' permissions                */
+ 190:lib/chip/CMSIS/Include/core_cm4.h **** #define     __IO    volatile             /*!< defines 'read / write' permissions              */
+ 191:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 192:lib/chip/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_core_definitions */
+ 193:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 194:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 195:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 196:lib/chip/CMSIS/Include/core_cm4.h **** /*******************************************************************************
+ 197:lib/chip/CMSIS/Include/core_cm4.h ****  *                 Register Abstraction
+ 198:lib/chip/CMSIS/Include/core_cm4.h ****  ******************************************************************************/
+ 199:lib/chip/CMSIS/Include/core_cm4.h **** /** \defgroup CMSIS_core_register CMSIS Core Register
+ 200:lib/chip/CMSIS/Include/core_cm4.h ****   Core Register contain:
+ 201:lib/chip/CMSIS/Include/core_cm4.h ****   - Core Register
+ 202:lib/chip/CMSIS/Include/core_cm4.h ****   - Core NVIC Register
+ 203:lib/chip/CMSIS/Include/core_cm4.h ****   - Core SCB Register
+ 204:lib/chip/CMSIS/Include/core_cm4.h ****   - Core SysTick Register
+ 205:lib/chip/CMSIS/Include/core_cm4.h ****   - Core Debug Register
+ 206:lib/chip/CMSIS/Include/core_cm4.h ****   - Core MPU Register
+ 207:lib/chip/CMSIS/Include/core_cm4.h ****   - Core FPU Register
+ 208:lib/chip/CMSIS/Include/core_cm4.h **** */
+ 209:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 210:lib/chip/CMSIS/Include/core_cm4.h **** /** \ingroup  CMSIS_core_register
+ 211:lib/chip/CMSIS/Include/core_cm4.h ****     \defgroup CMSIS_CORE CMSIS Core
+ 212:lib/chip/CMSIS/Include/core_cm4.h ****   Type definitions for the Cortex-M Core Registers
+ 213:lib/chip/CMSIS/Include/core_cm4.h ****   @{
+ 214:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 215:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 216:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Union type to access the Application Program Status Register (APSR).
+ 217:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 218:lib/chip/CMSIS/Include/core_cm4.h **** typedef union
+ 219:lib/chip/CMSIS/Include/core_cm4.h **** {
+ 220:lib/chip/CMSIS/Include/core_cm4.h ****   struct
+ 221:lib/chip/CMSIS/Include/core_cm4.h ****   {
+ 222:lib/chip/CMSIS/Include/core_cm4.h **** #if (__CORTEX_M != 0x04)
+ 223:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t _reserved0:27;              /*!< bit:  0..26  Reserved                           */
+ 224:lib/chip/CMSIS/Include/core_cm4.h **** #else
+ 225:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t _reserved0:16;              /*!< bit:  0..15  Reserved                           */
+ 226:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t GE:4;                       /*!< bit: 16..19  Greater than or Equal flags        */
+ 227:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t _reserved1:7;               /*!< bit: 20..26  Reserved                           */
+ 228:lib/chip/CMSIS/Include/core_cm4.h **** #endif
+ 229:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t Q:1;                        /*!< bit:     27  Saturation condition flag          */
+ 230:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag       */
+ 231:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag          */
+ 232:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag           */
+ 233:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag       */
+ 234:lib/chip/CMSIS/Include/core_cm4.h ****   } b;                                   /*!< Structure used for bit  access                  */
+ 235:lib/chip/CMSIS/Include/core_cm4.h ****   uint32_t w;                            /*!< Type      used for word access                  */
+ 236:lib/chip/CMSIS/Include/core_cm4.h **** } APSR_Type;
+ 237:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 238:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 239:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Union type to access the Interrupt Program Status Register (IPSR).
+ 240:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 241:lib/chip/CMSIS/Include/core_cm4.h **** typedef union
+ 242:lib/chip/CMSIS/Include/core_cm4.h **** {
+ 243:lib/chip/CMSIS/Include/core_cm4.h ****   struct
+ 244:lib/chip/CMSIS/Include/core_cm4.h ****   {
+ 245:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number                   */
+ 246:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t _reserved0:23;              /*!< bit:  9..31  Reserved                           */
+ 247:lib/chip/CMSIS/Include/core_cm4.h ****   } b;                                   /*!< Structure used for bit  access                  */
+ 248:lib/chip/CMSIS/Include/core_cm4.h ****   uint32_t w;                            /*!< Type      used for word access                  */
+ 249:lib/chip/CMSIS/Include/core_cm4.h **** } IPSR_Type;
+ 250:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 251:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 252:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Union type to access the Special-Purpose Program Status Registers (xPSR).
+ 253:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 254:lib/chip/CMSIS/Include/core_cm4.h **** typedef union
+ 255:lib/chip/CMSIS/Include/core_cm4.h **** {
+ 256:lib/chip/CMSIS/Include/core_cm4.h ****   struct
+ 257:lib/chip/CMSIS/Include/core_cm4.h ****   {
+ 258:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number                   */
+ 259:lib/chip/CMSIS/Include/core_cm4.h **** #if (__CORTEX_M != 0x04)
+ 260:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t _reserved0:15;              /*!< bit:  9..23  Reserved                           */
+ 261:lib/chip/CMSIS/Include/core_cm4.h **** #else
+ 262:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t _reserved0:7;               /*!< bit:  9..15  Reserved                           */
+ 263:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t GE:4;                       /*!< bit: 16..19  Greater than or Equal flags        */
+ 264:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t _reserved1:4;               /*!< bit: 20..23  Reserved                           */
+ 265:lib/chip/CMSIS/Include/core_cm4.h **** #endif
+ 266:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t T:1;                        /*!< bit:     24  Thumb bit        (read 0)          */
+ 267:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t IT:2;                       /*!< bit: 25..26  saved IT state   (read 0)          */
+ 268:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t Q:1;                        /*!< bit:     27  Saturation condition flag          */
+ 269:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag       */
+ 270:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag          */
+ 271:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag           */
+ 272:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag       */
+ 273:lib/chip/CMSIS/Include/core_cm4.h ****   } b;                                   /*!< Structure used for bit  access                  */
+ 274:lib/chip/CMSIS/Include/core_cm4.h ****   uint32_t w;                            /*!< Type      used for word access                  */
+ 275:lib/chip/CMSIS/Include/core_cm4.h **** } xPSR_Type;
+ 276:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 277:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 278:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Union type to access the Control Registers (CONTROL).
+ 279:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 280:lib/chip/CMSIS/Include/core_cm4.h **** typedef union
+ 281:lib/chip/CMSIS/Include/core_cm4.h **** {
+ 282:lib/chip/CMSIS/Include/core_cm4.h ****   struct
+ 283:lib/chip/CMSIS/Include/core_cm4.h ****   {
+ 284:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t nPRIV:1;                    /*!< bit:      0  Execution privilege in Thread mode */
+ 285:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t SPSEL:1;                    /*!< bit:      1  Stack to be used                   */
+ 286:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t FPCA:1;                     /*!< bit:      2  FP extension active flag           */
+ 287:lib/chip/CMSIS/Include/core_cm4.h ****     uint32_t _reserved0:29;              /*!< bit:  3..31  Reserved                           */
+ 288:lib/chip/CMSIS/Include/core_cm4.h ****   } b;                                   /*!< Structure used for bit  access                  */
+ 289:lib/chip/CMSIS/Include/core_cm4.h ****   uint32_t w;                            /*!< Type      used for word access                  */
+ 290:lib/chip/CMSIS/Include/core_cm4.h **** } CONTROL_Type;
+ 291:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 292:lib/chip/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_CORE */
+ 293:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 294:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 295:lib/chip/CMSIS/Include/core_cm4.h **** /** \ingroup  CMSIS_core_register
+ 296:lib/chip/CMSIS/Include/core_cm4.h ****     \defgroup CMSIS_NVIC CMSIS NVIC
+ 297:lib/chip/CMSIS/Include/core_cm4.h ****   Type definitions for the Cortex-M NVIC Registers
+ 298:lib/chip/CMSIS/Include/core_cm4.h ****   @{
+ 299:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 300:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 301:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Structure type to access the Nested Vectored Interrupt Controller (NVIC).
+ 302:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 303:lib/chip/CMSIS/Include/core_cm4.h **** typedef struct
+ 304:lib/chip/CMSIS/Include/core_cm4.h **** {
+ 305:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t ISER[8];                 /*!< Offset: 0x000 (R/W)  Interrupt Set Enable Register   
+ 306:lib/chip/CMSIS/Include/core_cm4.h ****        uint32_t RESERVED0[24];
+ 307:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t ICER[8];                 /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register 
+ 308:lib/chip/CMSIS/Include/core_cm4.h ****        uint32_t RSERVED1[24];
+ 309:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t ISPR[8];                 /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register  
+ 310:lib/chip/CMSIS/Include/core_cm4.h ****        uint32_t RESERVED2[24];
+ 311:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t ICPR[8];                 /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register
+ 312:lib/chip/CMSIS/Include/core_cm4.h ****        uint32_t RESERVED3[24];
+ 313:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t IABR[8];                 /*!< Offset: 0x200 (R/W)  Interrupt Active bit Register   
+ 314:lib/chip/CMSIS/Include/core_cm4.h ****        uint32_t RESERVED4[56];
+ 315:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint8_t  IP[240];                 /*!< Offset: 0x300 (R/W)  Interrupt Priority Register (8Bi
+ 316:lib/chip/CMSIS/Include/core_cm4.h ****        uint32_t RESERVED5[644];
+ 317:lib/chip/CMSIS/Include/core_cm4.h ****   __O  uint32_t STIR;                    /*!< Offset: 0xE00 ( /W)  Software Trigger Interrupt Regis
+ 318:lib/chip/CMSIS/Include/core_cm4.h **** }  NVIC_Type;
+ 319:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 320:lib/chip/CMSIS/Include/core_cm4.h **** /* Software Triggered Interrupt Register Definitions */
+ 321:lib/chip/CMSIS/Include/core_cm4.h **** #define NVIC_STIR_INTID_Pos                 0                                          /*!< STIR: I
+ 322:lib/chip/CMSIS/Include/core_cm4.h **** #define NVIC_STIR_INTID_Msk                (0x1FFUL << NVIC_STIR_INTID_Pos)            /*!< STIR: I
+ 323:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 324:lib/chip/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_NVIC */
+ 325:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 326:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 327:lib/chip/CMSIS/Include/core_cm4.h **** /** \ingroup  CMSIS_core_register
+ 328:lib/chip/CMSIS/Include/core_cm4.h ****     \defgroup CMSIS_SCB CMSIS SCB
+ 329:lib/chip/CMSIS/Include/core_cm4.h ****   Type definitions for the Cortex-M System Control Block Registers
+ 330:lib/chip/CMSIS/Include/core_cm4.h ****   @{
+ 331:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 332:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 333:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Structure type to access the System Control Block (SCB).
+ 334:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 335:lib/chip/CMSIS/Include/core_cm4.h **** typedef struct
+ 336:lib/chip/CMSIS/Include/core_cm4.h **** {
+ 337:lib/chip/CMSIS/Include/core_cm4.h ****   __I  uint32_t CPUID;                   /*!< Offset: 0x000 (R/ )  CPUID Base Register             
+ 338:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t ICSR;                    /*!< Offset: 0x004 (R/W)  Interrupt Control and State Regi
+ 339:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t VTOR;                    /*!< Offset: 0x008 (R/W)  Vector Table Offset Register    
+ 340:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t AIRCR;                   /*!< Offset: 0x00C (R/W)  Application Interrupt and Reset 
+ 341:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t SCR;                     /*!< Offset: 0x010 (R/W)  System Control Register         
+ 342:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t CCR;                     /*!< Offset: 0x014 (R/W)  Configuration Control Register  
+ 343:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint8_t  SHP[12];                 /*!< Offset: 0x018 (R/W)  System Handlers Priority Registe
+ 344:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t SHCSR;                   /*!< Offset: 0x024 (R/W)  System Handler Control and State
+ 345:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t CFSR;                    /*!< Offset: 0x028 (R/W)  Configurable Fault Status Regist
+ 346:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t HFSR;                    /*!< Offset: 0x02C (R/W)  HardFault Status Register       
+ 347:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t DFSR;                    /*!< Offset: 0x030 (R/W)  Debug Fault Status Register     
+ 348:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t MMFAR;                   /*!< Offset: 0x034 (R/W)  MemManage Fault Address Register
+ 349:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t BFAR;                    /*!< Offset: 0x038 (R/W)  BusFault Address Register       
+ 350:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t AFSR;                    /*!< Offset: 0x03C (R/W)  Auxiliary Fault Status Register 
+ 351:lib/chip/CMSIS/Include/core_cm4.h ****   __I  uint32_t PFR[2];                  /*!< Offset: 0x040 (R/ )  Processor Feature Register      
+ 352:lib/chip/CMSIS/Include/core_cm4.h ****   __I  uint32_t DFR;                     /*!< Offset: 0x048 (R/ )  Debug Feature Register          
+ 353:lib/chip/CMSIS/Include/core_cm4.h ****   __I  uint32_t ADR;                     /*!< Offset: 0x04C (R/ )  Auxiliary Feature Register      
+ 354:lib/chip/CMSIS/Include/core_cm4.h ****   __I  uint32_t MMFR[4];                 /*!< Offset: 0x050 (R/ )  Memory Model Feature Register   
+ 355:lib/chip/CMSIS/Include/core_cm4.h ****   __I  uint32_t ISAR[5];                 /*!< Offset: 0x060 (R/ )  Instruction Set Attributes Regis
+ 356:lib/chip/CMSIS/Include/core_cm4.h ****        uint32_t RESERVED0[5];
+ 357:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t CPACR;                   /*!< Offset: 0x088 (R/W)  Coprocessor Access Control Regis
+ 358:lib/chip/CMSIS/Include/core_cm4.h **** } SCB_Type;
+ 359:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 360:lib/chip/CMSIS/Include/core_cm4.h **** /* SCB CPUID Register Definitions */
+ 361:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_IMPLEMENTER_Pos          24                                             /*!< SCB 
+ 362:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_IMPLEMENTER_Msk          (0xFFUL << SCB_CPUID_IMPLEMENTER_Pos)          /*!< SCB 
+ 363:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 364:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_VARIANT_Pos              20                                             /*!< SCB 
+ 365:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_VARIANT_Msk              (0xFUL << SCB_CPUID_VARIANT_Pos)               /*!< SCB 
+ 366:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 367:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_ARCHITECTURE_Pos         16                                             /*!< SCB 
+ 368:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_ARCHITECTURE_Msk         (0xFUL << SCB_CPUID_ARCHITECTURE_Pos)          /*!< SCB 
+ 369:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 370:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_PARTNO_Pos                4                                             /*!< SCB 
+ 371:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_PARTNO_Msk               (0xFFFUL << SCB_CPUID_PARTNO_Pos)              /*!< SCB 
+ 372:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 373:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_REVISION_Pos              0                                             /*!< SCB 
+ 374:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_REVISION_Msk             (0xFUL << SCB_CPUID_REVISION_Pos)              /*!< SCB 
+ 375:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 376:lib/chip/CMSIS/Include/core_cm4.h **** /* SCB Interrupt Control State Register Definitions */
+ 377:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_NMIPENDSET_Pos            31                                             /*!< SCB 
+ 378:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_NMIPENDSET_Msk            (1UL << SCB_ICSR_NMIPENDSET_Pos)               /*!< SCB 
+ 379:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 380:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSVSET_Pos             28                                             /*!< SCB 
+ 381:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSVSET_Msk             (1UL << SCB_ICSR_PENDSVSET_Pos)                /*!< SCB 
+ 382:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 383:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSVCLR_Pos             27                                             /*!< SCB 
+ 384:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSVCLR_Msk             (1UL << SCB_ICSR_PENDSVCLR_Pos)                /*!< SCB 
+ 385:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 386:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSTSET_Pos             26                                             /*!< SCB 
+ 387:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSTSET_Msk             (1UL << SCB_ICSR_PENDSTSET_Pos)                /*!< SCB 
+ 388:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 389:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSTCLR_Pos             25                                             /*!< SCB 
+ 390:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSTCLR_Msk             (1UL << SCB_ICSR_PENDSTCLR_Pos)                /*!< SCB 
+ 391:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 392:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_ISRPREEMPT_Pos            23                                             /*!< SCB 
+ 393:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_ISRPREEMPT_Msk            (1UL << SCB_ICSR_ISRPREEMPT_Pos)               /*!< SCB 
+ 394:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 395:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_ISRPENDING_Pos            22                                             /*!< SCB 
+ 396:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_ISRPENDING_Msk            (1UL << SCB_ICSR_ISRPENDING_Pos)               /*!< SCB 
+ 397:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 398:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_VECTPENDING_Pos           12                                             /*!< SCB 
+ 399:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_VECTPENDING_Msk           (0x1FFUL << SCB_ICSR_VECTPENDING_Pos)          /*!< SCB 
+ 400:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 401:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_RETTOBASE_Pos             11                                             /*!< SCB 
+ 402:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_RETTOBASE_Msk             (1UL << SCB_ICSR_RETTOBASE_Pos)                /*!< SCB 
+ 403:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 404:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_VECTACTIVE_Pos             0                                             /*!< SCB 
+ 405:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_VECTACTIVE_Msk            (0x1FFUL << SCB_ICSR_VECTACTIVE_Pos)           /*!< SCB 
+ 406:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 407:lib/chip/CMSIS/Include/core_cm4.h **** /* SCB Vector Table Offset Register Definitions */
+ 408:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_VTOR_TBLOFF_Pos                 7                                             /*!< SCB 
+ 409:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_VTOR_TBLOFF_Msk                (0x1FFFFFFUL << SCB_VTOR_TBLOFF_Pos)           /*!< SCB 
+ 410:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 411:lib/chip/CMSIS/Include/core_cm4.h **** /* SCB Application Interrupt and Reset Control Register Definitions */
+ 412:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTKEY_Pos              16                                             /*!< SCB 
+ 413:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTKEY_Msk              (0xFFFFUL << SCB_AIRCR_VECTKEY_Pos)            /*!< SCB 
+ 414:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 415:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTKEYSTAT_Pos          16                                             /*!< SCB 
+ 416:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTKEYSTAT_Msk          (0xFFFFUL << SCB_AIRCR_VECTKEYSTAT_Pos)        /*!< SCB 
+ 417:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 418:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_ENDIANESS_Pos            15                                             /*!< SCB 
+ 419:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_ENDIANESS_Msk            (1UL << SCB_AIRCR_ENDIANESS_Pos)               /*!< SCB 
+ 420:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 421:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_PRIGROUP_Pos              8                                             /*!< SCB 
+ 422:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_PRIGROUP_Msk             (7UL << SCB_AIRCR_PRIGROUP_Pos)                /*!< SCB 
+ 423:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 424:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_SYSRESETREQ_Pos           2                                             /*!< SCB 
+ 425:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_SYSRESETREQ_Msk          (1UL << SCB_AIRCR_SYSRESETREQ_Pos)             /*!< SCB 
+ 426:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 427:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTCLRACTIVE_Pos         1                                             /*!< SCB 
+ 428:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTCLRACTIVE_Msk        (1UL << SCB_AIRCR_VECTCLRACTIVE_Pos)           /*!< SCB 
+ 429:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 430:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTRESET_Pos             0                                             /*!< SCB 
+ 431:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTRESET_Msk            (1UL << SCB_AIRCR_VECTRESET_Pos)               /*!< SCB 
+ 432:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 433:lib/chip/CMSIS/Include/core_cm4.h **** /* SCB System Control Register Definitions */
+ 434:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SCR_SEVONPEND_Pos               4                                             /*!< SCB 
+ 435:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SCR_SEVONPEND_Msk              (1UL << SCB_SCR_SEVONPEND_Pos)                 /*!< SCB 
+ 436:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 437:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SCR_SLEEPDEEP_Pos               2                                             /*!< SCB 
+ 438:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SCR_SLEEPDEEP_Msk              (1UL << SCB_SCR_SLEEPDEEP_Pos)                 /*!< SCB 
+ 439:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 440:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SCR_SLEEPONEXIT_Pos             1                                             /*!< SCB 
+ 441:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SCR_SLEEPONEXIT_Msk            (1UL << SCB_SCR_SLEEPONEXIT_Pos)               /*!< SCB 
+ 442:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 443:lib/chip/CMSIS/Include/core_cm4.h **** /* SCB Configuration Control Register Definitions */
+ 444:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CCR_STKALIGN_Pos                9                                             /*!< SCB 
+ 445:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CCR_STKALIGN_Msk               (1UL << SCB_CCR_STKALIGN_Pos)                  /*!< SCB 
+ 446:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 447:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CCR_BFHFNMIGN_Pos               8                                             /*!< SCB 
+ 448:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CCR_BFHFNMIGN_Msk              (1UL << SCB_CCR_BFHFNMIGN_Pos)                 /*!< SCB 
+ 449:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 450:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CCR_DIV_0_TRP_Pos               4                                             /*!< SCB 
+ 451:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CCR_DIV_0_TRP_Msk              (1UL << SCB_CCR_DIV_0_TRP_Pos)                 /*!< SCB 
+ 452:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 453:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CCR_UNALIGN_TRP_Pos             3                                             /*!< SCB 
+ 454:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CCR_UNALIGN_TRP_Msk            (1UL << SCB_CCR_UNALIGN_TRP_Pos)               /*!< SCB 
+ 455:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 456:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CCR_USERSETMPEND_Pos            1                                             /*!< SCB 
+ 457:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CCR_USERSETMPEND_Msk           (1UL << SCB_CCR_USERSETMPEND_Pos)              /*!< SCB 
+ 458:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 459:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CCR_NONBASETHRDENA_Pos          0                                             /*!< SCB 
+ 460:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CCR_NONBASETHRDENA_Msk         (1UL << SCB_CCR_NONBASETHRDENA_Pos)            /*!< SCB 
+ 461:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 462:lib/chip/CMSIS/Include/core_cm4.h **** /* SCB System Handler Control and State Register Definitions */
+ 463:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTENA_Pos          18                                             /*!< SCB 
+ 464:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTENA_Msk          (1UL << SCB_SHCSR_USGFAULTENA_Pos)             /*!< SCB 
+ 465:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 466:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_BUSFAULTENA_Pos          17                                             /*!< SCB 
+ 467:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_BUSFAULTENA_Msk          (1UL << SCB_SHCSR_BUSFAULTENA_Pos)             /*!< SCB 
+ 468:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 469:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MEMFAULTENA_Pos          16                                             /*!< SCB 
+ 470:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MEMFAULTENA_Msk          (1UL << SCB_SHCSR_MEMFAULTENA_Pos)             /*!< SCB 
+ 471:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 472:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SVCALLPENDED_Pos         15                                             /*!< SCB 
+ 473:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SVCALLPENDED_Msk         (1UL << SCB_SHCSR_SVCALLPENDED_Pos)            /*!< SCB 
+ 474:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 475:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_BUSFAULTPENDED_Pos       14                                             /*!< SCB 
+ 476:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_BUSFAULTPENDED_Msk       (1UL << SCB_SHCSR_BUSFAULTPENDED_Pos)          /*!< SCB 
+ 477:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 478:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MEMFAULTPENDED_Pos       13                                             /*!< SCB 
+ 479:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MEMFAULTPENDED_Msk       (1UL << SCB_SHCSR_MEMFAULTPENDED_Pos)          /*!< SCB 
+ 480:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 481:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTPENDED_Pos       12                                             /*!< SCB 
+ 482:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTPENDED_Msk       (1UL << SCB_SHCSR_USGFAULTPENDED_Pos)          /*!< SCB 
+ 483:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 484:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SYSTICKACT_Pos           11                                             /*!< SCB 
+ 485:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SYSTICKACT_Msk           (1UL << SCB_SHCSR_SYSTICKACT_Pos)              /*!< SCB 
+ 486:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 487:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_PENDSVACT_Pos            10                                             /*!< SCB 
+ 488:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_PENDSVACT_Msk            (1UL << SCB_SHCSR_PENDSVACT_Pos)               /*!< SCB 
+ 489:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 490:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MONITORACT_Pos            8                                             /*!< SCB 
+ 491:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MONITORACT_Msk           (1UL << SCB_SHCSR_MONITORACT_Pos)              /*!< SCB 
+ 492:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 493:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SVCALLACT_Pos             7                                             /*!< SCB 
+ 494:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SVCALLACT_Msk            (1UL << SCB_SHCSR_SVCALLACT_Pos)               /*!< SCB 
+ 495:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 496:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTACT_Pos           3                                             /*!< SCB 
+ 497:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTACT_Msk          (1UL << SCB_SHCSR_USGFAULTACT_Pos)             /*!< SCB 
+ 498:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 499:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_BUSFAULTACT_Pos           1                                             /*!< SCB 
+ 500:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_BUSFAULTACT_Msk          (1UL << SCB_SHCSR_BUSFAULTACT_Pos)             /*!< SCB 
+ 501:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 502:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MEMFAULTACT_Pos           0                                             /*!< SCB 
+ 503:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MEMFAULTACT_Msk          (1UL << SCB_SHCSR_MEMFAULTACT_Pos)             /*!< SCB 
+ 504:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 505:lib/chip/CMSIS/Include/core_cm4.h **** /* SCB Configurable Fault Status Registers Definitions */
+ 506:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CFSR_USGFAULTSR_Pos            16                                             /*!< SCB 
+ 507:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CFSR_USGFAULTSR_Msk            (0xFFFFUL << SCB_CFSR_USGFAULTSR_Pos)          /*!< SCB 
+ 508:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 509:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CFSR_BUSFAULTSR_Pos             8                                             /*!< SCB 
+ 510:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CFSR_BUSFAULTSR_Msk            (0xFFUL << SCB_CFSR_BUSFAULTSR_Pos)            /*!< SCB 
+ 511:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 512:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CFSR_MEMFAULTSR_Pos             0                                             /*!< SCB 
+ 513:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_CFSR_MEMFAULTSR_Msk            (0xFFUL << SCB_CFSR_MEMFAULTSR_Pos)            /*!< SCB 
+ 514:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 515:lib/chip/CMSIS/Include/core_cm4.h **** /* SCB Hard Fault Status Registers Definitions */
+ 516:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_HFSR_DEBUGEVT_Pos              31                                             /*!< SCB 
+ 517:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_HFSR_DEBUGEVT_Msk              (1UL << SCB_HFSR_DEBUGEVT_Pos)                 /*!< SCB 
+ 518:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 519:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_HFSR_FORCED_Pos                30                                             /*!< SCB 
+ 520:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_HFSR_FORCED_Msk                (1UL << SCB_HFSR_FORCED_Pos)                   /*!< SCB 
+ 521:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 522:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_HFSR_VECTTBL_Pos                1                                             /*!< SCB 
+ 523:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_HFSR_VECTTBL_Msk               (1UL << SCB_HFSR_VECTTBL_Pos)                  /*!< SCB 
+ 524:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 525:lib/chip/CMSIS/Include/core_cm4.h **** /* SCB Debug Fault Status Register Definitions */
+ 526:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_EXTERNAL_Pos               4                                             /*!< SCB 
+ 527:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_EXTERNAL_Msk              (1UL << SCB_DFSR_EXTERNAL_Pos)                 /*!< SCB 
+ 528:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 529:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_VCATCH_Pos                 3                                             /*!< SCB 
+ 530:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_VCATCH_Msk                (1UL << SCB_DFSR_VCATCH_Pos)                   /*!< SCB 
+ 531:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 532:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_DWTTRAP_Pos                2                                             /*!< SCB 
+ 533:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_DWTTRAP_Msk               (1UL << SCB_DFSR_DWTTRAP_Pos)                  /*!< SCB 
+ 534:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 535:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_BKPT_Pos                   1                                             /*!< SCB 
+ 536:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_BKPT_Msk                  (1UL << SCB_DFSR_BKPT_Pos)                     /*!< SCB 
+ 537:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 538:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_HALTED_Pos                 0                                             /*!< SCB 
+ 539:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_HALTED_Msk                (1UL << SCB_DFSR_HALTED_Pos)                   /*!< SCB 
+ 540:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 541:lib/chip/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_SCB */
+ 542:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 543:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 544:lib/chip/CMSIS/Include/core_cm4.h **** /** \ingroup  CMSIS_core_register
+ 545:lib/chip/CMSIS/Include/core_cm4.h ****     \defgroup CMSIS_SCnSCB CMSIS System Control and ID Register not in the SCB
+ 546:lib/chip/CMSIS/Include/core_cm4.h ****   Type definitions for the Cortex-M System Control and ID Register not in the SCB
+ 547:lib/chip/CMSIS/Include/core_cm4.h ****   @{
+ 548:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 549:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 550:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Structure type to access the System Control and ID Register not in the SCB.
+ 551:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 552:lib/chip/CMSIS/Include/core_cm4.h **** typedef struct
+ 553:lib/chip/CMSIS/Include/core_cm4.h **** {
+ 554:lib/chip/CMSIS/Include/core_cm4.h ****        uint32_t RESERVED0[1];
+ 555:lib/chip/CMSIS/Include/core_cm4.h ****   __I  uint32_t ICTR;                    /*!< Offset: 0x004 (R/ )  Interrupt Controller Type Regist
+ 556:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t ACTLR;                   /*!< Offset: 0x008 (R/W)  Auxiliary Control Register      
+ 557:lib/chip/CMSIS/Include/core_cm4.h **** } SCnSCB_Type;
+ 558:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 559:lib/chip/CMSIS/Include/core_cm4.h **** /* Interrupt Controller Type Register Definitions */
+ 560:lib/chip/CMSIS/Include/core_cm4.h **** #define SCnSCB_ICTR_INTLINESNUM_Pos         0                                          /*!< ICTR: I
+ 561:lib/chip/CMSIS/Include/core_cm4.h **** #define SCnSCB_ICTR_INTLINESNUM_Msk        (0xFUL << SCnSCB_ICTR_INTLINESNUM_Pos)      /*!< ICTR: I
+ 562:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 563:lib/chip/CMSIS/Include/core_cm4.h **** /* Auxiliary Control Register Definitions */
+ 564:lib/chip/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISOOFP_Pos            9                                          /*!< ACTLR: 
+ 565:lib/chip/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISOOFP_Msk           (1UL << SCnSCB_ACTLR_DISOOFP_Pos)           /*!< ACTLR: 
+ 566:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 567:lib/chip/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISFPCA_Pos            8                                          /*!< ACTLR: 
+ 568:lib/chip/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISFPCA_Msk           (1UL << SCnSCB_ACTLR_DISFPCA_Pos)           /*!< ACTLR: 
+ 569:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 570:lib/chip/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISFOLD_Pos            2                                          /*!< ACTLR: 
+ 571:lib/chip/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISFOLD_Msk           (1UL << SCnSCB_ACTLR_DISFOLD_Pos)           /*!< ACTLR: 
+ 572:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 573:lib/chip/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISDEFWBUF_Pos         1                                          /*!< ACTLR: 
+ 574:lib/chip/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISDEFWBUF_Msk        (1UL << SCnSCB_ACTLR_DISDEFWBUF_Pos)        /*!< ACTLR: 
+ 575:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 576:lib/chip/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISMCYCINT_Pos         0                                          /*!< ACTLR: 
+ 577:lib/chip/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISMCYCINT_Msk        (1UL << SCnSCB_ACTLR_DISMCYCINT_Pos)        /*!< ACTLR: 
+ 578:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 579:lib/chip/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_SCnotSCB */
+ 580:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 581:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 582:lib/chip/CMSIS/Include/core_cm4.h **** /** \ingroup  CMSIS_core_register
+ 583:lib/chip/CMSIS/Include/core_cm4.h ****     \defgroup CMSIS_SysTick CMSIS SysTick
+ 584:lib/chip/CMSIS/Include/core_cm4.h ****   Type definitions for the Cortex-M System Timer Registers
+ 585:lib/chip/CMSIS/Include/core_cm4.h ****   @{
+ 586:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 587:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 588:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Structure type to access the System Timer (SysTick).
+ 589:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 590:lib/chip/CMSIS/Include/core_cm4.h **** typedef struct
+ 591:lib/chip/CMSIS/Include/core_cm4.h **** {
+ 592:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t CTRL;                    /*!< Offset: 0x000 (R/W)  SysTick Control and Status Regis
+ 593:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t LOAD;                    /*!< Offset: 0x004 (R/W)  SysTick Reload Value Register   
+ 594:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t VAL;                     /*!< Offset: 0x008 (R/W)  SysTick Current Value Register  
+ 595:lib/chip/CMSIS/Include/core_cm4.h ****   __I  uint32_t CALIB;                   /*!< Offset: 0x00C (R/ )  SysTick Calibration Register    
+ 596:lib/chip/CMSIS/Include/core_cm4.h **** } SysTick_Type;
+ 597:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 598:lib/chip/CMSIS/Include/core_cm4.h **** /* SysTick Control / Status Register Definitions */
+ 599:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_COUNTFLAG_Pos         16                                             /*!< SysT
+ 600:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_COUNTFLAG_Msk         (1UL << SysTick_CTRL_COUNTFLAG_Pos)            /*!< SysT
+ 601:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 602:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_CLKSOURCE_Pos          2                                             /*!< SysT
+ 603:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_CLKSOURCE_Msk         (1UL << SysTick_CTRL_CLKSOURCE_Pos)            /*!< SysT
+ 604:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 605:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_TICKINT_Pos            1                                             /*!< SysT
+ 606:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_TICKINT_Msk           (1UL << SysTick_CTRL_TICKINT_Pos)              /*!< SysT
+ 607:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 608:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_ENABLE_Pos             0                                             /*!< SysT
+ 609:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_ENABLE_Msk            (1UL << SysTick_CTRL_ENABLE_Pos)               /*!< SysT
+ 610:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 611:lib/chip/CMSIS/Include/core_cm4.h **** /* SysTick Reload Register Definitions */
+ 612:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_LOAD_RELOAD_Pos             0                                             /*!< SysT
+ 613:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_LOAD_RELOAD_Msk            (0xFFFFFFUL << SysTick_LOAD_RELOAD_Pos)        /*!< SysT
+ 614:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 615:lib/chip/CMSIS/Include/core_cm4.h **** /* SysTick Current Register Definitions */
+ 616:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_VAL_CURRENT_Pos             0                                             /*!< SysT
+ 617:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_VAL_CURRENT_Msk            (0xFFFFFFUL << SysTick_VAL_CURRENT_Pos)        /*!< SysT
+ 618:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 619:lib/chip/CMSIS/Include/core_cm4.h **** /* SysTick Calibration Register Definitions */
+ 620:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CALIB_NOREF_Pos            31                                             /*!< SysT
+ 621:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CALIB_NOREF_Msk            (1UL << SysTick_CALIB_NOREF_Pos)               /*!< SysT
+ 622:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 623:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CALIB_SKEW_Pos             30                                             /*!< SysT
+ 624:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CALIB_SKEW_Msk             (1UL << SysTick_CALIB_SKEW_Pos)                /*!< SysT
+ 625:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 626:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CALIB_TENMS_Pos             0                                             /*!< SysT
+ 627:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_CALIB_TENMS_Msk            (0xFFFFFFUL << SysTick_VAL_CURRENT_Pos)        /*!< SysT
+ 628:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 629:lib/chip/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_SysTick */
+ 630:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 631:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 632:lib/chip/CMSIS/Include/core_cm4.h **** /** \ingroup  CMSIS_core_register
+ 633:lib/chip/CMSIS/Include/core_cm4.h ****     \defgroup CMSIS_ITM CMSIS ITM
+ 634:lib/chip/CMSIS/Include/core_cm4.h ****   Type definitions for the Cortex-M Instrumentation Trace Macrocell (ITM)
+ 635:lib/chip/CMSIS/Include/core_cm4.h ****   @{
+ 636:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 637:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 638:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Structure type to access the Instrumentation Trace Macrocell Register (ITM).
+ 639:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 640:lib/chip/CMSIS/Include/core_cm4.h **** typedef struct
+ 641:lib/chip/CMSIS/Include/core_cm4.h **** {
+ 642:lib/chip/CMSIS/Include/core_cm4.h ****   __O  union
+ 643:lib/chip/CMSIS/Include/core_cm4.h ****   {
+ 644:lib/chip/CMSIS/Include/core_cm4.h ****     __O  uint8_t    u8;                  /*!< Offset: 0x000 ( /W)  ITM Stimulus Port 8-bit         
+ 645:lib/chip/CMSIS/Include/core_cm4.h ****     __O  uint16_t   u16;                 /*!< Offset: 0x000 ( /W)  ITM Stimulus Port 16-bit        
+ 646:lib/chip/CMSIS/Include/core_cm4.h ****     __O  uint32_t   u32;                 /*!< Offset: 0x000 ( /W)  ITM Stimulus Port 32-bit        
+ 647:lib/chip/CMSIS/Include/core_cm4.h ****   }  PORT [32];                          /*!< Offset: 0x000 ( /W)  ITM Stimulus Port Registers     
+ 648:lib/chip/CMSIS/Include/core_cm4.h ****        uint32_t RESERVED0[864];
+ 649:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t TER;                     /*!< Offset: 0xE00 (R/W)  ITM Trace Enable Register       
+ 650:lib/chip/CMSIS/Include/core_cm4.h ****        uint32_t RESERVED1[15];
+ 651:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t TPR;                     /*!< Offset: 0xE40 (R/W)  ITM Trace Privilege Register    
+ 652:lib/chip/CMSIS/Include/core_cm4.h ****        uint32_t RESERVED2[15];
+ 653:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t TCR;                     /*!< Offset: 0xE80 (R/W)  ITM Trace Control Register      
+ 654:lib/chip/CMSIS/Include/core_cm4.h **** } ITM_Type;
+ 655:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 656:lib/chip/CMSIS/Include/core_cm4.h **** /* ITM Trace Privilege Register Definitions */
+ 657:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TPR_PRIVMASK_Pos                0                                          /*!< ITM TPR
+ 658:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TPR_PRIVMASK_Msk               (0xFUL << ITM_TPR_PRIVMASK_Pos)             /*!< ITM TPR
+ 659:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 660:lib/chip/CMSIS/Include/core_cm4.h **** /* ITM Trace Control Register Definitions */
+ 661:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_BUSY_Pos                   23                                          /*!< ITM TCR
+ 662:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_BUSY_Msk                   (1UL << ITM_TCR_BUSY_Pos)                   /*!< ITM TCR
+ 663:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 664:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TraceBusID_Pos             16                                          /*!< ITM TCR
+ 665:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TraceBusID_Msk             (0x7FUL << ITM_TCR_TraceBusID_Pos)          /*!< ITM TCR
+ 666:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 667:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_GTSFREQ_Pos                10                                          /*!< ITM TCR
+ 668:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_GTSFREQ_Msk                (3UL << ITM_TCR_GTSFREQ_Pos)                /*!< ITM TCR
+ 669:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 670:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TSPrescale_Pos              8                                          /*!< ITM TCR
+ 671:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TSPrescale_Msk             (3UL << ITM_TCR_TSPrescale_Pos)             /*!< ITM TCR
+ 672:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 673:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_SWOENA_Pos                  4                                          /*!< ITM TCR
+ 674:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_SWOENA_Msk                 (1UL << ITM_TCR_SWOENA_Pos)                 /*!< ITM TCR
+ 675:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 676:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TXENA_Pos                   3                                          /*!< ITM TCR
+ 677:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TXENA_Msk                  (1UL << ITM_TCR_TXENA_Pos)                  /*!< ITM TCR
+ 678:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 679:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_SYNCENA_Pos                 2                                          /*!< ITM TCR
+ 680:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_SYNCENA_Msk                (1UL << ITM_TCR_SYNCENA_Pos)                /*!< ITM TCR
+ 681:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 682:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TSENA_Pos                   1                                          /*!< ITM TCR
+ 683:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TSENA_Msk                  (1UL << ITM_TCR_TSENA_Pos)                  /*!< ITM TCR
+ 684:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 685:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_ITMENA_Pos                  0                                          /*!< ITM TCR
+ 686:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_TCR_ITMENA_Msk                 (1UL << ITM_TCR_ITMENA_Pos)                 /*!< ITM TCR
+ 687:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 688:lib/chip/CMSIS/Include/core_cm4.h **** /*@}*/ /* end of group CMSIS_ITM */
+ 689:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 690:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 691:lib/chip/CMSIS/Include/core_cm4.h **** #if (__MPU_PRESENT == 1)
+ 692:lib/chip/CMSIS/Include/core_cm4.h **** /** \ingroup  CMSIS_core_register
+ 693:lib/chip/CMSIS/Include/core_cm4.h ****     \defgroup CMSIS_MPU CMSIS MPU
+ 694:lib/chip/CMSIS/Include/core_cm4.h ****   Type definitions for the Cortex-M Memory Protection Unit (MPU)
+ 695:lib/chip/CMSIS/Include/core_cm4.h ****   @{
+ 696:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 697:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 698:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Structure type to access the Memory Protection Unit (MPU).
+ 699:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 700:lib/chip/CMSIS/Include/core_cm4.h **** typedef struct
+ 701:lib/chip/CMSIS/Include/core_cm4.h **** {
+ 702:lib/chip/CMSIS/Include/core_cm4.h ****   __I  uint32_t TYPE;                    /*!< Offset: 0x000 (R/ )  MPU Type Register               
+ 703:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t CTRL;                    /*!< Offset: 0x004 (R/W)  MPU Control Register            
+ 704:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t RNR;                     /*!< Offset: 0x008 (R/W)  MPU Region RNRber Register      
+ 705:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t RBAR;                    /*!< Offset: 0x00C (R/W)  MPU Region Base Address Register
+ 706:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t RASR;                    /*!< Offset: 0x010 (R/W)  MPU Region Attribute and Size Re
+ 707:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t RBAR_A1;                 /*!< Offset: 0x014 (R/W)  MPU Alias 1 Region Base Address 
+ 708:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t RASR_A1;                 /*!< Offset: 0x018 (R/W)  MPU Alias 1 Region Attribute and
+ 709:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t RBAR_A2;                 /*!< Offset: 0x01C (R/W)  MPU Alias 2 Region Base Address 
+ 710:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t RASR_A2;                 /*!< Offset: 0x020 (R/W)  MPU Alias 2 Region Attribute and
+ 711:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t RBAR_A3;                 /*!< Offset: 0x024 (R/W)  MPU Alias 3 Region Base Address 
+ 712:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t RASR_A3;                 /*!< Offset: 0x028 (R/W)  MPU Alias 3 Region Attribute and
+ 713:lib/chip/CMSIS/Include/core_cm4.h **** } MPU_Type;
+ 714:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 715:lib/chip/CMSIS/Include/core_cm4.h **** /* MPU Type Register */
+ 716:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_TYPE_IREGION_Pos               16                                             /*!< MPU 
+ 717:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_TYPE_IREGION_Msk               (0xFFUL << MPU_TYPE_IREGION_Pos)               /*!< MPU 
+ 718:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 719:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_TYPE_DREGION_Pos                8                                             /*!< MPU 
+ 720:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_TYPE_DREGION_Msk               (0xFFUL << MPU_TYPE_DREGION_Pos)               /*!< MPU 
+ 721:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 722:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_TYPE_SEPARATE_Pos               0                                             /*!< MPU 
+ 723:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_TYPE_SEPARATE_Msk              (1UL << MPU_TYPE_SEPARATE_Pos)                 /*!< MPU 
+ 724:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 725:lib/chip/CMSIS/Include/core_cm4.h **** /* MPU Control Register */
+ 726:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_CTRL_PRIVDEFENA_Pos             2                                             /*!< MPU 
+ 727:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_CTRL_PRIVDEFENA_Msk            (1UL << MPU_CTRL_PRIVDEFENA_Pos)               /*!< MPU 
+ 728:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 729:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_CTRL_HFNMIENA_Pos               1                                             /*!< MPU 
+ 730:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_CTRL_HFNMIENA_Msk              (1UL << MPU_CTRL_HFNMIENA_Pos)                 /*!< MPU 
+ 731:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 732:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_CTRL_ENABLE_Pos                 0                                             /*!< MPU 
+ 733:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_CTRL_ENABLE_Msk                (1UL << MPU_CTRL_ENABLE_Pos)                   /*!< MPU 
+ 734:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 735:lib/chip/CMSIS/Include/core_cm4.h **** /* MPU Region Number Register */
+ 736:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RNR_REGION_Pos                  0                                             /*!< MPU 
+ 737:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RNR_REGION_Msk                 (0xFFUL << MPU_RNR_REGION_Pos)                 /*!< MPU 
+ 738:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 739:lib/chip/CMSIS/Include/core_cm4.h **** /* MPU Region Base Address Register */
+ 740:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RBAR_ADDR_Pos                   5                                             /*!< MPU 
+ 741:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RBAR_ADDR_Msk                  (0x7FFFFFFUL << MPU_RBAR_ADDR_Pos)             /*!< MPU 
+ 742:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 743:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RBAR_VALID_Pos                  4                                             /*!< MPU 
+ 744:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RBAR_VALID_Msk                 (1UL << MPU_RBAR_VALID_Pos)                    /*!< MPU 
+ 745:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 746:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RBAR_REGION_Pos                 0                                             /*!< MPU 
+ 747:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RBAR_REGION_Msk                (0xFUL << MPU_RBAR_REGION_Pos)                 /*!< MPU 
+ 748:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 749:lib/chip/CMSIS/Include/core_cm4.h **** /* MPU Region Attribute and Size Register */
+ 750:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RASR_ATTRS_Pos                 16                                             /*!< MPU 
+ 751:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RASR_ATTRS_Msk                 (0xFFFFUL << MPU_RASR_ATTRS_Pos)               /*!< MPU 
+ 752:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 753:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RASR_SRD_Pos                    8                                             /*!< MPU 
+ 754:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RASR_SRD_Msk                   (0xFFUL << MPU_RASR_SRD_Pos)                   /*!< MPU 
+ 755:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 756:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RASR_SIZE_Pos                   1                                             /*!< MPU 
+ 757:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RASR_SIZE_Msk                  (0x1FUL << MPU_RASR_SIZE_Pos)                  /*!< MPU 
+ 758:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 759:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RASR_ENABLE_Pos                 0                                             /*!< MPU 
+ 760:lib/chip/CMSIS/Include/core_cm4.h **** #define MPU_RASR_ENABLE_Msk                (1UL << MPU_RASR_ENABLE_Pos)                   /*!< MPU 
+ 761:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 762:lib/chip/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_MPU */
+ 763:lib/chip/CMSIS/Include/core_cm4.h **** #endif
+ 764:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 765:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 766:lib/chip/CMSIS/Include/core_cm4.h **** #if (__FPU_PRESENT == 1)
+ 767:lib/chip/CMSIS/Include/core_cm4.h **** /** \ingroup  CMSIS_core_register
+ 768:lib/chip/CMSIS/Include/core_cm4.h ****     \defgroup CMSIS_FPU CMSIS FPU
+ 769:lib/chip/CMSIS/Include/core_cm4.h ****   Type definitions for the Cortex-M Floating Point Unit (FPU)
+ 770:lib/chip/CMSIS/Include/core_cm4.h ****   @{
+ 771:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 772:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 773:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Structure type to access the Floating Point Unit (FPU).
+ 774:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 775:lib/chip/CMSIS/Include/core_cm4.h **** typedef struct
+ 776:lib/chip/CMSIS/Include/core_cm4.h **** {
+ 777:lib/chip/CMSIS/Include/core_cm4.h ****        uint32_t RESERVED0[1];
+ 778:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t FPCCR;                   /*!< Offset: 0x004 (R/W)  Floating-Point Context Control R
+ 779:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t FPCAR;                   /*!< Offset: 0x008 (R/W)  Floating-Point Context Address R
+ 780:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t FPDSCR;                  /*!< Offset: 0x00C (R/W)  Floating-Point Default Status Co
+ 781:lib/chip/CMSIS/Include/core_cm4.h ****   __I  uint32_t MVFR0;                   /*!< Offset: 0x010 (R/ )  Media and FP Feature Register 0 
+ 782:lib/chip/CMSIS/Include/core_cm4.h ****   __I  uint32_t MVFR1;                   /*!< Offset: 0x014 (R/ )  Media and FP Feature Register 1 
+ 783:lib/chip/CMSIS/Include/core_cm4.h **** } FPU_Type;
+ 784:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 785:lib/chip/CMSIS/Include/core_cm4.h **** /* Floating-Point Context Control Register */
+ 786:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_ASPEN_Pos                31                                             /*!< FPCC
+ 787:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_ASPEN_Msk                (1UL << FPU_FPCCR_ASPEN_Pos)                   /*!< FPCC
+ 788:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 789:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_LSPEN_Pos                30                                             /*!< FPCC
+ 790:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_LSPEN_Msk                (1UL << FPU_FPCCR_LSPEN_Pos)                   /*!< FPCC
+ 791:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 792:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_MONRDY_Pos                8                                             /*!< FPCC
+ 793:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_MONRDY_Msk               (1UL << FPU_FPCCR_MONRDY_Pos)                  /*!< FPCC
+ 794:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 795:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_BFRDY_Pos                 6                                             /*!< FPCC
+ 796:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_BFRDY_Msk                (1UL << FPU_FPCCR_BFRDY_Pos)                   /*!< FPCC
+ 797:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 798:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_MMRDY_Pos                 5                                             /*!< FPCC
+ 799:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_MMRDY_Msk                (1UL << FPU_FPCCR_MMRDY_Pos)                   /*!< FPCC
+ 800:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 801:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_HFRDY_Pos                 4                                             /*!< FPCC
+ 802:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_HFRDY_Msk                (1UL << FPU_FPCCR_HFRDY_Pos)                   /*!< FPCC
+ 803:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 804:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_THREAD_Pos                3                                             /*!< FPCC
+ 805:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_THREAD_Msk               (1UL << FPU_FPCCR_THREAD_Pos)                  /*!< FPCC
+ 806:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 807:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_USER_Pos                  1                                             /*!< FPCC
+ 808:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_USER_Msk                 (1UL << FPU_FPCCR_USER_Pos)                    /*!< FPCC
+ 809:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 810:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_LSPACT_Pos                0                                             /*!< FPCC
+ 811:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_LSPACT_Msk               (1UL << FPU_FPCCR_LSPACT_Pos)                  /*!< FPCC
+ 812:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 813:lib/chip/CMSIS/Include/core_cm4.h **** /* Floating-Point Context Address Register */
+ 814:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCAR_ADDRESS_Pos               3                                             /*!< FPCA
+ 815:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPCAR_ADDRESS_Msk              (0x1FFFFFFFUL << FPU_FPCAR_ADDRESS_Pos)        /*!< FPCA
+ 816:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 817:lib/chip/CMSIS/Include/core_cm4.h **** /* Floating-Point Default Status Control Register */
+ 818:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_AHP_Pos                 26                                             /*!< FPDS
+ 819:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_AHP_Msk                 (1UL << FPU_FPDSCR_AHP_Pos)                    /*!< FPDS
+ 820:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 821:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_DN_Pos                  25                                             /*!< FPDS
+ 822:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_DN_Msk                  (1UL << FPU_FPDSCR_DN_Pos)                     /*!< FPDS
+ 823:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 824:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_FZ_Pos                  24                                             /*!< FPDS
+ 825:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_FZ_Msk                  (1UL << FPU_FPDSCR_FZ_Pos)                     /*!< FPDS
+ 826:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 827:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_RMode_Pos               22                                             /*!< FPDS
+ 828:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_RMode_Msk               (3UL << FPU_FPDSCR_RMode_Pos)                  /*!< FPDS
+ 829:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 830:lib/chip/CMSIS/Include/core_cm4.h **** /* Media and FP Feature Register 0 */
+ 831:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_FP_rounding_modes_Pos    28                                             /*!< MVFR
+ 832:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_FP_rounding_modes_Msk    (0xFUL << FPU_MVFR0_FP_rounding_modes_Pos)     /*!< MVFR
+ 833:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 834:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Short_vectors_Pos        24                                             /*!< MVFR
+ 835:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Short_vectors_Msk        (0xFUL << FPU_MVFR0_Short_vectors_Pos)         /*!< MVFR
+ 836:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 837:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Square_root_Pos          20                                             /*!< MVFR
+ 838:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Square_root_Msk          (0xFUL << FPU_MVFR0_Square_root_Pos)           /*!< MVFR
+ 839:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 840:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Divide_Pos               16                                             /*!< MVFR
+ 841:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Divide_Msk               (0xFUL << FPU_MVFR0_Divide_Pos)                /*!< MVFR
+ 842:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 843:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_FP_excep_trapping_Pos    12                                             /*!< MVFR
+ 844:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_FP_excep_trapping_Msk    (0xFUL << FPU_MVFR0_FP_excep_trapping_Pos)     /*!< MVFR
+ 845:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 846:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Double_precision_Pos      8                                             /*!< MVFR
+ 847:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Double_precision_Msk     (0xFUL << FPU_MVFR0_Double_precision_Pos)      /*!< MVFR
+ 848:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 849:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Single_precision_Pos      4                                             /*!< MVFR
+ 850:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Single_precision_Msk     (0xFUL << FPU_MVFR0_Single_precision_Pos)      /*!< MVFR
+ 851:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 852:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_A_SIMD_registers_Pos      0                                             /*!< MVFR
+ 853:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_A_SIMD_registers_Msk     (0xFUL << FPU_MVFR0_A_SIMD_registers_Pos)      /*!< MVFR
+ 854:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 855:lib/chip/CMSIS/Include/core_cm4.h **** /* Media and FP Feature Register 1 */
+ 856:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_FP_fused_MAC_Pos         28                                             /*!< MVFR
+ 857:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_FP_fused_MAC_Msk         (0xFUL << FPU_MVFR1_FP_fused_MAC_Pos)          /*!< MVFR
+ 858:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 859:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_FP_HPFP_Pos              24                                             /*!< MVFR
+ 860:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_FP_HPFP_Msk              (0xFUL << FPU_MVFR1_FP_HPFP_Pos)               /*!< MVFR
+ 861:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 862:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_D_NaN_mode_Pos            4                                             /*!< MVFR
+ 863:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_D_NaN_mode_Msk           (0xFUL << FPU_MVFR1_D_NaN_mode_Pos)            /*!< MVFR
+ 864:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 865:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_FtZ_mode_Pos              0                                             /*!< MVFR
+ 866:lib/chip/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_FtZ_mode_Msk             (0xFUL << FPU_MVFR1_FtZ_mode_Pos)              /*!< MVFR
+ 867:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 868:lib/chip/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_FPU */
+ 869:lib/chip/CMSIS/Include/core_cm4.h **** #endif
+ 870:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 871:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 872:lib/chip/CMSIS/Include/core_cm4.h **** /** \ingroup  CMSIS_core_register
+ 873:lib/chip/CMSIS/Include/core_cm4.h ****     \defgroup CMSIS_CoreDebug CMSIS Core Debug
+ 874:lib/chip/CMSIS/Include/core_cm4.h ****   Type definitions for the Cortex-M Core Debug Registers
+ 875:lib/chip/CMSIS/Include/core_cm4.h ****   @{
+ 876:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 877:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 878:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Structure type to access the Core Debug Register (CoreDebug).
+ 879:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 880:lib/chip/CMSIS/Include/core_cm4.h **** typedef struct
+ 881:lib/chip/CMSIS/Include/core_cm4.h **** {
+ 882:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t DHCSR;                   /*!< Offset: 0x000 (R/W)  Debug Halting Control and Status
+ 883:lib/chip/CMSIS/Include/core_cm4.h ****   __O  uint32_t DCRSR;                   /*!< Offset: 0x004 ( /W)  Debug Core Register Selector Reg
+ 884:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t DCRDR;                   /*!< Offset: 0x008 (R/W)  Debug Core Register Data Registe
+ 885:lib/chip/CMSIS/Include/core_cm4.h ****   __IO uint32_t DEMCR;                   /*!< Offset: 0x00C (R/W)  Debug Exception and Monitor Cont
+ 886:lib/chip/CMSIS/Include/core_cm4.h **** } CoreDebug_Type;
+ 887:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 888:lib/chip/CMSIS/Include/core_cm4.h **** /* Debug Halting Control and Status Register */
+ 889:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_DBGKEY_Pos         16                                             /*!< Core
+ 890:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_DBGKEY_Msk         (0xFFFFUL << CoreDebug_DHCSR_DBGKEY_Pos)       /*!< Core
+ 891:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 892:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_RESET_ST_Pos     25                                             /*!< Core
+ 893:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_RESET_ST_Msk     (1UL << CoreDebug_DHCSR_S_RESET_ST_Pos)        /*!< Core
+ 894:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 895:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_RETIRE_ST_Pos    24                                             /*!< Core
+ 896:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_RETIRE_ST_Msk    (1UL << CoreDebug_DHCSR_S_RETIRE_ST_Pos)       /*!< Core
+ 897:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 898:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_LOCKUP_Pos       19                                             /*!< Core
+ 899:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_LOCKUP_Msk       (1UL << CoreDebug_DHCSR_S_LOCKUP_Pos)          /*!< Core
+ 900:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 901:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_SLEEP_Pos        18                                             /*!< Core
+ 902:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_SLEEP_Msk        (1UL << CoreDebug_DHCSR_S_SLEEP_Pos)           /*!< Core
+ 903:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 904:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_HALT_Pos         17                                             /*!< Core
+ 905:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_HALT_Msk         (1UL << CoreDebug_DHCSR_S_HALT_Pos)            /*!< Core
+ 906:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 907:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_REGRDY_Pos       16                                             /*!< Core
+ 908:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_REGRDY_Msk       (1UL << CoreDebug_DHCSR_S_REGRDY_Pos)          /*!< Core
+ 909:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 910:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_SNAPSTALL_Pos     5                                             /*!< Core
+ 911:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_SNAPSTALL_Msk    (1UL << CoreDebug_DHCSR_C_SNAPSTALL_Pos)       /*!< Core
+ 912:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 913:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_MASKINTS_Pos      3                                             /*!< Core
+ 914:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_MASKINTS_Msk     (1UL << CoreDebug_DHCSR_C_MASKINTS_Pos)        /*!< Core
+ 915:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 916:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_STEP_Pos          2                                             /*!< Core
+ 917:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_STEP_Msk         (1UL << CoreDebug_DHCSR_C_STEP_Pos)            /*!< Core
+ 918:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 919:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_HALT_Pos          1                                             /*!< Core
+ 920:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_HALT_Msk         (1UL << CoreDebug_DHCSR_C_HALT_Pos)            /*!< Core
+ 921:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 922:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_DEBUGEN_Pos       0                                             /*!< Core
+ 923:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_DEBUGEN_Msk      (1UL << CoreDebug_DHCSR_C_DEBUGEN_Pos)         /*!< Core
+ 924:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 925:lib/chip/CMSIS/Include/core_cm4.h **** /* Debug Core Register Selector Register */
+ 926:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DCRSR_REGWnR_Pos         16                                             /*!< Core
+ 927:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DCRSR_REGWnR_Msk         (1UL << CoreDebug_DCRSR_REGWnR_Pos)            /*!< Core
+ 928:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 929:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DCRSR_REGSEL_Pos          0                                             /*!< Core
+ 930:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DCRSR_REGSEL_Msk         (0x1FUL << CoreDebug_DCRSR_REGSEL_Pos)         /*!< Core
+ 931:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 932:lib/chip/CMSIS/Include/core_cm4.h **** /* Debug Exception and Monitor Control Register */
+ 933:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_TRCENA_Pos         24                                             /*!< Core
+ 934:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_TRCENA_Msk         (1UL << CoreDebug_DEMCR_TRCENA_Pos)            /*!< Core
+ 935:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 936:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_REQ_Pos        19                                             /*!< Core
+ 937:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_REQ_Msk        (1UL << CoreDebug_DEMCR_MON_REQ_Pos)           /*!< Core
+ 938:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 939:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_STEP_Pos       18                                             /*!< Core
+ 940:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_STEP_Msk       (1UL << CoreDebug_DEMCR_MON_STEP_Pos)          /*!< Core
+ 941:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 942:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_PEND_Pos       17                                             /*!< Core
+ 943:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_PEND_Msk       (1UL << CoreDebug_DEMCR_MON_PEND_Pos)          /*!< Core
+ 944:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 945:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_EN_Pos         16                                             /*!< Core
+ 946:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_EN_Msk         (1UL << CoreDebug_DEMCR_MON_EN_Pos)            /*!< Core
+ 947:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 948:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_HARDERR_Pos     10                                             /*!< Core
+ 949:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_HARDERR_Msk     (1UL << CoreDebug_DEMCR_VC_HARDERR_Pos)        /*!< Core
+ 950:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 951:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_INTERR_Pos       9                                             /*!< Core
+ 952:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_INTERR_Msk      (1UL << CoreDebug_DEMCR_VC_INTERR_Pos)         /*!< Core
+ 953:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 954:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_BUSERR_Pos       8                                             /*!< Core
+ 955:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_BUSERR_Msk      (1UL << CoreDebug_DEMCR_VC_BUSERR_Pos)         /*!< Core
+ 956:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 957:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_STATERR_Pos      7                                             /*!< Core
+ 958:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_STATERR_Msk     (1UL << CoreDebug_DEMCR_VC_STATERR_Pos)        /*!< Core
+ 959:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 960:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_CHKERR_Pos       6                                             /*!< Core
+ 961:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_CHKERR_Msk      (1UL << CoreDebug_DEMCR_VC_CHKERR_Pos)         /*!< Core
+ 962:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 963:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_NOCPERR_Pos      5                                             /*!< Core
+ 964:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_NOCPERR_Msk     (1UL << CoreDebug_DEMCR_VC_NOCPERR_Pos)        /*!< Core
+ 965:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 966:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_MMERR_Pos        4                                             /*!< Core
+ 967:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_MMERR_Msk       (1UL << CoreDebug_DEMCR_VC_MMERR_Pos)          /*!< Core
+ 968:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 969:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_CORERESET_Pos    0                                             /*!< Core
+ 970:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_CORERESET_Msk   (1UL << CoreDebug_DEMCR_VC_CORERESET_Pos)      /*!< Core
+ 971:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 972:lib/chip/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_CoreDebug */
+ 973:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 974:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 975:lib/chip/CMSIS/Include/core_cm4.h **** /** \ingroup  CMSIS_core_register
+ 976:lib/chip/CMSIS/Include/core_cm4.h ****   @{
+ 977:lib/chip/CMSIS/Include/core_cm4.h ****  */
+ 978:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 979:lib/chip/CMSIS/Include/core_cm4.h **** /* Memory mapping of Cortex-M4 Hardware */
+ 980:lib/chip/CMSIS/Include/core_cm4.h **** #define SCS_BASE            (0xE000E000UL)                            /*!< System Control Space Bas
+ 981:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM_BASE            (0xE0000000UL)                            /*!< ITM Base Address        
+ 982:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug_BASE      (0xE000EDF0UL)                            /*!< Core Debug Base Address 
+ 983:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick_BASE        (SCS_BASE +  0x0010UL)                    /*!< SysTick Base Address    
+ 984:lib/chip/CMSIS/Include/core_cm4.h **** #define NVIC_BASE           (SCS_BASE +  0x0100UL)                    /*!< NVIC Base Address       
+ 985:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB_BASE            (SCS_BASE +  0x0D00UL)                    /*!< System Control Block Bas
+ 986:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 987:lib/chip/CMSIS/Include/core_cm4.h **** #define SCnSCB              ((SCnSCB_Type    *)     SCS_BASE      )   /*!< System control Register 
+ 988:lib/chip/CMSIS/Include/core_cm4.h **** #define SCB                 ((SCB_Type       *)     SCB_BASE      )   /*!< SCB configuration struct
+ 989:lib/chip/CMSIS/Include/core_cm4.h **** #define SysTick             ((SysTick_Type   *)     SysTick_BASE  )   /*!< SysTick configuration st
+ 990:lib/chip/CMSIS/Include/core_cm4.h **** #define NVIC                ((NVIC_Type      *)     NVIC_BASE     )   /*!< NVIC configuration struc
+ 991:lib/chip/CMSIS/Include/core_cm4.h **** #define ITM                 ((ITM_Type       *)     ITM_BASE      )   /*!< ITM configuration struct
+ 992:lib/chip/CMSIS/Include/core_cm4.h **** #define CoreDebug           ((CoreDebug_Type *)     CoreDebug_BASE)   /*!< Core Debug configuration
+ 993:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 994:lib/chip/CMSIS/Include/core_cm4.h **** #if (__MPU_PRESENT == 1)
+ 995:lib/chip/CMSIS/Include/core_cm4.h ****   #define MPU_BASE          (SCS_BASE +  0x0D90UL)                    /*!< Memory Protection Unit  
+ 996:lib/chip/CMSIS/Include/core_cm4.h ****   #define MPU               ((MPU_Type       *)     MPU_BASE      )   /*!< Memory Protection Unit  
+ 997:lib/chip/CMSIS/Include/core_cm4.h **** #endif
+ 998:lib/chip/CMSIS/Include/core_cm4.h **** 
+ 999:lib/chip/CMSIS/Include/core_cm4.h **** #if (__FPU_PRESENT == 1)
+1000:lib/chip/CMSIS/Include/core_cm4.h ****   #define FPU_BASE          (SCS_BASE +  0x0F30UL)                    /*!< Floating Point Unit     
+1001:lib/chip/CMSIS/Include/core_cm4.h ****   #define FPU               ((FPU_Type       *)     FPU_BASE      )   /*!< Floating Point Unit     
+1002:lib/chip/CMSIS/Include/core_cm4.h **** #endif
+1003:lib/chip/CMSIS/Include/core_cm4.h **** 
+1004:lib/chip/CMSIS/Include/core_cm4.h **** /*@} */
+1005:lib/chip/CMSIS/Include/core_cm4.h **** 
+1006:lib/chip/CMSIS/Include/core_cm4.h **** 
+1007:lib/chip/CMSIS/Include/core_cm4.h **** 
+1008:lib/chip/CMSIS/Include/core_cm4.h **** /*******************************************************************************
+1009:lib/chip/CMSIS/Include/core_cm4.h ****  *                Hardware Abstraction Layer
+1010:lib/chip/CMSIS/Include/core_cm4.h ****  ******************************************************************************/
+1011:lib/chip/CMSIS/Include/core_cm4.h **** /** \defgroup CMSIS_Core_FunctionInterface CMSIS Core Function Interface
+1012:lib/chip/CMSIS/Include/core_cm4.h ****   Core Function Interface contains:
+1013:lib/chip/CMSIS/Include/core_cm4.h ****   - Core NVIC Functions
+1014:lib/chip/CMSIS/Include/core_cm4.h ****   - Core SysTick Functions
+1015:lib/chip/CMSIS/Include/core_cm4.h ****   - Core Debug Functions
+1016:lib/chip/CMSIS/Include/core_cm4.h ****   - Core Register Access Functions
+1017:lib/chip/CMSIS/Include/core_cm4.h **** */
+1018:lib/chip/CMSIS/Include/core_cm4.h **** 
+1019:lib/chip/CMSIS/Include/core_cm4.h **** 
+1020:lib/chip/CMSIS/Include/core_cm4.h **** 
+1021:lib/chip/CMSIS/Include/core_cm4.h **** /* ##########################   NVIC functions  #################################### */
+1022:lib/chip/CMSIS/Include/core_cm4.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+1023:lib/chip/CMSIS/Include/core_cm4.h ****     \defgroup CMSIS_Core_NVICFunctions CMSIS Core NVIC Functions
+1024:lib/chip/CMSIS/Include/core_cm4.h ****   @{
+1025:lib/chip/CMSIS/Include/core_cm4.h ****  */
+1026:lib/chip/CMSIS/Include/core_cm4.h **** 
+1027:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Set Priority Grouping
+1028:lib/chip/CMSIS/Include/core_cm4.h **** 
+1029:lib/chip/CMSIS/Include/core_cm4.h ****   This function sets the priority grouping field using the required unlock sequence.
+1030:lib/chip/CMSIS/Include/core_cm4.h ****   The parameter PriorityGroup is assigned to the field SCB->AIRCR [10:8] PRIGROUP field.
+1031:lib/chip/CMSIS/Include/core_cm4.h ****   Only values from 0..7 are used.
+1032:lib/chip/CMSIS/Include/core_cm4.h ****   In case of a conflict between priority grouping and available
+1033:lib/chip/CMSIS/Include/core_cm4.h ****   priority bits (__NVIC_PRIO_BITS) the smallest possible priority group is set.
+1034:lib/chip/CMSIS/Include/core_cm4.h **** 
+1035:lib/chip/CMSIS/Include/core_cm4.h ****     \param [in]      PriorityGroup  Priority grouping field
+1036:lib/chip/CMSIS/Include/core_cm4.h ****  */
+1037:lib/chip/CMSIS/Include/core_cm4.h **** static __INLINE void NVIC_SetPriorityGrouping(uint32_t PriorityGroup)
+1038:lib/chip/CMSIS/Include/core_cm4.h **** {
+1039:lib/chip/CMSIS/Include/core_cm4.h ****   uint32_t reg_value;
+1040:lib/chip/CMSIS/Include/core_cm4.h ****   uint32_t PriorityGroupTmp = (PriorityGroup & (uint32_t)0x07);               /* only values 0..7 a
+1041:lib/chip/CMSIS/Include/core_cm4.h **** 
+1042:lib/chip/CMSIS/Include/core_cm4.h ****   reg_value  =  SCB->AIRCR;                                                   /* read old register 
+1043:lib/chip/CMSIS/Include/core_cm4.h ****   reg_value &= ~(SCB_AIRCR_VECTKEY_Msk | SCB_AIRCR_PRIGROUP_Msk);             /* clear bits to chan
+1044:lib/chip/CMSIS/Include/core_cm4.h ****   reg_value  =  (reg_value                                 |
+1045:lib/chip/CMSIS/Include/core_cm4.h ****                 ((uint32_t)0x5FA << SCB_AIRCR_VECTKEY_Pos) |
+1046:lib/chip/CMSIS/Include/core_cm4.h ****                 (PriorityGroupTmp << 8));                                     /* Insert write key a
+1047:lib/chip/CMSIS/Include/core_cm4.h ****   SCB->AIRCR =  reg_value;
+1048:lib/chip/CMSIS/Include/core_cm4.h **** }
+1049:lib/chip/CMSIS/Include/core_cm4.h **** 
+1050:lib/chip/CMSIS/Include/core_cm4.h **** 
+1051:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Get Priority Grouping
+1052:lib/chip/CMSIS/Include/core_cm4.h **** 
+1053:lib/chip/CMSIS/Include/core_cm4.h ****   This function gets the priority grouping from NVIC Interrupt Controller.
+1054:lib/chip/CMSIS/Include/core_cm4.h ****   Priority grouping is SCB->AIRCR [10:8] PRIGROUP field.
+1055:lib/chip/CMSIS/Include/core_cm4.h **** 
+1056:lib/chip/CMSIS/Include/core_cm4.h ****     \return                Priority grouping field
+1057:lib/chip/CMSIS/Include/core_cm4.h ****  */
+1058:lib/chip/CMSIS/Include/core_cm4.h **** static __INLINE uint32_t NVIC_GetPriorityGrouping(void)
+1059:lib/chip/CMSIS/Include/core_cm4.h **** {
+1060:lib/chip/CMSIS/Include/core_cm4.h ****   return ((SCB->AIRCR & SCB_AIRCR_PRIGROUP_Msk) >> SCB_AIRCR_PRIGROUP_Pos);   /* read priority grou
+1061:lib/chip/CMSIS/Include/core_cm4.h **** }
+1062:lib/chip/CMSIS/Include/core_cm4.h **** 
+1063:lib/chip/CMSIS/Include/core_cm4.h **** 
+1064:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Enable External Interrupt
+1065:lib/chip/CMSIS/Include/core_cm4.h **** 
+1066:lib/chip/CMSIS/Include/core_cm4.h ****     This function enables a device specific interrupt in the NVIC interrupt controller.
+1067:lib/chip/CMSIS/Include/core_cm4.h ****     The interrupt number cannot be a negative value.
+1068:lib/chip/CMSIS/Include/core_cm4.h **** 
+1069:lib/chip/CMSIS/Include/core_cm4.h ****     \param [in]      IRQn  Number of the external interrupt to enable
+1070:lib/chip/CMSIS/Include/core_cm4.h ****  */
+1071:lib/chip/CMSIS/Include/core_cm4.h **** static __INLINE void NVIC_EnableIRQ(IRQn_Type IRQn)
+1072:lib/chip/CMSIS/Include/core_cm4.h **** {
+1073:lib/chip/CMSIS/Include/core_cm4.h **** /*  NVIC->ISER[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F));  enable interrupt */
+1074:lib/chip/CMSIS/Include/core_cm4.h ****   NVIC->ISER[(uint32_t)((int32_t)IRQn) >> 5] = (uint32_t)(1 << ((uint32_t)((int32_t)IRQn) & (uint32
+1075:lib/chip/CMSIS/Include/core_cm4.h **** }
+1076:lib/chip/CMSIS/Include/core_cm4.h **** 
+1077:lib/chip/CMSIS/Include/core_cm4.h **** 
+1078:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Disable External Interrupt
+1079:lib/chip/CMSIS/Include/core_cm4.h **** 
+1080:lib/chip/CMSIS/Include/core_cm4.h ****     This function disables a device specific interrupt in the NVIC interrupt controller.
+1081:lib/chip/CMSIS/Include/core_cm4.h ****     The interrupt number cannot be a negative value.
+1082:lib/chip/CMSIS/Include/core_cm4.h **** 
+1083:lib/chip/CMSIS/Include/core_cm4.h ****     \param [in]      IRQn  Number of the external interrupt to disable
+1084:lib/chip/CMSIS/Include/core_cm4.h ****  */
+1085:lib/chip/CMSIS/Include/core_cm4.h **** static __INLINE void NVIC_DisableIRQ(IRQn_Type IRQn)
+1086:lib/chip/CMSIS/Include/core_cm4.h **** {
+1087:lib/chip/CMSIS/Include/core_cm4.h ****   NVIC->ICER[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F)); /* disable interrupt */
+1088:lib/chip/CMSIS/Include/core_cm4.h **** }
+1089:lib/chip/CMSIS/Include/core_cm4.h **** 
+1090:lib/chip/CMSIS/Include/core_cm4.h **** 
+1091:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Get Pending Interrupt
+1092:lib/chip/CMSIS/Include/core_cm4.h **** 
+1093:lib/chip/CMSIS/Include/core_cm4.h ****     This function reads the pending register in the NVIC and returns the pending bit
+1094:lib/chip/CMSIS/Include/core_cm4.h ****     for the specified interrupt.
+1095:lib/chip/CMSIS/Include/core_cm4.h **** 
+1096:lib/chip/CMSIS/Include/core_cm4.h ****     \param [in]      IRQn  Number of the interrupt for get pending
+1097:lib/chip/CMSIS/Include/core_cm4.h ****     \return             0  Interrupt status is not pending
+1098:lib/chip/CMSIS/Include/core_cm4.h ****     \return             1  Interrupt status is pending
+1099:lib/chip/CMSIS/Include/core_cm4.h ****  */
+1100:lib/chip/CMSIS/Include/core_cm4.h **** static __INLINE uint32_t NVIC_GetPendingIRQ(IRQn_Type IRQn)
+1101:lib/chip/CMSIS/Include/core_cm4.h **** {
+1102:lib/chip/CMSIS/Include/core_cm4.h ****   return((uint32_t) ((NVIC->ISPR[(uint32_t)(IRQn) >> 5] & (1 << ((uint32_t)(IRQn) & 0x1F)))?1:0)); 
+1103:lib/chip/CMSIS/Include/core_cm4.h **** }
+1104:lib/chip/CMSIS/Include/core_cm4.h **** 
+1105:lib/chip/CMSIS/Include/core_cm4.h **** 
+1106:lib/chip/CMSIS/Include/core_cm4.h **** /** \brief  Set Pending Interrupt
+1107:lib/chip/CMSIS/Include/core_cm4.h **** 
+1108:lib/chip/CMSIS/Include/core_cm4.h ****     This function sets the pending bit for the specified interrupt.
+1109:lib/chip/CMSIS/Include/core_cm4.h ****     The interrupt number cannot be a negative value.
+1110:lib/chip/CMSIS/Include/core_cm4.h **** 
+1111:lib/chip/CMSIS/Include/core_cm4.h ****     \param [in]      IRQn  Number of the interrupt for set pending
+1112:lib/chip/CMSIS/Include/core_cm4.h ****  */
+1113:lib/chip/CMSIS/Include/core_cm4.h **** static __INLINE void NVIC_SetPendingIRQ(IRQn_Type IRQn)
+1114:lib/chip/CMSIS/Include/core_cm4.h **** {
+  27              		.loc 1 1114 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32 0000 80B4     		push	{r7}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 4
+  35              		.cfi_offset 7, -4
+  36 0002 83B0     		sub	sp, sp, #12
+  37              	.LCFI1:
+  38              		.cfi_def_cfa_offset 16
+  39 0004 00AF     		add	r7, sp, #0
+  40              	.LCFI2:
+  41              		.cfi_def_cfa_register 7
+  42 0006 0346     		mov	r3, r0
+  43 0008 FB71     		strb	r3, [r7, #7]
+1115:lib/chip/CMSIS/Include/core_cm4.h ****   NVIC->ISPR[((uint32_t)(IRQn) >> 5)] = (1 << ((uint32_t)(IRQn) & 0x1F)); /* set interrupt pending 
+  44              		.loc 1 1115 0
+  45 000a 4FF46143 		mov	r3, #57600
+  46 000e CEF20003 		movt	r3, 57344
+  47 0012 97F90720 		ldrsb	r2, [r7, #7]
+  48 0016 5209     		lsrs	r2, r2, #5
+  49 0018 F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+  50 001a 01F01F01 		and	r1, r1, #31
+  51 001e 0120     		movs	r0, #1
+  52 0020 00FA01F1 		lsl	r1, r0, r1
+  53 0024 4032     		adds	r2, r2, #64
+  54 0026 43F82210 		str	r1, [r3, r2, lsl #2]
+1116:lib/chip/CMSIS/Include/core_cm4.h **** }
+  55              		.loc 1 1116 0
+  56 002a 0C37     		adds	r7, r7, #12
+  57 002c BD46     		mov	sp, r7
+  58              		@ sp needed
+  59 002e 5DF8047B 		ldr	r7, [sp], #4
+  60 0032 7047     		bx	lr
+  61              		.cfi_endproc
+  62              	.LFE99:
+  64              		.global	ulRegTest1LoopCounter
+  65              		.section	.bss.ulRegTest1LoopCounter,"aw",%nobits
+  66              		.align	2
+  69              	ulRegTest1LoopCounter:
+  70 0000 00000000 		.space	4
+  71              		.global	ulRegTest2LoopCounter
+  72              		.section	.bss.ulRegTest2LoopCounter,"aw",%nobits
+  73              		.align	2
+  76              	ulRegTest2LoopCounter:
+  77 0000 00000000 		.space	4
+  78              		.global	ulFPUInterruptNesting
+  79              		.section	.bss.ulFPUInterruptNesting,"aw",%nobits
+  80              		.align	2
+  83              	ulFPUInterruptNesting:
+  84 0000 00000000 		.space	4
+  85              		.global	ulMaxFPUInterruptNesting
+  86              		.section	.bss.ulMaxFPUInterruptNesting,"aw",%nobits
+  87              		.align	2
+  90              	ulMaxFPUInterruptNesting:
+  91 0000 00000000 		.space	4
+  92              		.section	.bss.xTestSemaphore,"aw",%nobits
+  93              		.align	2
+  96              	xTestSemaphore:
+  97 0000 00000000 		.space	4
+  98              		.global	ulButtonPressCounts
+  99              		.section	.bss.ulButtonPressCounts,"aw",%nobits
+ 100              		.align	2
+ 103              	ulButtonPressCounts:
+ 104 0000 00000000 		.space	4
+ 105              		.section	.text.main,"ax",%progbits
+ 106              		.align	2
+ 107              		.global	main
+ 108              		.thumb
+ 109              		.thumb_func
+ 111              	main:
+ 112              	.LFB111:
+ 113              		.file 2 "main.c"
+   1:main.c        **** /*
+   2:main.c        ****     FreeRTOS V7.5.3 - Copyright (C) 2013 Real Time Engineers Ltd.
+   3:main.c        ****     All rights reserved
+   4:main.c        **** 
+   5:main.c        ****     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
+   6:main.c        **** 
+   7:main.c        ****     ***************************************************************************
+   8:main.c        ****      *                                                                       *
+   9:main.c        ****      *    FreeRTOS provides completely free yet professionally developed,    *
+  10:main.c        ****      *    robust, strictly quality controlled, supported, and cross          *
+  11:main.c        ****      *    platform software that has become a de facto standard.             *
+  12:main.c        ****      *                                                                       *
+  13:main.c        ****      *    Help yourself get started quickly and support the FreeRTOS         *
+  14:main.c        ****      *    project by purchasing a FreeRTOS tutorial book, reference          *
+  15:main.c        ****      *    manual, or both from: http://www.FreeRTOS.org/Documentation        *
+  16:main.c        ****      *                                                                       *
+  17:main.c        ****      *    Thank you!                                                         *
+  18:main.c        ****      *                                                                       *
+  19:main.c        ****     ***************************************************************************
+  20:main.c        **** 
+  21:main.c        ****     This file is part of the FreeRTOS distribution.
+  22:main.c        **** 
+  23:main.c        ****     FreeRTOS is free software; you can redistribute it and/or modify it under
+  24:main.c        ****     the terms of the GNU General Public License (version 2) as published by the
+  25:main.c        ****     Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+  26:main.c        **** 
+  27:main.c        ****     >>! NOTE: The modification to the GPL is included to allow you to distribute
+  28:main.c        ****     >>! a combined work that includes FreeRTOS without being obliged to provide
+  29:main.c        ****     >>! the source code for proprietary components outside of the FreeRTOS
+  30:main.c        ****     >>! kernel.
+  31:main.c        **** 
+  32:main.c        ****     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
+  33:main.c        ****     WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  34:main.c        ****     FOR A PARTICULAR PURPOSE.  Full license text is available from the following
+  35:main.c        ****     link: http://www.freertos.org/a00114.html
+  36:main.c        **** 
+  37:main.c        ****     1 tab == 4 spaces!
+  38:main.c        **** 
+  39:main.c        ****     ***************************************************************************
+  40:main.c        ****      *                                                                       *
+  41:main.c        ****      *    Having a problem?  Start by reading the FAQ "My application does   *
+  42:main.c        ****      *    not run, what could be wrong?"                                     *
+  43:main.c        ****      *                                                                       *
+  44:main.c        ****      *    http://www.FreeRTOS.org/FAQHelp.html                               *
+  45:main.c        ****      *                                                                       *
+  46:main.c        ****     ***************************************************************************
+  47:main.c        **** 
+  48:main.c        ****     http://www.FreeRTOS.org - Documentation, books, training, latest versions,
+  49:main.c        ****     license and Real Time Engineers Ltd. contact details.
+  50:main.c        **** 
+  51:main.c        ****     http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
+  52:main.c        ****     including FreeRTOS+Trace - an indispensable productivity tool, a DOS
+  53:main.c        ****     compatible FAT file system, and our tiny thread aware UDP/IP stack.
+  54:main.c        **** 
+  55:main.c        ****     http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
+  56:main.c        ****     Integrity Systems to sell under the OpenRTOS brand.  Low cost OpenRTOS
+  57:main.c        ****     licenses offer ticketed support, indemnification and middleware.
+  58:main.c        **** 
+  59:main.c        ****     http://www.SafeRTOS.com - High Integrity Systems also provide a safety
+  60:main.c        ****     engineered and independently SIL3 certified version for use in safety and
+  61:main.c        ****     mission critical applications that require provable dependability.
+  62:main.c        **** 
+  63:main.c        ****     1 tab == 4 spaces!
+  64:main.c        **** */
+  65:main.c        **** 
+  66:main.c        **** /******************************************************************************
+  67:main.c        ****  * >>>>>> NOTE 1: <<<<<<
+  68:main.c        ****  *
+  69:main.c        ****  * main() can be configured to create either a very simple LED flasher demo, or
+  70:main.c        ****  * a more comprehensive test/demo application.
+  71:main.c        ****  *
+  72:main.c        ****  * To create a very simple LED flasher example, set the
+  73:main.c        ****  * mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY constant (defined below) to 1.  When
+  74:main.c        ****  * this is done, only the standard demo flash tasks are created.  The standard
+  75:main.c        ****  * demo flash example creates three tasks, each of which toggle an LED at a
+  76:main.c        ****  * fixed but different frequency.
+  77:main.c        ****  *
+  78:main.c        ****  * To create a more comprehensive test and demo application, set
+  79:main.c        ****  * mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY to 0.
+  80:main.c        ****  *
+  81:main.c        ****  * >>>>>> NOTE 2: <<<<<<
+  82:main.c        ****  *
+  83:main.c        ****  * In addition to the normal set of standard demo tasks, the comprehensive test
+  84:main.c        ****  * makes heavy use of the floating point unit, and forces floating point
+  85:main.c        ****  * instructions to be used from interrupts that nest three deep.  The nesting
+  86:main.c        ****  * starts from the tick hook function, resulting is an abnormally long context
+  87:main.c        ****  * switch time.  This is done purely to stress test the FPU context switching
+  88:main.c        ****  * implementation, and that part of the test can be removed by setting
+  89:main.c        ****  * configUSE_TICK_HOOK to 0 in FreeRTOSConfig.h.
+  90:main.c        ****  ******************************************************************************
+  91:main.c        ****  *
+  92:main.c        ****  * main() creates all the demo application tasks and software timers, then starts
+  93:main.c        ****  * the scheduler.  The web documentation provides more details of the standard
+  94:main.c        ****  * demo application tasks, which provide no particular functionality, but do
+  95:main.c        ****  * provide a good example of how to use the FreeRTOS API.
+  96:main.c        ****  *
+  97:main.c        ****  * In addition to the standard demo tasks, the following tasks and tests are
+  98:main.c        ****  * defined and/or created within this file:
+  99:main.c        ****  *
+ 100:main.c        ****  * "Reg test" tasks - These fill both the core and floating point registers with
+ 101:main.c        ****  * known values, then check that each register maintains its expected value for
+ 102:main.c        ****  * the lifetime of the task.  Each task uses a different set of values.  The reg
+ 103:main.c        ****  * test tasks execute with a very low priority, so get preempted very
+ 104:main.c        ****  * frequently.  A register containing an unexpected value is indicative of an
+ 105:main.c        ****  * error in the context switching mechanism.
+ 106:main.c        ****  *
+ 107:main.c        ****  * "Check" timer - The check software timer period is initially set to three
+ 108:main.c        ****  * seconds.  The callback function associated with the check software timer
+ 109:main.c        ****  * checks that all the standard demo tasks, and the register check tasks, are
+ 110:main.c        ****  * not only still executing, but are executing without reporting any errors.  If
+ 111:main.c        ****  * the check software timer discovers that a task has either stalled, or
+ 112:main.c        ****  * reported an error, then it changes its own execution period from the initial
+ 113:main.c        ****  * three seconds, to just 200ms.  The check software timer callback function
+ 114:main.c        ****  * also toggles an LED each time it is called.  This provides a visual
+ 115:main.c        ****  * indication of the system status:  If the LED toggles every three seconds,
+ 116:main.c        ****  * then no issues have been discovered.  If the LED toggles every 200ms, then
+ 117:main.c        ****  * an issue has been discovered with at least one task.
+ 118:main.c        ****  *
+ 119:main.c        ****  * Tick hook - The application tick hook is called from the schedulers tick
+ 120:main.c        ****  * interrupt service routine when configUSE_TICK_HOOK is set to 1 in
+ 121:main.c        ****  * FreeRTOSConfig.h.  In this example, the tick hook is used to test the kernels
+ 122:main.c        ****  * handling of the floating point units (FPU) context, both at the task level
+ 123:main.c        ****  * and when nesting interrupts access the floating point unit registers.  The
+ 124:main.c        ****  * tick hook function first fills the FPU registers with a known value, it
+ 125:main.c        ****  * then triggers a medium priority interrupt.  The medium priority interrupt
+ 126:main.c        ****  * fills the FPU registers with a different value, and triggers a high priority
+ 127:main.c        ****  * interrupt.  The high priority interrupt once again fills the the FPU
+ 128:main.c        ****  * registers with a known value before returning to the medium priority
+ 129:main.c        ****  * interrupt.  The medium priority interrupt checks that the FPU registers
+ 130:main.c        ****  * contain the values that it wrote to them, then returns to the tick hook
+ 131:main.c        ****  * function.  Finally, the tick hook function checks that the FPU registers
+ 132:main.c        ****  * contain the values that it wrote to them, before it too returns.
+ 133:main.c        ****  *
+ 134:main.c        ****  * Button interrupt - The button marked "USER" on the starter kit is used to
+ 135:main.c        ****  * demonstrate how to write an interrupt service routine, and how to synchronise
+ 136:main.c        ****  * a task with an interrupt.  A task is created that blocks on a test semaphore.
+ 137:main.c        ****  * When the USER button is pressed, the button interrupt handler gives the
+ 138:main.c        ****  * semaphore, causing the task to unblock.  When the task unblocks, it simply
+ 139:main.c        ****  * increments an execution count variable, then returns to block on the
+ 140:main.c        ****  * semaphore again.
+ 141:main.c        ****  */
+ 142:main.c        **** 
+ 143:main.c        **** /* Kernel includes. */
+ 144:main.c        **** #include "FreeRTOS.h"
+ 145:main.c        **** #include "task.h"
+ 146:main.c        **** #include "timers.h"
+ 147:main.c        **** #include "semphr.h"
+ 148:main.c        **** 
+ 149:main.c        **** /* Demo application includes. */
+ 150:main.c        **** #include "partest.h"
+ 151:main.c        **** #include "flash.h"
+ 152:main.c        **** #include "flop.h"
+ 153:main.c        **** #include "integer.h"
+ 154:main.c        **** #include "PollQ.h"
+ 155:main.c        **** #include "semtest.h"
+ 156:main.c        **** #include "dynamic.h"
+ 157:main.c        **** #include "BlockQ.h"
+ 158:main.c        **** #include "blocktim.h"
+ 159:main.c        **** #include "countsem.h"
+ 160:main.c        **** #include "GenQTest.h"
+ 161:main.c        **** #include "recmutex.h"
+ 162:main.c        **** #include "death.h"
+ 163:main.c        **** 
+ 164:main.c        **** ///* Hardware and starter kit includes. */
+ 165:main.c        **** //#include "arm_comm.h"
+ 166:main.c        **** #include "stm32f4_discovery.h"
+ 167:main.c        **** #include "stm32f4xx.h"
+ 168:main.c        **** #include "stm32f4xx_conf.h"
+ 169:main.c        **** //
+ 170:main.c        **** ///* Priorities for the demo application tasks. */
+ 171:main.c        **** #define mainFLASH_TASK_PRIORITY				( tskIDLE_PRIORITY + 1UL )
+ 172:main.c        **** #define mainQUEUE_POLL_PRIORITY				( tskIDLE_PRIORITY + 2UL )
+ 173:main.c        **** #define mainSEM_TEST_PRIORITY				( tskIDLE_PRIORITY + 1UL )
+ 174:main.c        **** #define mainBLOCK_Q_PRIORITY				( tskIDLE_PRIORITY + 2UL )
+ 175:main.c        **** #define mainCREATOR_TASK_PRIORITY			( tskIDLE_PRIORITY + 3UL )
+ 176:main.c        **** #define mainFLOP_TASK_PRIORITY				( tskIDLE_PRIORITY )
+ 177:main.c        **** 
+ 178:main.c        **** /* The LED used by the check timer. */
+ 179:main.c        **** #define mainCHECK_LED 						( 3UL )
+ 180:main.c        **** 
+ 181:main.c        **** /* A block time of zero simply means "don't block". */
+ 182:main.c        **** #define mainDONT_BLOCK						( 0UL )
+ 183:main.c        **** 
+ 184:main.c        **** /* The period after which the check timer will expire, in ms, provided no errors
+ 185:main.c        **** have been reported by any of the standard demo tasks.  ms are converted to the
+ 186:main.c        **** equivalent in ticks using the portTICK_RATE_MS constant. */
+ 187:main.c        **** #define mainCHECK_TIMER_PERIOD_MS			( 3000UL / portTICK_RATE_MS )
+ 188:main.c        **** 
+ 189:main.c        **** /* The period at which the check timer will expire, in ms, if an error has been
+ 190:main.c        **** reported in one of the standard demo tasks.  ms are converted to the equivalent
+ 191:main.c        **** in ticks using the portTICK_RATE_MS constant. */
+ 192:main.c        **** #define mainERROR_CHECK_TIMER_PERIOD_MS 	( 200UL / portTICK_RATE_MS )
+ 193:main.c        **** 
+ 194:main.c        **** /* Set mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY to 1 to create a simple demo.
+ 195:main.c        **** Set mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY to 0 to create a much more
+ 196:main.c        **** comprehensive test application.  See the comments at the top of this file, and
+ 197:main.c        **** the documentation page on the http://www.FreeRTOS.org web site for more
+ 198:main.c        **** information. */
+ 199:main.c        **** #define mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY		0
+ 200:main.c        **** 
+ 201:main.c        **** /*-----------------------------------------------------------*/
+ 202:main.c        **** 
+ 203:main.c        **** /*
+ 204:main.c        ****  * Set up the hardware ready to run this demo.
+ 205:main.c        ****  */
+ 206:main.c        **** static void prvSetupHardware( void );
+ 207:main.c        **** 
+ 208:main.c        **** /*
+ 209:main.c        ****  * The check timer callback function, as described at the top of this file.
+ 210:main.c        ****  */
+ 211:main.c        **** static void prvCheckTimerCallback( xTimerHandle xTimer );
+ 212:main.c        **** 
+ 213:main.c        **** /*
+ 214:main.c        ****  * Configure the interrupts used to test the interrupt nesting depth as
+ 215:main.c        ****  * described at the top of this file.
+ 216:main.c        ****  */
+ 217:main.c        **** static void prvSetupNestedFPUInterruptsTest( void );
+ 218:main.c        **** 
+ 219:main.c        **** /*
+ 220:main.c        ****  * Register check tasks, and the tasks used to write over and check the contents
+ 221:main.c        ****  * of the FPU registers, as described at the top of this file.  The nature of
+ 222:main.c        ****  * these files necessitates that they are written in an assembly file.
+ 223:main.c        ****  */
+ 224:main.c        **** extern void vRegTest1Task( void *pvParameters );
+ 225:main.c        **** extern void vRegTest2Task( void *pvParameters );
+ 226:main.c        **** extern void vRegTestClearFlopRegistersToParameterValue( unsigned long ulValue );
+ 227:main.c        **** extern unsigned long ulRegTestCheckFlopRegistersContainParameterValue( unsigned long ulValue );
+ 228:main.c        **** 
+ 229:main.c        **** /*
+ 230:main.c        ****  * The task that is synchronised with the button interrupt.  This is done just
+ 231:main.c        ****  * to demonstrate how to write interrupt service routines, and how to
+ 232:main.c        ****  * synchronise a task with an interrupt.
+ 233:main.c        ****  */
+ 234:main.c        **** static void prvButtonTestTask( void *pvParameters );
+ 235:main.c        **** 
+ 236:main.c        **** /*
+ 237:main.c        ****  * This file can be used to create either a simple LED flasher example, or a
+ 238:main.c        ****  * comprehensive test/demo application - depending on the setting of the
+ 239:main.c        ****  * mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY constant defined above.  If
+ 240:main.c        ****  * mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY is set to 1, then the following
+ 241:main.c        ****  * function will create a lot of additional tasks and a software timer.  If
+ 242:main.c        ****  * mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY is set to 0, then the following
+ 243:main.c        ****  * function will do nothing.
+ 244:main.c        ****  */
+ 245:main.c        **** static void prvOptionallyCreateComprehensveTestApplication( void );
+ 246:main.c        **** 
+ 247:main.c        **** /*-----------------------------------------------------------*/
+ 248:main.c        **** 
+ 249:main.c        **** /* The following two variables are used to communicate the status of the
+ 250:main.c        **** register check tasks to the check software timer.  If the variables keep
+ 251:main.c        **** incrementing, then the register check tasks has not discovered any errors.  If
+ 252:main.c        **** a variable stops incrementing, then an error has been found. */
+ 253:main.c        **** volatile unsigned long ulRegTest1LoopCounter = 0UL, ulRegTest2LoopCounter = 0UL;
+ 254:main.c        **** 
+ 255:main.c        **** /* The following variables are used to verify that the interrupt nesting depth
+ 256:main.c        **** is as intended.  ulFPUInterruptNesting is incremented on entry to an interrupt
+ 257:main.c        **** that uses the FPU, and decremented on exit of the same interrupt.
+ 258:main.c        **** ulMaxFPUInterruptNesting latches the highest value reached by
+ 259:main.c        **** ulFPUInterruptNesting.  These variables have no other purpose. */
+ 260:main.c        **** volatile unsigned long ulFPUInterruptNesting = 0UL, ulMaxFPUInterruptNesting = 0UL;
+ 261:main.c        **** 
+ 262:main.c        **** /* The semaphore used to demonstrate a task being synchronised with an
+ 263:main.c        **** interrupt. */
+ 264:main.c        **** static xSemaphoreHandle xTestSemaphore = NULL;
+ 265:main.c        **** 
+ 266:main.c        **** /* The variable that is incremented by the task synchronised with the button
+ 267:main.c        **** interrupt. */
+ 268:main.c        **** volatile unsigned long ulButtonPressCounts = 0UL;
+ 269:main.c        **** 
+ 270:main.c        **** /*-----------------------------------------------------------*/
+ 271:main.c        **** 
+ 272:main.c        **** int main(void)
+ 273:main.c        **** {
+ 114              		.loc 2 273 0
+ 115              		.cfi_startproc
+ 116              		@ args = 0, pretend = 0, frame = 0
+ 117              		@ frame_needed = 1, uses_anonymous_args = 0
+ 118 0000 80B5     		push	{r7, lr}
+ 119              	.LCFI3:
+ 120              		.cfi_def_cfa_offset 8
+ 121              		.cfi_offset 7, -8
+ 122              		.cfi_offset 14, -4
+ 123 0002 00AF     		add	r7, sp, #0
+ 124              	.LCFI4:
+ 125              		.cfi_def_cfa_register 7
+ 274:main.c        **** 	/* Configure the hardware ready to run the test. */
+ 275:main.c        **** 	prvSetupHardware();
+ 126              		.loc 2 275 0
+ 127 0004 FFF7FEFF 		bl	prvSetupHardware
+ 276:main.c        **** //	while(1){
+ 277:main.c        **** //		vParTestSetLED(LED3, 1);
+ 278:main.c        **** //		vParTestSetLED(LED4, 1);
+ 279:main.c        **** //		vParTestSetLED(LED5, 1);
+ 280:main.c        **** //		vParTestSetLED(LED6, 1);
+ 281:main.c        **** //	}
+ 282:main.c        **** 	/* Start standard demo/test application flash tasks.  See the comments at
+ 283:main.c        **** 	the top of this file.  The LED flash tasks are always created.  The other
+ 284:main.c        **** 	tasks are only created if mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY is set to
+ 285:main.c        **** 	0 (at the top of this file).  See the comments at the top of this file for
+ 286:main.c        **** 	more information. */
+ 287:main.c        **** 	vStartLEDFlashTasks( mainFLASH_TASK_PRIORITY );
+ 128              		.loc 2 287 0
+ 129 0008 0120     		movs	r0, #1
+ 130 000a FFF7FEFF 		bl	vStartLEDFlashTasks
+ 288:main.c        **** 
+ 289:main.c        **** 	/* The following function will only create more tasks and timers if
+ 290:main.c        **** 	mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY is set to 0 (at the top of this
+ 291:main.c        **** 	file).  See the comments at the top of this file for more information. */
+ 292:main.c        **** 	prvOptionallyCreateComprehensveTestApplication();
+ 131              		.loc 2 292 0
+ 132 000e FFF7FEFF 		bl	prvOptionallyCreateComprehensveTestApplication
+ 293:main.c        **** 
+ 294:main.c        **** 	/* Start the scheduler. */
+ 295:main.c        **** 	vTaskStartScheduler();
+ 133              		.loc 2 295 0
+ 134 0012 FFF7FEFF 		bl	vTaskStartScheduler
+ 135              	.L3:
+ 296:main.c        **** 
+ 297:main.c        **** 	/* If all is well, the scheduler will now be running, and the following line
+ 298:main.c        **** 	will never be reached.  If the following line does execute, then there was
+ 299:main.c        **** 	insufficient FreeRTOS heap memory available for the idle and/or timer tasks
+ 300:main.c        **** 	to be created.  See the memory management section on the FreeRTOS web site
+ 301:main.c        **** 	for more details. */
+ 302:main.c        **** 	for( ;; );
+ 136              		.loc 2 302 0 discriminator 1
+ 137 0016 FEE7     		b	.L3
+ 138              		.cfi_endproc
+ 139              	.LFE111:
+ 141              		.section	.text.prvCheckTimerCallback,"ax",%progbits
+ 142              		.align	2
+ 143              		.thumb
+ 144              		.thumb_func
+ 146              	prvCheckTimerCallback:
+ 147              	.LFB112:
+ 303:main.c        **** }
+ 304:main.c        **** //GPIO_InitTypeDef  GPIO_InitStructure;
+ 305:main.c        **** ///**
+ 306:main.c        **** //  * @brief  Delay Function.
+ 307:main.c        **** //  * @param  nCount:specifies the Delay time length.
+ 308:main.c        **** //  * @retval None
+ 309:main.c        **** //  */
+ 310:main.c        **** //void Delay(__IO uint32_t nCount)
+ 311:main.c        **** //{
+ 312:main.c        **** //  while(nCount--)
+ 313:main.c        **** //  {
+ 314:main.c        **** //  }
+ 315:main.c        **** //}
+ 316:main.c        **** 
+ 317:main.c        **** /**
+ 318:main.c        ****   * @brief  Main program
+ 319:main.c        ****   * @param  None
+ 320:main.c        ****   * @retval None
+ 321:main.c        ****   */
+ 322:main.c        **** //int main(void)
+ 323:main.c        **** //{
+ 324:main.c        **** //  /*!< At this stage the microcontroller clock setting is already configured,
+ 325:main.c        **** //       this is done through SystemInit() function which is called from startup
+ 326:main.c        **** //       file (startup_stm32f4xx.s) before to branch to application main.
+ 327:main.c        **** //       To reconfigure the default setting of SystemInit() function, refer to
+ 328:main.c        **** //        system_stm32f4xx.c file
+ 329:main.c        **** //     */
+ 330:main.c        **** //
+ 331:main.c        **** //  /* GPIOD Periph clock enable */
+ 332:main.c        **** //  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+ 333:main.c        **** //
+ 334:main.c        **** //  /* Configure PD12, PD13, PD14 and PD15 in output pushpull mode */
+ 335:main.c        **** //  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13| GPIO_Pin_14| GPIO_Pin_15;
+ 336:main.c        **** //  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+ 337:main.c        **** //  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+ 338:main.c        **** //  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+ 339:main.c        **** //  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+ 340:main.c        **** //  GPIO_Init(GPIOD, &GPIO_InitStructure);
+ 341:main.c        **** //
+ 342:main.c        **** //  while (1)
+ 343:main.c        **** //  {
+ 344:main.c        **** //    /* PD12 to be toggled */
+ 345:main.c        **** //    GPIO_SetBits(GPIOD, GPIO_Pin_12);
+ 346:main.c        **** //
+ 347:main.c        **** //    /* Insert delay */
+ 348:main.c        **** //    Delay(0x3FFFFF);
+ 349:main.c        **** //
+ 350:main.c        **** //    /* PD13 to be toggled */
+ 351:main.c        **** //    GPIO_SetBits(GPIOD, GPIO_Pin_13);
+ 352:main.c        **** //
+ 353:main.c        **** //    /* Insert delay */
+ 354:main.c        **** //    Delay(0x3FFFFF);
+ 355:main.c        **** //
+ 356:main.c        **** //    /* PD14 to be toggled */
+ 357:main.c        **** //    GPIO_SetBits(GPIOD, GPIO_Pin_14);
+ 358:main.c        **** //
+ 359:main.c        **** //    /* Insert delay */
+ 360:main.c        **** //    Delay(0x3FFFFF);
+ 361:main.c        **** //
+ 362:main.c        **** //    /* PD15 to be toggled */
+ 363:main.c        **** //    GPIO_SetBits(GPIOD, GPIO_Pin_15);
+ 364:main.c        **** //
+ 365:main.c        **** //    /* Insert delay */
+ 366:main.c        **** //    Delay(0x7FFFFF);
+ 367:main.c        **** //
+ 368:main.c        **** //    GPIO_ResetBits(GPIOD, GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14|GPIO_Pin_15);
+ 369:main.c        **** //
+ 370:main.c        **** //    /* Insert delay */
+ 371:main.c        **** //    Delay(0xFFFFFF);
+ 372:main.c        **** //  }
+ 373:main.c        **** //}
+ 374:main.c        **** 
+ 375:main.c        **** 
+ 376:main.c        **** 
+ 377:main.c        **** /*-----------------------------------------------------------*/
+ 378:main.c        **** 
+ 379:main.c        **** static void prvCheckTimerCallback( xTimerHandle xTimer )
+ 380:main.c        **** {
+ 148              		.loc 2 380 0
+ 149              		.cfi_startproc
+ 150              		@ args = 0, pretend = 0, frame = 16
+ 151              		@ frame_needed = 1, uses_anonymous_args = 0
+ 152 0000 80B5     		push	{r7, lr}
+ 153              	.LCFI5:
+ 154              		.cfi_def_cfa_offset 8
+ 155              		.cfi_offset 7, -8
+ 156              		.cfi_offset 14, -4
+ 157 0002 86B0     		sub	sp, sp, #24
+ 158              	.LCFI6:
+ 159              		.cfi_def_cfa_offset 32
+ 160 0004 02AF     		add	r7, sp, #8
+ 161              	.LCFI7:
+ 162              		.cfi_def_cfa 7, 24
+ 163 0006 7860     		str	r0, [r7, #4]
+ 381:main.c        **** static long lChangedTimerPeriodAlready = pdFALSE;
+ 382:main.c        **** static unsigned long ulLastRegTest1Value = 0, ulLastRegTest2Value = 0;
+ 383:main.c        **** long lErrorFound = pdFALSE;
+ 164              		.loc 2 383 0
+ 165 0008 0023     		movs	r3, #0
+ 166 000a FB60     		str	r3, [r7, #12]
+ 384:main.c        **** 
+ 385:main.c        **** 	/* Check all the demo tasks (other than the flash tasks) to ensure
+ 386:main.c        **** 	that they are all still running, and that none have detected an error. */
+ 387:main.c        **** 
+ 388:main.c        **** 	if( xAreMathsTaskStillRunning() != pdTRUE )
+ 167              		.loc 2 388 0
+ 168 000c FFF7FEFF 		bl	xAreMathsTaskStillRunning
+ 169 0010 0346     		mov	r3, r0
+ 170 0012 012B     		cmp	r3, #1
+ 171 0014 01D0     		beq	.L5
+ 389:main.c        **** 	{
+ 390:main.c        **** 		lErrorFound = pdTRUE;
+ 172              		.loc 2 390 0
+ 173 0016 0123     		movs	r3, #1
+ 174 0018 FB60     		str	r3, [r7, #12]
+ 175              	.L5:
+ 391:main.c        **** 	}
+ 392:main.c        **** 
+ 393:main.c        **** 	if( xAreIntegerMathsTaskStillRunning() != pdTRUE )
+ 176              		.loc 2 393 0
+ 177 001a FFF7FEFF 		bl	xAreIntegerMathsTaskStillRunning
+ 178 001e 0346     		mov	r3, r0
+ 179 0020 012B     		cmp	r3, #1
+ 180 0022 01D0     		beq	.L6
+ 394:main.c        **** 	{
+ 395:main.c        **** 		lErrorFound = pdTRUE;
+ 181              		.loc 2 395 0
+ 182 0024 0123     		movs	r3, #1
+ 183 0026 FB60     		str	r3, [r7, #12]
+ 184              	.L6:
+ 396:main.c        **** 	}
+ 397:main.c        **** 
+ 398:main.c        **** 	if( xAreDynamicPriorityTasksStillRunning() != pdTRUE )
+ 185              		.loc 2 398 0
+ 186 0028 FFF7FEFF 		bl	xAreDynamicPriorityTasksStillRunning
+ 187 002c 0346     		mov	r3, r0
+ 188 002e 012B     		cmp	r3, #1
+ 189 0030 01D0     		beq	.L7
+ 399:main.c        **** 	{
+ 400:main.c        **** 		lErrorFound = pdTRUE;
+ 190              		.loc 2 400 0
+ 191 0032 0123     		movs	r3, #1
+ 192 0034 FB60     		str	r3, [r7, #12]
+ 193              	.L7:
+ 401:main.c        **** 	}
+ 402:main.c        **** 
+ 403:main.c        **** 	if( xAreBlockingQueuesStillRunning() != pdTRUE )
+ 194              		.loc 2 403 0
+ 195 0036 FFF7FEFF 		bl	xAreBlockingQueuesStillRunning
+ 196 003a 0346     		mov	r3, r0
+ 197 003c 012B     		cmp	r3, #1
+ 198 003e 01D0     		beq	.L8
+ 404:main.c        **** 	{
+ 405:main.c        **** 		lErrorFound = pdTRUE;
+ 199              		.loc 2 405 0
+ 200 0040 0123     		movs	r3, #1
+ 201 0042 FB60     		str	r3, [r7, #12]
+ 202              	.L8:
+ 406:main.c        **** 	}
+ 407:main.c        **** 
+ 408:main.c        **** 	if ( xAreBlockTimeTestTasksStillRunning() != pdTRUE )
+ 203              		.loc 2 408 0
+ 204 0044 FFF7FEFF 		bl	xAreBlockTimeTestTasksStillRunning
+ 205 0048 0346     		mov	r3, r0
+ 206 004a 012B     		cmp	r3, #1
+ 207 004c 01D0     		beq	.L9
+ 409:main.c        **** 	{
+ 410:main.c        **** 		lErrorFound = pdTRUE;
+ 208              		.loc 2 410 0
+ 209 004e 0123     		movs	r3, #1
+ 210 0050 FB60     		str	r3, [r7, #12]
+ 211              	.L9:
+ 411:main.c        **** 	}
+ 412:main.c        **** 
+ 413:main.c        **** 	if ( xAreGenericQueueTasksStillRunning() != pdTRUE )
+ 212              		.loc 2 413 0
+ 213 0052 FFF7FEFF 		bl	xAreGenericQueueTasksStillRunning
+ 214 0056 0346     		mov	r3, r0
+ 215 0058 012B     		cmp	r3, #1
+ 216 005a 01D0     		beq	.L10
+ 414:main.c        **** 	{
+ 415:main.c        **** 		lErrorFound = pdTRUE;
+ 217              		.loc 2 415 0
+ 218 005c 0123     		movs	r3, #1
+ 219 005e FB60     		str	r3, [r7, #12]
+ 220              	.L10:
+ 416:main.c        **** 	}
+ 417:main.c        **** 
+ 418:main.c        **** 	if ( xAreRecursiveMutexTasksStillRunning() != pdTRUE )
+ 221              		.loc 2 418 0
+ 222 0060 FFF7FEFF 		bl	xAreRecursiveMutexTasksStillRunning
+ 223 0064 0346     		mov	r3, r0
+ 224 0066 012B     		cmp	r3, #1
+ 225 0068 01D0     		beq	.L11
+ 419:main.c        **** 	{
+ 420:main.c        **** 		lErrorFound = pdTRUE;
+ 226              		.loc 2 420 0
+ 227 006a 0123     		movs	r3, #1
+ 228 006c FB60     		str	r3, [r7, #12]
+ 229              	.L11:
+ 421:main.c        **** 	}
+ 422:main.c        **** 
+ 423:main.c        **** 	if( xIsCreateTaskStillRunning() != pdTRUE )
+ 230              		.loc 2 423 0
+ 231 006e FFF7FEFF 		bl	xIsCreateTaskStillRunning
+ 232 0072 0346     		mov	r3, r0
+ 233 0074 012B     		cmp	r3, #1
+ 234 0076 01D0     		beq	.L12
+ 424:main.c        **** 	{
+ 425:main.c        **** 		lErrorFound = pdTRUE;
+ 235              		.loc 2 425 0
+ 236 0078 0123     		movs	r3, #1
+ 237 007a FB60     		str	r3, [r7, #12]
+ 238              	.L12:
+ 426:main.c        **** 	}
+ 427:main.c        **** 
+ 428:main.c        **** 	if( xArePollingQueuesStillRunning() != pdTRUE )
+ 239              		.loc 2 428 0
+ 240 007c FFF7FEFF 		bl	xArePollingQueuesStillRunning
+ 241 0080 0346     		mov	r3, r0
+ 242 0082 012B     		cmp	r3, #1
+ 243 0084 01D0     		beq	.L13
+ 429:main.c        **** 	{
+ 430:main.c        **** 		lErrorFound = pdTRUE;
+ 244              		.loc 2 430 0
+ 245 0086 0123     		movs	r3, #1
+ 246 0088 FB60     		str	r3, [r7, #12]
+ 247              	.L13:
+ 431:main.c        **** 	}
+ 432:main.c        **** 
+ 433:main.c        **** 	if( xAreSemaphoreTasksStillRunning() != pdTRUE )
+ 248              		.loc 2 433 0
+ 249 008a FFF7FEFF 		bl	xAreSemaphoreTasksStillRunning
+ 250 008e 0346     		mov	r3, r0
+ 251 0090 012B     		cmp	r3, #1
+ 252 0092 01D0     		beq	.L14
+ 434:main.c        **** 	{
+ 435:main.c        **** 		lErrorFound = pdTRUE;
+ 253              		.loc 2 435 0
+ 254 0094 0123     		movs	r3, #1
+ 255 0096 FB60     		str	r3, [r7, #12]
+ 256              	.L14:
+ 436:main.c        **** 	}
+ 437:main.c        **** 
+ 438:main.c        **** 	/* Check that the register test 1 task is still running. */
+ 439:main.c        **** 	if( ulLastRegTest1Value == ulRegTest1LoopCounter )
+ 257              		.loc 2 439 0
+ 258 0098 40F20003 		movw	r3, #:lower16:ulLastRegTest1Value.7813
+ 259 009c C0F20003 		movt	r3, #:upper16:ulLastRegTest1Value.7813
+ 260 00a0 1A68     		ldr	r2, [r3]
+ 261 00a2 40F20003 		movw	r3, #:lower16:ulRegTest1LoopCounter
+ 262 00a6 C0F20003 		movt	r3, #:upper16:ulRegTest1LoopCounter
+ 263 00aa 1B68     		ldr	r3, [r3]
+ 264 00ac 9A42     		cmp	r2, r3
+ 265 00ae 01D1     		bne	.L15
+ 440:main.c        **** 	{
+ 441:main.c        **** 		lErrorFound = pdTRUE;
+ 266              		.loc 2 441 0
+ 267 00b0 0123     		movs	r3, #1
+ 268 00b2 FB60     		str	r3, [r7, #12]
+ 269              	.L15:
+ 442:main.c        **** 	}
+ 443:main.c        **** 	ulLastRegTest1Value = ulRegTest1LoopCounter;
+ 270              		.loc 2 443 0
+ 271 00b4 40F20003 		movw	r3, #:lower16:ulRegTest1LoopCounter
+ 272 00b8 C0F20003 		movt	r3, #:upper16:ulRegTest1LoopCounter
+ 273 00bc 1A68     		ldr	r2, [r3]
+ 274 00be 40F20003 		movw	r3, #:lower16:ulLastRegTest1Value.7813
+ 275 00c2 C0F20003 		movt	r3, #:upper16:ulLastRegTest1Value.7813
+ 276 00c6 1A60     		str	r2, [r3]
+ 444:main.c        **** 
+ 445:main.c        **** 	/* Check that the register test 2 task is still running. */
+ 446:main.c        **** 	if( ulLastRegTest2Value == ulRegTest2LoopCounter )
+ 277              		.loc 2 446 0
+ 278 00c8 40F20003 		movw	r3, #:lower16:ulLastRegTest2Value.7814
+ 279 00cc C0F20003 		movt	r3, #:upper16:ulLastRegTest2Value.7814
+ 280 00d0 1A68     		ldr	r2, [r3]
+ 281 00d2 40F20003 		movw	r3, #:lower16:ulRegTest2LoopCounter
+ 282 00d6 C0F20003 		movt	r3, #:upper16:ulRegTest2LoopCounter
+ 283 00da 1B68     		ldr	r3, [r3]
+ 284 00dc 9A42     		cmp	r2, r3
+ 285 00de 01D1     		bne	.L16
+ 447:main.c        **** 	{
+ 448:main.c        **** 		lErrorFound = pdTRUE;
+ 286              		.loc 2 448 0
+ 287 00e0 0123     		movs	r3, #1
+ 288 00e2 FB60     		str	r3, [r7, #12]
+ 289              	.L16:
+ 449:main.c        **** 	}
+ 450:main.c        **** 	ulLastRegTest2Value = ulRegTest2LoopCounter;
+ 290              		.loc 2 450 0
+ 291 00e4 40F20003 		movw	r3, #:lower16:ulRegTest2LoopCounter
+ 292 00e8 C0F20003 		movt	r3, #:upper16:ulRegTest2LoopCounter
+ 293 00ec 1A68     		ldr	r2, [r3]
+ 294 00ee 40F20003 		movw	r3, #:lower16:ulLastRegTest2Value.7814
+ 295 00f2 C0F20003 		movt	r3, #:upper16:ulLastRegTest2Value.7814
+ 296 00f6 1A60     		str	r2, [r3]
+ 451:main.c        **** 
+ 452:main.c        **** 	/* Toggle the check LED to give an indication of the system status.  If
+ 453:main.c        **** 	the LED toggles every mainCHECK_TIMER_PERIOD_MS milliseconds then
+ 454:main.c        **** 	everything is ok.  A faster toggle indicates an error. */
+ 455:main.c        **** 	vParTestToggleLED( mainCHECK_LED );
+ 297              		.loc 2 455 0
+ 298 00f8 0320     		movs	r0, #3
+ 299 00fa FFF7FEFF 		bl	vParTestToggleLED
+ 456:main.c        **** 
+ 457:main.c        **** 	/* Have any errors been latch in lErrorFound?  If so, shorten the
+ 458:main.c        **** 	period of the check timer to mainERROR_CHECK_TIMER_PERIOD_MS milliseconds.
+ 459:main.c        **** 	This will result in an increase in the rate at which mainCHECK_LED
+ 460:main.c        **** 	toggles. */
+ 461:main.c        **** 	if( lErrorFound != pdFALSE )
+ 300              		.loc 2 461 0
+ 301 00fe FB68     		ldr	r3, [r7, #12]
+ 302 0100 002B     		cmp	r3, #0
+ 303 0102 14D0     		beq	.L4
+ 462:main.c        **** 	{
+ 463:main.c        **** 		if( lChangedTimerPeriodAlready == pdFALSE )
+ 304              		.loc 2 463 0
+ 305 0104 40F20003 		movw	r3, #:lower16:lChangedTimerPeriodAlready.7812
+ 306 0108 C0F20003 		movt	r3, #:upper16:lChangedTimerPeriodAlready.7812
+ 307 010c 1B68     		ldr	r3, [r3]
+ 308 010e 002B     		cmp	r3, #0
+ 309 0110 0DD1     		bne	.L4
+ 464:main.c        **** 		{
+ 465:main.c        **** 			lChangedTimerPeriodAlready = pdTRUE;
+ 310              		.loc 2 465 0
+ 311 0112 40F20003 		movw	r3, #:lower16:lChangedTimerPeriodAlready.7812
+ 312 0116 C0F20003 		movt	r3, #:upper16:lChangedTimerPeriodAlready.7812
+ 313 011a 0122     		movs	r2, #1
+ 314 011c 1A60     		str	r2, [r3]
+ 466:main.c        **** 
+ 467:main.c        **** 			/* This call to xTimerChangePeriod() uses a zero block time.
+ 468:main.c        **** 			Functions called from inside of a timer callback function must
+ 469:main.c        **** 			*never* attempt	to block. */
+ 470:main.c        **** 			xTimerChangePeriod( xTimer, ( mainERROR_CHECK_TIMER_PERIOD_MS ), mainDONT_BLOCK );
+ 315              		.loc 2 470 0
+ 316 011e 0023     		movs	r3, #0
+ 317 0120 0093     		str	r3, [sp]
+ 318 0122 7868     		ldr	r0, [r7, #4]
+ 319 0124 0421     		movs	r1, #4
+ 320 0126 C822     		movs	r2, #200
+ 321 0128 0023     		movs	r3, #0
+ 322 012a FFF7FEFF 		bl	xTimerGenericCommand
+ 323              	.L4:
+ 471:main.c        **** 		}
+ 472:main.c        **** 	}
+ 473:main.c        **** }
+ 324              		.loc 2 473 0
+ 325 012e 1037     		adds	r7, r7, #16
+ 326 0130 BD46     		mov	sp, r7
+ 327              		@ sp needed
+ 328 0132 80BD     		pop	{r7, pc}
+ 329              		.cfi_endproc
+ 330              	.LFE112:
+ 332              		.section	.text.prvButtonTestTask,"ax",%progbits
+ 333              		.align	2
+ 334              		.thumb
+ 335              		.thumb_func
+ 337              	prvButtonTestTask:
+ 338              	.LFB113:
+ 474:main.c        **** /*-----------------------------------------------------------*/
+ 475:main.c        **** 
+ 476:main.c        **** static void prvButtonTestTask( void *pvParameters )
+ 477:main.c        **** {
+ 339              		.loc 2 477 0
+ 340              		.cfi_startproc
+ 341              		@ args = 0, pretend = 0, frame = 8
+ 342              		@ frame_needed = 1, uses_anonymous_args = 0
+ 343 0000 80B5     		push	{r7, lr}
+ 344              	.LCFI8:
+ 345              		.cfi_def_cfa_offset 8
+ 346              		.cfi_offset 7, -8
+ 347              		.cfi_offset 14, -4
+ 348 0002 82B0     		sub	sp, sp, #8
+ 349              	.LCFI9:
+ 350              		.cfi_def_cfa_offset 16
+ 351 0004 00AF     		add	r7, sp, #0
+ 352              	.LCFI10:
+ 353              		.cfi_def_cfa_register 7
+ 354 0006 7860     		str	r0, [r7, #4]
+ 478:main.c        **** 	configASSERT( xTestSemaphore );
+ 355              		.loc 2 478 0
+ 356 0008 40F20003 		movw	r3, #:lower16:xTestSemaphore
+ 357 000c C0F20003 		movt	r3, #:upper16:xTestSemaphore
+ 358 0010 1B68     		ldr	r3, [r3]
+ 359 0012 002B     		cmp	r3, #0
+ 360 0014 02D1     		bne	.L19
+ 361              		.loc 2 478 0 is_stmt 0 discriminator 1
+ 362 0016 FFF7FEFF 		bl	ulPortSetInterruptMask
+ 363              	.L20:
+ 364 001a FEE7     		b	.L20
+ 365              	.L19:
+ 479:main.c        **** 
+ 480:main.c        **** 	/* This is the task used as an example of how to synchronise a task with
+ 481:main.c        **** 	an interrupt.  Each time the button interrupt gives the semaphore, this task
+ 482:main.c        **** 	will unblock, increment its execution counter, then return to block
+ 483:main.c        **** 	again. */
+ 484:main.c        **** 
+ 485:main.c        **** 	/* Take the semaphore before started to ensure it is in the correct
+ 486:main.c        **** 	state. */
+ 487:main.c        **** 	xSemaphoreTake( xTestSemaphore, mainDONT_BLOCK );
+ 366              		.loc 2 487 0 is_stmt 1
+ 367 001c 40F20003 		movw	r3, #:lower16:xTestSemaphore
+ 368 0020 C0F20003 		movt	r3, #:upper16:xTestSemaphore
+ 369 0024 1B68     		ldr	r3, [r3]
+ 370 0026 1846     		mov	r0, r3
+ 371 0028 0021     		movs	r1, #0
+ 372 002a 0022     		movs	r2, #0
+ 373 002c 0023     		movs	r3, #0
+ 374 002e FFF7FEFF 		bl	xQueueGenericReceive
+ 375              	.L21:
+ 488:main.c        **** 
+ 489:main.c        **** 	for( ;; )
+ 490:main.c        **** 	{
+ 491:main.c        **** 		xSemaphoreTake( xTestSemaphore, portMAX_DELAY );
+ 376              		.loc 2 491 0 discriminator 1
+ 377 0032 40F20003 		movw	r3, #:lower16:xTestSemaphore
+ 378 0036 C0F20003 		movt	r3, #:upper16:xTestSemaphore
+ 379 003a 1B68     		ldr	r3, [r3]
+ 380 003c 1846     		mov	r0, r3
+ 381 003e 0021     		movs	r1, #0
+ 382 0040 4FF0FF32 		mov	r2, #-1
+ 383 0044 0023     		movs	r3, #0
+ 384 0046 FFF7FEFF 		bl	xQueueGenericReceive
+ 492:main.c        **** 		ulButtonPressCounts++;
+ 385              		.loc 2 492 0 discriminator 1
+ 386 004a 40F20003 		movw	r3, #:lower16:ulButtonPressCounts
+ 387 004e C0F20003 		movt	r3, #:upper16:ulButtonPressCounts
+ 388 0052 1B68     		ldr	r3, [r3]
+ 389 0054 5A1C     		adds	r2, r3, #1
+ 390 0056 40F20003 		movw	r3, #:lower16:ulButtonPressCounts
+ 391 005a C0F20003 		movt	r3, #:upper16:ulButtonPressCounts
+ 392 005e 1A60     		str	r2, [r3]
+ 493:main.c        **** 	}
+ 393              		.loc 2 493 0 discriminator 1
+ 394 0060 E7E7     		b	.L21
+ 395              		.cfi_endproc
+ 396              	.LFE113:
+ 398 0062 00BF     		.section	.text.prvSetupHardware,"ax",%progbits
+ 399              		.align	2
+ 400              		.thumb
+ 401              		.thumb_func
+ 403              	prvSetupHardware:
+ 404              	.LFB114:
+ 494:main.c        **** }
+ 495:main.c        **** /*-----------------------------------------------------------*/
+ 496:main.c        **** 
+ 497:main.c        **** static void prvSetupHardware( void )
+ 498:main.c        **** {
+ 405              		.loc 2 498 0
+ 406              		.cfi_startproc
+ 407              		@ args = 0, pretend = 0, frame = 0
+ 408              		@ frame_needed = 1, uses_anonymous_args = 0
+ 409 0000 80B5     		push	{r7, lr}
+ 410              	.LCFI11:
+ 411              		.cfi_def_cfa_offset 8
+ 412              		.cfi_offset 7, -8
+ 413              		.cfi_offset 14, -4
+ 414 0002 00AF     		add	r7, sp, #0
+ 415              	.LCFI12:
+ 416              		.cfi_def_cfa_register 7
+ 499:main.c        **** 	/* Setup STM32 system (clock, PLL and Flash configuration) */
+ 500:main.c        **** 	SystemInit();
+ 417              		.loc 2 500 0
+ 418 0004 FFF7FEFF 		bl	SystemInit
+ 501:main.c        **** 
+ 502:main.c        **** 	/* Ensure all priority bits are assigned as preemption priority bits. */
+ 503:main.c        **** 	NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4 );
+ 419              		.loc 2 503 0
+ 420 0008 4FF44070 		mov	r0, #768
+ 421 000c FFF7FEFF 		bl	NVIC_PriorityGroupConfig
+ 504:main.c        **** 
+ 505:main.c        **** 	/* Setup the LED outputs. */
+ 506:main.c        **** 	vParTestInitialise();
+ 422              		.loc 2 506 0
+ 423 0010 FFF7FEFF 		bl	vParTestInitialise
+ 507:main.c        **** 
+ 508:main.c        **** 	/* Configure the button input.  This configures the interrupt to use the
+ 509:main.c        **** 	lowest interrupt priority, so it is ok to use the ISR safe FreeRTOS API
+ 510:main.c        **** 	from the button interrupt handler. */
+ 511:main.c        **** 	//STM_EVAL_PBInit( BUTTON_USER, BUTTON_MODE_EXTI );
+ 512:main.c        **** }
+ 424              		.loc 2 512 0
+ 425 0014 80BD     		pop	{r7, pc}
+ 426              		.cfi_endproc
+ 427              	.LFE114:
+ 429 0016 00BF     		.section	.text.vApplicationTickHook,"ax",%progbits
+ 430              		.align	2
+ 431              		.global	vApplicationTickHook
+ 432              		.thumb
+ 433              		.thumb_func
+ 435              	vApplicationTickHook:
+ 436              	.LFB115:
+ 513:main.c        **** /*-----------------------------------------------------------*/
+ 514:main.c        **** 
+ 515:main.c        **** void vApplicationTickHook( void )
+ 516:main.c        **** {
+ 437              		.loc 2 516 0
+ 438              		.cfi_startproc
+ 439              		@ args = 0, pretend = 0, frame = 0
+ 440              		@ frame_needed = 1, uses_anonymous_args = 0
+ 441 0000 80B5     		push	{r7, lr}
+ 442              	.LCFI13:
+ 443              		.cfi_def_cfa_offset 8
+ 444              		.cfi_offset 7, -8
+ 445              		.cfi_offset 14, -4
+ 446 0002 00AF     		add	r7, sp, #0
+ 447              	.LCFI14:
+ 448              		.cfi_def_cfa_register 7
+ 517:main.c        **** 	#if ( mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY == 0 )
+ 518:main.c        **** 	{
+ 519:main.c        **** 		/* Just to verify that the interrupt nesting behaves as expected,
+ 520:main.c        **** 		increment ulFPUInterruptNesting on entry, and decrement it on exit. */
+ 521:main.c        **** 		ulFPUInterruptNesting++;
+ 449              		.loc 2 521 0
+ 450 0004 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 451 0008 C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 452 000c 1B68     		ldr	r3, [r3]
+ 453 000e 5A1C     		adds	r2, r3, #1
+ 454 0010 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 455 0014 C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 456 0018 1A60     		str	r2, [r3]
+ 522:main.c        **** 
+ 523:main.c        **** 		/* Fill the FPU registers with 0. */
+ 524:main.c        **** 		//vRegTestClearFlopRegistersToParameterValue( 0UL );
+ 525:main.c        **** 
+ 526:main.c        **** 		/* Trigger a timer 2 interrupt, which will fill the registers with a
+ 527:main.c        **** 		different value and itself trigger a timer 3 interrupt.  Note that the
+ 528:main.c        **** 		timers are not actually used.  The timer 2 and 3 interrupt vectors are
+ 529:main.c        **** 		just used for convenience. */
+ 530:main.c        **** 		NVIC_SetPendingIRQ( TIM2_IRQn );
+ 457              		.loc 2 530 0
+ 458 001a 1C20     		movs	r0, #28
+ 459 001c FFF7FEFF 		bl	NVIC_SetPendingIRQ
+ 531:main.c        **** 
+ 532:main.c        **** 		/* Ensure that, after returning from the nested interrupts, all the FPU
+ 533:main.c        **** 		registers contain the value to which they were set by the tick hook
+ 534:main.c        **** 		function. */
+ 535:main.c        **** 		//configASSERT( ulRegTestCheckFlopRegistersContainParameterValue( 0UL ) );
+ 536:main.c        **** 
+ 537:main.c        **** 		ulFPUInterruptNesting--;
+ 460              		.loc 2 537 0
+ 461 0020 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 462 0024 C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 463 0028 1B68     		ldr	r3, [r3]
+ 464 002a 5A1E     		subs	r2, r3, #1
+ 465 002c 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 466 0030 C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 467 0034 1A60     		str	r2, [r3]
+ 538:main.c        **** 	}
+ 539:main.c        **** 	#endif
+ 540:main.c        **** }
+ 468              		.loc 2 540 0
+ 469 0036 80BD     		pop	{r7, pc}
+ 470              		.cfi_endproc
+ 471              	.LFE115:
+ 473              		.section	.text.prvSetupNestedFPUInterruptsTest,"ax",%progbits
+ 474              		.align	2
+ 475              		.thumb
+ 476              		.thumb_func
+ 478              	prvSetupNestedFPUInterruptsTest:
+ 479              	.LFB116:
+ 541:main.c        **** /*-----------------------------------------------------------*/
+ 542:main.c        **** 
+ 543:main.c        **** static void prvSetupNestedFPUInterruptsTest( void )
+ 544:main.c        **** {
+ 480              		.loc 2 544 0
+ 481              		.cfi_startproc
+ 482              		@ args = 0, pretend = 0, frame = 8
+ 483              		@ frame_needed = 1, uses_anonymous_args = 0
+ 484 0000 80B5     		push	{r7, lr}
+ 485              	.LCFI15:
+ 486              		.cfi_def_cfa_offset 8
+ 487              		.cfi_offset 7, -8
+ 488              		.cfi_offset 14, -4
+ 489 0002 82B0     		sub	sp, sp, #8
+ 490              	.LCFI16:
+ 491              		.cfi_def_cfa_offset 16
+ 492 0004 00AF     		add	r7, sp, #0
+ 493              	.LCFI17:
+ 494              		.cfi_def_cfa_register 7
+ 545:main.c        **** NVIC_InitTypeDef NVIC_InitStructure;
+ 546:main.c        **** 
+ 547:main.c        **** 	/* Enable the TIM2 interrupt in the NVIC.  The timer itself is not used,
+ 548:main.c        **** 	just its interrupt vector to force nesting from software.  TIM2 must have
+ 549:main.c        **** 	a lower priority than TIM3, and both must have priorities above
+ 550:main.c        **** 	configMAX_SYSCALL_INTERRUPT_PRIORITY. */
+ 551:main.c        **** 	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+ 495              		.loc 2 551 0
+ 496 0006 1C23     		movs	r3, #28
+ 497 0008 3B71     		strb	r3, [r7, #4]
+ 552:main.c        **** 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORIT
+ 498              		.loc 2 552 0
+ 499 000a 0423     		movs	r3, #4
+ 500 000c 7B71     		strb	r3, [r7, #5]
+ 553:main.c        **** 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+ 501              		.loc 2 553 0
+ 502 000e 0023     		movs	r3, #0
+ 503 0010 BB71     		strb	r3, [r7, #6]
+ 554:main.c        **** 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 504              		.loc 2 554 0
+ 505 0012 0123     		movs	r3, #1
+ 506 0014 FB71     		strb	r3, [r7, #7]
+ 555:main.c        **** 	NVIC_Init( &NVIC_InitStructure );
+ 507              		.loc 2 555 0
+ 508 0016 3B1D     		adds	r3, r7, #4
+ 509 0018 1846     		mov	r0, r3
+ 510 001a FFF7FEFF 		bl	NVIC_Init
+ 556:main.c        **** 
+ 557:main.c        **** 	/* Enable the TIM3 interrupt in the NVIC.  The timer itself is not used,
+ 558:main.c        **** 	just its interrupt vector to force nesting from software.  TIM2 must have
+ 559:main.c        **** 	a lower priority than TIM3, and both must have priorities above
+ 560:main.c        **** 	configMAX_SYSCALL_INTERRUPT_PRIORITY. */
+ 561:main.c        **** 	NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
+ 511              		.loc 2 561 0
+ 512 001e 1D23     		movs	r3, #29
+ 513 0020 3B71     		strb	r3, [r7, #4]
+ 562:main.c        **** 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORIT
+ 514              		.loc 2 562 0
+ 515 0022 0323     		movs	r3, #3
+ 516 0024 7B71     		strb	r3, [r7, #5]
+ 563:main.c        **** 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+ 517              		.loc 2 563 0
+ 518 0026 0023     		movs	r3, #0
+ 519 0028 BB71     		strb	r3, [r7, #6]
+ 564:main.c        **** 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+ 520              		.loc 2 564 0
+ 521 002a 0123     		movs	r3, #1
+ 522 002c FB71     		strb	r3, [r7, #7]
+ 565:main.c        **** 	NVIC_Init( &NVIC_InitStructure );
+ 523              		.loc 2 565 0
+ 524 002e 3B1D     		adds	r3, r7, #4
+ 525 0030 1846     		mov	r0, r3
+ 526 0032 FFF7FEFF 		bl	NVIC_Init
+ 566:main.c        **** }
+ 527              		.loc 2 566 0
+ 528 0036 0837     		adds	r7, r7, #8
+ 529 0038 BD46     		mov	sp, r7
+ 530              		@ sp needed
+ 531 003a 80BD     		pop	{r7, pc}
+ 532              		.cfi_endproc
+ 533              	.LFE116:
+ 535              		.section	.text.TIM3_IRQHandler,"ax",%progbits
+ 536              		.align	2
+ 537              		.global	TIM3_IRQHandler
+ 538              		.thumb
+ 539              		.thumb_func
+ 541              	TIM3_IRQHandler:
+ 542              	.LFB117:
+ 567:main.c        **** /*-----------------------------------------------------------*/
+ 568:main.c        **** 
+ 569:main.c        **** void TIM3_IRQHandler( void )
+ 570:main.c        **** {
+ 543              		.loc 2 570 0
+ 544              		.cfi_startproc
+ 545              		@ args = 0, pretend = 0, frame = 0
+ 546              		@ frame_needed = 1, uses_anonymous_args = 0
+ 547              		@ link register save eliminated.
+ 548 0000 80B4     		push	{r7}
+ 549              	.LCFI18:
+ 550              		.cfi_def_cfa_offset 4
+ 551              		.cfi_offset 7, -4
+ 552 0002 00AF     		add	r7, sp, #0
+ 553              	.LCFI19:
+ 554              		.cfi_def_cfa_register 7
+ 571:main.c        **** 	/* Just to verify that the interrupt nesting behaves as expected, increment
+ 572:main.c        **** 	ulFPUInterruptNesting on entry, and decrement it on exit. */
+ 573:main.c        **** 	ulFPUInterruptNesting++;
+ 555              		.loc 2 573 0
+ 556 0004 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 557 0008 C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 558 000c 1B68     		ldr	r3, [r3]
+ 559 000e 5A1C     		adds	r2, r3, #1
+ 560 0010 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 561 0014 C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 562 0018 1A60     		str	r2, [r3]
+ 574:main.c        **** 
+ 575:main.c        **** 	/* This is the highest priority interrupt in the chain of forced nesting
+ 576:main.c        **** 	interrupts, so latch the maximum value reached by ulFPUInterruptNesting.
+ 577:main.c        **** 	This is done purely to allow verification that the nesting depth reaches
+ 578:main.c        **** 	that intended. */
+ 579:main.c        **** 	if( ulFPUInterruptNesting > ulMaxFPUInterruptNesting )
+ 563              		.loc 2 579 0
+ 564 001a 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 565 001e C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 566 0022 1A68     		ldr	r2, [r3]
+ 567 0024 40F20003 		movw	r3, #:lower16:ulMaxFPUInterruptNesting
+ 568 0028 C0F20003 		movt	r3, #:upper16:ulMaxFPUInterruptNesting
+ 569 002c 1B68     		ldr	r3, [r3]
+ 570 002e 9A42     		cmp	r2, r3
+ 571 0030 09D9     		bls	.L26
+ 580:main.c        **** 	{
+ 581:main.c        **** 		ulMaxFPUInterruptNesting = ulFPUInterruptNesting;
+ 572              		.loc 2 581 0
+ 573 0032 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 574 0036 C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 575 003a 1A68     		ldr	r2, [r3]
+ 576 003c 40F20003 		movw	r3, #:lower16:ulMaxFPUInterruptNesting
+ 577 0040 C0F20003 		movt	r3, #:upper16:ulMaxFPUInterruptNesting
+ 578 0044 1A60     		str	r2, [r3]
+ 579              	.L26:
+ 582:main.c        **** 	}
+ 583:main.c        **** 
+ 584:main.c        **** 	/* Fill the FPU registers with 99 to overwrite the values written by
+ 585:main.c        **** 	TIM2_IRQHandler(). */
+ 586:main.c        **** 	//vRegTestClearFlopRegistersToParameterValue( 99UL );
+ 587:main.c        **** 
+ 588:main.c        **** 	ulFPUInterruptNesting--;
+ 580              		.loc 2 588 0
+ 581 0046 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 582 004a C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 583 004e 1B68     		ldr	r3, [r3]
+ 584 0050 5A1E     		subs	r2, r3, #1
+ 585 0052 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 586 0056 C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 587 005a 1A60     		str	r2, [r3]
+ 589:main.c        **** }
+ 588              		.loc 2 589 0
+ 589 005c BD46     		mov	sp, r7
+ 590              		@ sp needed
+ 591 005e 5DF8047B 		ldr	r7, [sp], #4
+ 592 0062 7047     		bx	lr
+ 593              		.cfi_endproc
+ 594              	.LFE117:
+ 596              		.section	.text.TIM2_IRQHandler,"ax",%progbits
+ 597              		.align	2
+ 598              		.global	TIM2_IRQHandler
+ 599              		.thumb
+ 600              		.thumb_func
+ 602              	TIM2_IRQHandler:
+ 603              	.LFB118:
+ 590:main.c        **** /*-----------------------------------------------------------*/
+ 591:main.c        **** 
+ 592:main.c        **** void TIM2_IRQHandler( void )
+ 593:main.c        **** {
+ 604              		.loc 2 593 0
+ 605              		.cfi_startproc
+ 606              		@ args = 0, pretend = 0, frame = 0
+ 607              		@ frame_needed = 1, uses_anonymous_args = 0
+ 608 0000 80B5     		push	{r7, lr}
+ 609              	.LCFI20:
+ 610              		.cfi_def_cfa_offset 8
+ 611              		.cfi_offset 7, -8
+ 612              		.cfi_offset 14, -4
+ 613 0002 00AF     		add	r7, sp, #0
+ 614              	.LCFI21:
+ 615              		.cfi_def_cfa_register 7
+ 594:main.c        **** 	/* Just to verify that the interrupt nesting behaves as expected, increment
+ 595:main.c        **** 	ulFPUInterruptNesting on entry, and decrement it on exit. */
+ 596:main.c        **** 	ulFPUInterruptNesting++;
+ 616              		.loc 2 596 0
+ 617 0004 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 618 0008 C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 619 000c 1B68     		ldr	r3, [r3]
+ 620 000e 5A1C     		adds	r2, r3, #1
+ 621 0010 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 622 0014 C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 623 0018 1A60     		str	r2, [r3]
+ 597:main.c        **** 
+ 598:main.c        **** 	/* Fill the FPU registers with 1. */
+ 599:main.c        **** 	//vRegTestClearFlopRegistersToParameterValue( 1UL );
+ 600:main.c        **** 
+ 601:main.c        **** 	/* Trigger a timer 3 interrupt, which will fill the registers with a
+ 602:main.c        **** 	different value. */
+ 603:main.c        **** 	NVIC_SetPendingIRQ( TIM3_IRQn );
+ 624              		.loc 2 603 0
+ 625 001a 1D20     		movs	r0, #29
+ 626 001c FFF7FEFF 		bl	NVIC_SetPendingIRQ
+ 604:main.c        **** 
+ 605:main.c        **** 	/* Ensure that, after returning from the nesting interrupt, all the FPU
+ 606:main.c        **** 	registers contain the value to which they were set by this interrupt
+ 607:main.c        **** 	function. */
+ 608:main.c        **** 	//configASSERT( ulRegTestCheckFlopRegistersContainParameterValue( 1UL ) );
+ 609:main.c        **** 
+ 610:main.c        **** 	ulFPUInterruptNesting--;
+ 627              		.loc 2 610 0
+ 628 0020 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 629 0024 C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 630 0028 1B68     		ldr	r3, [r3]
+ 631 002a 5A1E     		subs	r2, r3, #1
+ 632 002c 40F20003 		movw	r3, #:lower16:ulFPUInterruptNesting
+ 633 0030 C0F20003 		movt	r3, #:upper16:ulFPUInterruptNesting
+ 634 0034 1A60     		str	r2, [r3]
+ 611:main.c        **** }
+ 635              		.loc 2 611 0
+ 636 0036 80BD     		pop	{r7, pc}
+ 637              		.cfi_endproc
+ 638              	.LFE118:
+ 640              		.section	.rodata
+ 641              		.align	2
+ 642              	.LC0:
+ 643 0000 42746E54 		.ascii	"BtnTest\000"
+ 643      65737400 
+ 644              		.align	2
+ 645              	.LC1:
+ 646 0008 43686563 		.ascii	"CheckTimer\000"
+ 646      6B54696D 
+ 646      657200
+ 647 0013 00       		.section	.text.prvOptionallyCreateComprehensveTestApplication,"ax",%progbits
+ 648              		.align	2
+ 649              		.thumb
+ 650              		.thumb_func
+ 652              	prvOptionallyCreateComprehensveTestApplication:
+ 653              	.LFB119:
+ 612:main.c        **** /*-----------------------------------------------------------*/
+ 613:main.c        **** 
+ 614:main.c        **** static void prvOptionallyCreateComprehensveTestApplication( void )
+ 615:main.c        **** {
+ 654              		.loc 2 615 0
+ 655              		.cfi_startproc
+ 656              		@ args = 0, pretend = 0, frame = 8
+ 657              		@ frame_needed = 1, uses_anonymous_args = 0
+ 658 0000 80B5     		push	{r7, lr}
+ 659              	.LCFI22:
+ 660              		.cfi_def_cfa_offset 8
+ 661              		.cfi_offset 7, -8
+ 662              		.cfi_offset 14, -4
+ 663 0002 86B0     		sub	sp, sp, #24
+ 664              	.LCFI23:
+ 665              		.cfi_def_cfa_offset 32
+ 666 0004 04AF     		add	r7, sp, #16
+ 667              	.LCFI24:
+ 668              		.cfi_def_cfa 7, 16
+ 669              	.LBB2:
+ 616:main.c        **** 	#if ( mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY == 0 )
+ 617:main.c        **** 	{
+ 618:main.c        **** 	xTimerHandle xCheckTimer = NULL;
+ 670              		.loc 2 618 0
+ 671 0006 0023     		movs	r3, #0
+ 672 0008 7B60     		str	r3, [r7, #4]
+ 619:main.c        **** 
+ 620:main.c        **** 		/* Configure the interrupts used to test FPU registers being used from
+ 621:main.c        **** 		nested interrupts. */
+ 622:main.c        **** 		prvSetupNestedFPUInterruptsTest();
+ 673              		.loc 2 622 0
+ 674 000a FFF7FEFF 		bl	prvSetupNestedFPUInterruptsTest
+ 623:main.c        **** 
+ 624:main.c        **** 		/* Start all the other standard demo/test tasks. */
+ 625:main.c        **** 		vStartIntegerMathTasks( tskIDLE_PRIORITY );
+ 675              		.loc 2 625 0
+ 676 000e 0020     		movs	r0, #0
+ 677 0010 FFF7FEFF 		bl	vStartIntegerMathTasks
+ 626:main.c        **** 		vStartDynamicPriorityTasks();
+ 678              		.loc 2 626 0
+ 679 0014 FFF7FEFF 		bl	vStartDynamicPriorityTasks
+ 627:main.c        **** 		vStartBlockingQueueTasks( mainBLOCK_Q_PRIORITY );
+ 680              		.loc 2 627 0
+ 681 0018 0220     		movs	r0, #2
+ 682 001a FFF7FEFF 		bl	vStartBlockingQueueTasks
+ 628:main.c        **** 		vCreateBlockTimeTasks();
+ 683              		.loc 2 628 0
+ 684 001e FFF7FEFF 		bl	vCreateBlockTimeTasks
+ 629:main.c        **** 		vStartCountingSemaphoreTasks();
+ 685              		.loc 2 629 0
+ 686 0022 FFF7FEFF 		bl	vStartCountingSemaphoreTasks
+ 630:main.c        **** 		vStartGenericQueueTasks( tskIDLE_PRIORITY );
+ 687              		.loc 2 630 0
+ 688 0026 0020     		movs	r0, #0
+ 689 0028 FFF7FEFF 		bl	vStartGenericQueueTasks
+ 631:main.c        **** 		vStartRecursiveMutexTasks();
+ 690              		.loc 2 631 0
+ 691 002c FFF7FEFF 		bl	vStartRecursiveMutexTasks
+ 632:main.c        **** 		vStartPolledQueueTasks( mainQUEUE_POLL_PRIORITY );
+ 692              		.loc 2 632 0
+ 693 0030 0220     		movs	r0, #2
+ 694 0032 FFF7FEFF 		bl	vStartPolledQueueTasks
+ 633:main.c        **** 		vStartSemaphoreTasks( mainSEM_TEST_PRIORITY );
+ 695              		.loc 2 633 0
+ 696 0036 0120     		movs	r0, #1
+ 697 0038 FFF7FEFF 		bl	vStartSemaphoreTasks
+ 634:main.c        **** 
+ 635:main.c        **** 		/* Most importantly, start the tasks that use the FPU. */
+ 636:main.c        **** 		vStartMathTasks( mainFLOP_TASK_PRIORITY );
+ 698              		.loc 2 636 0
+ 699 003c 0020     		movs	r0, #0
+ 700 003e FFF7FEFF 		bl	vStartMathTasks
+ 637:main.c        **** 
+ 638:main.c        **** 		/* Create the register check tasks, as described at the top of this
+ 639:main.c        **** 		file */
+ 640:main.c        **** 		//xTaskCreate( vRegTest1Task, ( signed char * ) "Reg1", configMINIMAL_STACK_SIZE, ( void * ) NULL
+ 641:main.c        **** 		//xTaskCreate( vRegTest2Task, ( signed char * ) "Reg2", configMINIMAL_STACK_SIZE, ( void * ) NULL
+ 642:main.c        **** 
+ 643:main.c        **** 		/* Create the semaphore that is used to demonstrate a task being
+ 644:main.c        **** 		synchronised with an interrupt. */
+ 645:main.c        **** 		vSemaphoreCreateBinary( xTestSemaphore );
+ 701              		.loc 2 645 0
+ 702 0042 0120     		movs	r0, #1
+ 703 0044 0021     		movs	r1, #0
+ 704 0046 0322     		movs	r2, #3
+ 705 0048 FFF7FEFF 		bl	xQueueGenericCreate
+ 706 004c 0246     		mov	r2, r0
+ 707 004e 40F20003 		movw	r3, #:lower16:xTestSemaphore
+ 708 0052 C0F20003 		movt	r3, #:upper16:xTestSemaphore
+ 709 0056 1A60     		str	r2, [r3]
+ 710 0058 40F20003 		movw	r3, #:lower16:xTestSemaphore
+ 711 005c C0F20003 		movt	r3, #:upper16:xTestSemaphore
+ 712 0060 1B68     		ldr	r3, [r3]
+ 713 0062 002B     		cmp	r3, #0
+ 714 0064 0AD0     		beq	.L29
+ 715              		.loc 2 645 0 is_stmt 0 discriminator 1
+ 716 0066 40F20003 		movw	r3, #:lower16:xTestSemaphore
+ 717 006a C0F20003 		movt	r3, #:upper16:xTestSemaphore
+ 718 006e 1B68     		ldr	r3, [r3]
+ 719 0070 1846     		mov	r0, r3
+ 720 0072 0021     		movs	r1, #0
+ 721 0074 0022     		movs	r2, #0
+ 722 0076 0023     		movs	r3, #0
+ 723 0078 FFF7FEFF 		bl	xQueueGenericSend
+ 724              	.L29:
+ 646:main.c        **** 
+ 647:main.c        **** 		/* Create the task that is unblocked by the demonstration interrupt. */
+ 648:main.c        **** 		xTaskCreate( prvButtonTestTask, ( signed char * ) "BtnTest", configMINIMAL_STACK_SIZE, ( void * )
+ 725              		.loc 2 648 0 is_stmt 1
+ 726 007c 0023     		movs	r3, #0
+ 727 007e 0093     		str	r3, [sp]
+ 728 0080 0023     		movs	r3, #0
+ 729 0082 0193     		str	r3, [sp, #4]
+ 730 0084 0023     		movs	r3, #0
+ 731 0086 0293     		str	r3, [sp, #8]
+ 732 0088 0023     		movs	r3, #0
+ 733 008a 0393     		str	r3, [sp, #12]
+ 734 008c 40F20000 		movw	r0, #:lower16:prvButtonTestTask
+ 735 0090 C0F20000 		movt	r0, #:upper16:prvButtonTestTask
+ 736 0094 40F20001 		movw	r1, #:lower16:.LC0
+ 737 0098 C0F20001 		movt	r1, #:upper16:.LC0
+ 738 009c 8222     		movs	r2, #130
+ 739 009e 0023     		movs	r3, #0
+ 740 00a0 FFF7FEFF 		bl	xTaskGenericCreate
+ 649:main.c        **** 
+ 650:main.c        **** 		/* Create the software timer that performs the 'check' functionality,
+ 651:main.c        **** 		as described at the top of this file. */
+ 652:main.c        **** 		xCheckTimer = xTimerCreate( ( const signed char * ) "CheckTimer",/* A text name, purely to help d
+ 741              		.loc 2 652 0
+ 742 00a4 40F20003 		movw	r3, #:lower16:prvCheckTimerCallback
+ 743 00a8 C0F20003 		movt	r3, #:upper16:prvCheckTimerCallback
+ 744 00ac 0093     		str	r3, [sp]
+ 745 00ae 40F20000 		movw	r0, #:lower16:.LC1
+ 746 00b2 C0F20000 		movt	r0, #:upper16:.LC1
+ 747 00b6 40F6B831 		movw	r1, #3000
+ 748 00ba 0122     		movs	r2, #1
+ 749 00bc 0023     		movs	r3, #0
+ 750 00be FFF7FEFF 		bl	xTimerCreate
+ 751 00c2 7860     		str	r0, [r7, #4]
+ 653:main.c        **** 									( mainCHECK_TIMER_PERIOD_MS ),		/* The timer period, in this case 3000ms (3s). */
+ 654:main.c        **** 									pdTRUE,								/* This is an auto-reload timer, so xAutoReload is set to pdTRUE. */
+ 655:main.c        **** 									( void * ) 0,						/* The ID is not used, so can be set to anything. */
+ 656:main.c        **** 									prvCheckTimerCallback				/* The callback function that inspects the status of all the othe
+ 657:main.c        **** 								  );
+ 658:main.c        **** 
+ 659:main.c        **** 		if( xCheckTimer != NULL )
+ 752              		.loc 2 659 0
+ 753 00c4 7B68     		ldr	r3, [r7, #4]
+ 754 00c6 002B     		cmp	r3, #0
+ 755 00c8 0AD0     		beq	.L30
+ 660:main.c        **** 		{
+ 661:main.c        **** 			xTimerStart( xCheckTimer, mainDONT_BLOCK );
+ 756              		.loc 2 661 0
+ 757 00ca FFF7FEFF 		bl	xTaskGetTickCount
+ 758 00ce 0346     		mov	r3, r0
+ 759 00d0 0022     		movs	r2, #0
+ 760 00d2 0092     		str	r2, [sp]
+ 761 00d4 7868     		ldr	r0, [r7, #4]
+ 762 00d6 0121     		movs	r1, #1
+ 763 00d8 1A46     		mov	r2, r3
+ 764 00da 0023     		movs	r3, #0
+ 765 00dc FFF7FEFF 		bl	xTimerGenericCommand
+ 766              	.L30:
+ 662:main.c        **** 		}
+ 663:main.c        **** 
+ 664:main.c        **** 		/* This task has to be created last as it keeps account of the number of
+ 665:main.c        **** 		tasks it expects to see running. */
+ 666:main.c        **** 		vCreateSuicidalTasks( mainCREATOR_TASK_PRIORITY );
+ 767              		.loc 2 666 0
+ 768 00e0 0320     		movs	r0, #3
+ 769 00e2 FFF7FEFF 		bl	vCreateSuicidalTasks
+ 770              	.LBE2:
+ 667:main.c        **** 	}
+ 668:main.c        **** 	#else /* mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY */
+ 669:main.c        **** 	{
+ 670:main.c        **** 		/* Just to prevent compiler warnings when the configuration options are
+ 671:main.c        **** 		set such that these static functions are not used. */
+ 672:main.c        **** 		( void ) vRegTest1Task;
+ 673:main.c        **** 		( void ) vRegTest2Task;
+ 674:main.c        **** 		( void ) prvCheckTimerCallback;
+ 675:main.c        **** 		( void ) prvSetupNestedFPUInterruptsTest;
+ 676:main.c        **** 	}
+ 677:main.c        **** 	#endif /* mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY */
+ 678:main.c        **** }
+ 771              		.loc 2 678 0
+ 772 00e6 0837     		adds	r7, r7, #8
+ 773 00e8 BD46     		mov	sp, r7
+ 774              		@ sp needed
+ 775 00ea 80BD     		pop	{r7, pc}
+ 776              		.cfi_endproc
+ 777              	.LFE119:
+ 779              		.section	.text.EXTI9_5_IRQHandler,"ax",%progbits
+ 780              		.align	2
+ 781              		.global	EXTI9_5_IRQHandler
+ 782              		.thumb
+ 783              		.thumb_func
+ 785              	EXTI9_5_IRQHandler:
+ 786              	.LFB120:
+ 679:main.c        **** /*-----------------------------------------------------------*/
+ 680:main.c        **** 
+ 681:main.c        **** void EXTI9_5_IRQHandler(void)
+ 682:main.c        **** {
+ 787              		.loc 2 682 0
+ 788              		.cfi_startproc
+ 789              		@ args = 0, pretend = 0, frame = 8
+ 790              		@ frame_needed = 1, uses_anonymous_args = 0
+ 791 0000 80B5     		push	{r7, lr}
+ 792              	.LCFI25:
+ 793              		.cfi_def_cfa_offset 8
+ 794              		.cfi_offset 7, -8
+ 795              		.cfi_offset 14, -4
+ 796 0002 82B0     		sub	sp, sp, #8
+ 797              	.LCFI26:
+ 798              		.cfi_def_cfa_offset 16
+ 799 0004 00AF     		add	r7, sp, #0
+ 800              	.LCFI27:
+ 801              		.cfi_def_cfa_register 7
+ 683:main.c        **** long lHigherPriorityTaskWoken = pdFALSE;
+ 802              		.loc 2 683 0
+ 803 0006 0023     		movs	r3, #0
+ 804 0008 7B60     		str	r3, [r7, #4]
+ 684:main.c        **** 
+ 685:main.c        **** 	/* Only line 6 is enabled, so there is no need to test which line generated
+ 686:main.c        **** 	the interrupt. */
+ 687:main.c        **** 	EXTI_ClearITPendingBit( EXTI_Line6 );
+ 805              		.loc 2 687 0
+ 806 000a 4020     		movs	r0, #64
+ 807 000c FFF7FEFF 		bl	EXTI_ClearITPendingBit
+ 688:main.c        **** 
+ 689:main.c        **** 	/* This interrupt does nothing more than demonstrate how to synchronise a
+ 690:main.c        **** 	task with an interrupt.  First the handler releases a semaphore.
+ 691:main.c        **** 	lHigherPriorityTaskWoken has been initialised to zero. */
+ 692:main.c        **** 	xSemaphoreGiveFromISR( xTestSemaphore, &lHigherPriorityTaskWoken );
+ 808              		.loc 2 692 0
+ 809 0010 40F20003 		movw	r3, #:lower16:xTestSemaphore
+ 810 0014 C0F20003 		movt	r3, #:upper16:xTestSemaphore
+ 811 0018 1A68     		ldr	r2, [r3]
+ 812 001a 3B1D     		adds	r3, r7, #4
+ 813 001c 1046     		mov	r0, r2
+ 814 001e 0021     		movs	r1, #0
+ 815 0020 1A46     		mov	r2, r3
+ 816 0022 0023     		movs	r3, #0
+ 817 0024 FFF7FEFF 		bl	xQueueGenericSendFromISR
+ 693:main.c        **** 
+ 694:main.c        **** 	/* If there was a task that was blocked on the semaphore, and giving the
+ 695:main.c        **** 	semaphore caused the task to unblock, and the unblocked task has a priority
+ 696:main.c        **** 	higher than the currently executing task (the task that this interrupt
+ 697:main.c        **** 	interrupted), then lHigherPriorityTaskWoken will have been set to pdTRUE.
+ 698:main.c        **** 	Passing pdTRUE into the following macro call will cause this interrupt to
+ 699:main.c        **** 	return directly to the unblocked, higher priority, task. */
+ 700:main.c        **** 	portEND_SWITCHING_ISR( lHigherPriorityTaskWoken );
+ 818              		.loc 2 700 0
+ 819 0028 7B68     		ldr	r3, [r7, #4]
+ 820 002a 002B     		cmp	r3, #0
+ 821 002c 06D0     		beq	.L31
+ 822              		.loc 2 700 0 is_stmt 0 discriminator 1
+ 823 002e 4EF60453 		movw	r3, #60676
+ 824 0032 CEF20003 		movt	r3, 57344
+ 825 0036 4FF08052 		mov	r2, #268435456
+ 826 003a 1A60     		str	r2, [r3]
+ 827              	.L31:
+ 701:main.c        **** }
+ 828              		.loc 2 701 0 is_stmt 1
+ 829 003c 0837     		adds	r7, r7, #8
+ 830 003e BD46     		mov	sp, r7
+ 831              		@ sp needed
+ 832 0040 80BD     		pop	{r7, pc}
+ 833              		.cfi_endproc
+ 834              	.LFE120:
+ 836 0042 00BF     		.section	.text.vApplicationMallocFailedHook,"ax",%progbits
+ 837              		.align	2
+ 838              		.global	vApplicationMallocFailedHook
+ 839              		.thumb
+ 840              		.thumb_func
+ 842              	vApplicationMallocFailedHook:
+ 843              	.LFB121:
+ 702:main.c        **** /*-----------------------------------------------------------*/
+ 703:main.c        **** 
+ 704:main.c        **** void vApplicationMallocFailedHook( void )
+ 705:main.c        **** {
+ 844              		.loc 2 705 0
+ 845              		.cfi_startproc
+ 846              		@ args = 0, pretend = 0, frame = 0
+ 847              		@ frame_needed = 1, uses_anonymous_args = 0
+ 848 0000 80B5     		push	{r7, lr}
+ 849              	.LCFI28:
+ 850              		.cfi_def_cfa_offset 8
+ 851              		.cfi_offset 7, -8
+ 852              		.cfi_offset 14, -4
+ 853 0002 00AF     		add	r7, sp, #0
+ 854              	.LCFI29:
+ 855              		.cfi_def_cfa_register 7
+ 706:main.c        **** 	/* vApplicationMallocFailedHook() will only be called if
+ 707:main.c        **** 	configUSE_MALLOC_FAILED_HOOK is set to 1 in FreeRTOSConfig.h.  It is a hook
+ 708:main.c        **** 	function that will get called if a call to pvPortMalloc() fails.
+ 709:main.c        **** 	pvPortMalloc() is called internally by the kernel whenever a task, queue,
+ 710:main.c        **** 	timer or semaphore is created.  It is also called by various parts of the
+ 711:main.c        **** 	demo application.  If heap_1.c or heap_2.c are used, then the size of the
+ 712:main.c        **** 	heap available to pvPortMalloc() is defined by configTOTAL_HEAP_SIZE in
+ 713:main.c        **** 	FreeRTOSConfig.h, and the xPortGetFreeHeapSize() API function can be used
+ 714:main.c        **** 	to query the size of free heap space that remains (although it does not
+ 715:main.c        **** 	provide information on how the remaining heap might be fragmented). */
+ 716:main.c        **** 	taskDISABLE_INTERRUPTS();
+ 856              		.loc 2 716 0
+ 857 0004 FFF7FEFF 		bl	ulPortSetInterruptMask
+ 858              	.L34:
+ 717:main.c        **** 	for( ;; );
+ 859              		.loc 2 717 0 discriminator 1
+ 860 0008 FEE7     		b	.L34
+ 861              		.cfi_endproc
+ 862              	.LFE121:
+ 864 000a 00BF     		.section	.text.vApplicationIdleHook,"ax",%progbits
+ 865              		.align	2
+ 866              		.global	vApplicationIdleHook
+ 867              		.thumb
+ 868              		.thumb_func
+ 870              	vApplicationIdleHook:
+ 871              	.LFB122:
+ 718:main.c        **** }
+ 719:main.c        **** /*-----------------------------------------------------------*/
+ 720:main.c        **** 
+ 721:main.c        **** void vApplicationIdleHook( void )
+ 722:main.c        **** {
+ 872              		.loc 2 722 0
+ 873              		.cfi_startproc
+ 874              		@ args = 0, pretend = 0, frame = 0
+ 875              		@ frame_needed = 1, uses_anonymous_args = 0
+ 876              		@ link register save eliminated.
+ 877 0000 80B4     		push	{r7}
+ 878              	.LCFI30:
+ 879              		.cfi_def_cfa_offset 4
+ 880              		.cfi_offset 7, -4
+ 881 0002 00AF     		add	r7, sp, #0
+ 882              	.LCFI31:
+ 883              		.cfi_def_cfa_register 7
+ 723:main.c        **** 	/* vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set
+ 724:main.c        **** 	to 1 in FreeRTOSConfig.h.  It will be called on each iteration of the idle
+ 725:main.c        **** 	task.  It is essential that code added to this hook function never attempts
+ 726:main.c        **** 	to block in any way (for example, call xQueueReceive() with a block time
+ 727:main.c        **** 	specified, or call vTaskDelay()).  If the application makes use of the
+ 728:main.c        **** 	vTaskDelete() API function (as this demo application does) then it is also
+ 729:main.c        **** 	important that vApplicationIdleHook() is permitted to return to its calling
+ 730:main.c        **** 	function, because it is the responsibility of the idle task to clean up
+ 731:main.c        **** 	memory allocated by the kernel to any task that has since been deleted. */
+ 732:main.c        **** }
+ 884              		.loc 2 732 0
+ 885 0004 BD46     		mov	sp, r7
+ 886              		@ sp needed
+ 887 0006 5DF8047B 		ldr	r7, [sp], #4
+ 888 000a 7047     		bx	lr
+ 889              		.cfi_endproc
+ 890              	.LFE122:
+ 892              		.section	.text.vApplicationStackOverflowHook,"ax",%progbits
+ 893              		.align	2
+ 894              		.global	vApplicationStackOverflowHook
+ 895              		.thumb
+ 896              		.thumb_func
+ 898              	vApplicationStackOverflowHook:
+ 899              	.LFB123:
+ 733:main.c        **** /*-----------------------------------------------------------*/
+ 734:main.c        **** 
+ 735:main.c        **** void vApplicationStackOverflowHook( xTaskHandle pxTask, signed char *pcTaskName )
+ 736:main.c        **** {
+ 900              		.loc 2 736 0
+ 901              		.cfi_startproc
+ 902              		@ args = 0, pretend = 0, frame = 8
+ 903              		@ frame_needed = 1, uses_anonymous_args = 0
+ 904 0000 80B5     		push	{r7, lr}
+ 905              	.LCFI32:
+ 906              		.cfi_def_cfa_offset 8
+ 907              		.cfi_offset 7, -8
+ 908              		.cfi_offset 14, -4
+ 909 0002 82B0     		sub	sp, sp, #8
+ 910              	.LCFI33:
+ 911              		.cfi_def_cfa_offset 16
+ 912 0004 00AF     		add	r7, sp, #0
+ 913              	.LCFI34:
+ 914              		.cfi_def_cfa_register 7
+ 915 0006 7860     		str	r0, [r7, #4]
+ 916 0008 3960     		str	r1, [r7]
+ 737:main.c        **** 	( void ) pcTaskName;
+ 738:main.c        **** 	( void ) pxTask;
+ 739:main.c        **** 
+ 740:main.c        **** 	/* Run time stack overflow checking is performed if
+ 741:main.c        **** 	configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
+ 742:main.c        **** 	function is called if a stack overflow is detected. */
+ 743:main.c        **** 	taskDISABLE_INTERRUPTS();
+ 917              		.loc 2 743 0
+ 918 000a FFF7FEFF 		bl	ulPortSetInterruptMask
+ 919              	.L37:
+ 744:main.c        **** 	for( ;; );
+ 920              		.loc 2 744 0 discriminator 1
+ 921 000e FEE7     		b	.L37
+ 922              		.cfi_endproc
+ 923              	.LFE123:
+ 925              		.section	.text.assert_failed,"ax",%progbits
+ 926              		.align	2
+ 927              		.global	assert_failed
+ 928              		.thumb
+ 929              		.thumb_func
+ 931              	assert_failed:
+ 932              	.LFB124:
+ 745:main.c        **** }
+ 746:main.c        **** ///*-----------------------------------------------------------*/
+ 747:main.c        **** void assert_failed(uint8_t* file, uint32_t line){
+ 933              		.loc 2 747 0
+ 934              		.cfi_startproc
+ 935              		@ args = 0, pretend = 0, frame = 8
+ 936              		@ frame_needed = 1, uses_anonymous_args = 0
+ 937              		@ link register save eliminated.
+ 938 0000 80B4     		push	{r7}
+ 939              	.LCFI35:
+ 940              		.cfi_def_cfa_offset 4
+ 941              		.cfi_offset 7, -4
+ 942 0002 83B0     		sub	sp, sp, #12
+ 943              	.LCFI36:
+ 944              		.cfi_def_cfa_offset 16
+ 945 0004 00AF     		add	r7, sp, #0
+ 946              	.LCFI37:
+ 947              		.cfi_def_cfa_register 7
+ 948 0006 7860     		str	r0, [r7, #4]
+ 949 0008 3960     		str	r1, [r7]
+ 748:main.c        **** 
+ 749:main.c        **** }
+ 950              		.loc 2 749 0
+ 951 000a 0C37     		adds	r7, r7, #12
+ 952 000c BD46     		mov	sp, r7
+ 953              		@ sp needed
+ 954 000e 5DF8047B 		ldr	r7, [sp], #4
+ 955 0012 7047     		bx	lr
+ 956              		.cfi_endproc
+ 957              	.LFE124:
+ 959              		.section	.bss.ulLastRegTest1Value.7813,"aw",%nobits
+ 960              		.align	2
+ 963              	ulLastRegTest1Value.7813:
+ 964 0000 00000000 		.space	4
+ 965              		.section	.bss.ulLastRegTest2Value.7814,"aw",%nobits
+ 966              		.align	2
+ 969              	ulLastRegTest2Value.7814:
+ 970 0000 00000000 		.space	4
+ 971              		.section	.bss.lChangedTimerPeriodAlready.7812,"aw",%nobits
+ 972              		.align	2
+ 975              	lChangedTimerPeriodAlready.7812:
+ 976 0000 00000000 		.space	4
+ 977              		.text
+ 978              	.Letext0:
+ 979              		.file 3 "/usr/include/newlib/machine/_default_types.h"
+ 980              		.file 4 "/usr/include/newlib/stdint.h"
+ 981              		.file 5 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 982              		.file 6 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/task.h"
+ 983              		.file 7 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/timers.h"
+ 984              		.file 8 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/queue.h"
+ 985              		.file 9 "lib/FreeRTOSV8.1.2/FreeRTOS/Source/include/semphr.h"
+ 986              		.file 10 "lib/chip/CMSIS/ST/STM32F4xx/Include/stm32f4xx.h"
+ 987              		.file 11 "lib/chip/STM32F4xx_StdPeriph_Driver/inc/misc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+     /tmp/ccj9w9GV.s:20     .text.NVIC_SetPendingIRQ:00000000 $t
+     /tmp/ccj9w9GV.s:24     .text.NVIC_SetPendingIRQ:00000000 NVIC_SetPendingIRQ
+     /tmp/ccj9w9GV.s:69     .bss.ulRegTest1LoopCounter:00000000 ulRegTest1LoopCounter
+     /tmp/ccj9w9GV.s:66     .bss.ulRegTest1LoopCounter:00000000 $d
+     /tmp/ccj9w9GV.s:76     .bss.ulRegTest2LoopCounter:00000000 ulRegTest2LoopCounter
+     /tmp/ccj9w9GV.s:73     .bss.ulRegTest2LoopCounter:00000000 $d
+     /tmp/ccj9w9GV.s:83     .bss.ulFPUInterruptNesting:00000000 ulFPUInterruptNesting
+     /tmp/ccj9w9GV.s:80     .bss.ulFPUInterruptNesting:00000000 $d
+     /tmp/ccj9w9GV.s:90     .bss.ulMaxFPUInterruptNesting:00000000 ulMaxFPUInterruptNesting
+     /tmp/ccj9w9GV.s:87     .bss.ulMaxFPUInterruptNesting:00000000 $d
+     /tmp/ccj9w9GV.s:93     .bss.xTestSemaphore:00000000 $d
+     /tmp/ccj9w9GV.s:96     .bss.xTestSemaphore:00000000 xTestSemaphore
+     /tmp/ccj9w9GV.s:103    .bss.ulButtonPressCounts:00000000 ulButtonPressCounts
+     /tmp/ccj9w9GV.s:100    .bss.ulButtonPressCounts:00000000 $d
+     /tmp/ccj9w9GV.s:106    .text.main:00000000 $t
+     /tmp/ccj9w9GV.s:111    .text.main:00000000 main
+     /tmp/ccj9w9GV.s:403    .text.prvSetupHardware:00000000 prvSetupHardware
+     /tmp/ccj9w9GV.s:652    .text.prvOptionallyCreateComprehensveTestApplication:00000000 prvOptionallyCreateComprehensveTestApplication
+     /tmp/ccj9w9GV.s:142    .text.prvCheckTimerCallback:00000000 $t
+     /tmp/ccj9w9GV.s:146    .text.prvCheckTimerCallback:00000000 prvCheckTimerCallback
+     /tmp/ccj9w9GV.s:963    .bss.ulLastRegTest1Value.7813:00000000 ulLastRegTest1Value.7813
+     /tmp/ccj9w9GV.s:969    .bss.ulLastRegTest2Value.7814:00000000 ulLastRegTest2Value.7814
+     /tmp/ccj9w9GV.s:975    .bss.lChangedTimerPeriodAlready.7812:00000000 lChangedTimerPeriodAlready.7812
+     /tmp/ccj9w9GV.s:333    .text.prvButtonTestTask:00000000 $t
+     /tmp/ccj9w9GV.s:337    .text.prvButtonTestTask:00000000 prvButtonTestTask
+     /tmp/ccj9w9GV.s:399    .text.prvSetupHardware:00000000 $t
+     /tmp/ccj9w9GV.s:430    .text.vApplicationTickHook:00000000 $t
+     /tmp/ccj9w9GV.s:435    .text.vApplicationTickHook:00000000 vApplicationTickHook
+     /tmp/ccj9w9GV.s:474    .text.prvSetupNestedFPUInterruptsTest:00000000 $t
+     /tmp/ccj9w9GV.s:478    .text.prvSetupNestedFPUInterruptsTest:00000000 prvSetupNestedFPUInterruptsTest
+     /tmp/ccj9w9GV.s:536    .text.TIM3_IRQHandler:00000000 $t
+     /tmp/ccj9w9GV.s:541    .text.TIM3_IRQHandler:00000000 TIM3_IRQHandler
+     /tmp/ccj9w9GV.s:597    .text.TIM2_IRQHandler:00000000 $t
+     /tmp/ccj9w9GV.s:602    .text.TIM2_IRQHandler:00000000 TIM2_IRQHandler
+     /tmp/ccj9w9GV.s:641    .rodata:00000000 $d
+     /tmp/ccj9w9GV.s:642    .rodata:00000000 .LC0
+     /tmp/ccj9w9GV.s:645    .rodata:00000008 .LC1
+     /tmp/ccj9w9GV.s:648    .text.prvOptionallyCreateComprehensveTestApplication:00000000 $t
+     /tmp/ccj9w9GV.s:780    .text.EXTI9_5_IRQHandler:00000000 $t
+     /tmp/ccj9w9GV.s:785    .text.EXTI9_5_IRQHandler:00000000 EXTI9_5_IRQHandler
+     /tmp/ccj9w9GV.s:837    .text.vApplicationMallocFailedHook:00000000 $t
+     /tmp/ccj9w9GV.s:842    .text.vApplicationMallocFailedHook:00000000 vApplicationMallocFailedHook
+     /tmp/ccj9w9GV.s:865    .text.vApplicationIdleHook:00000000 $t
+     /tmp/ccj9w9GV.s:870    .text.vApplicationIdleHook:00000000 vApplicationIdleHook
+     /tmp/ccj9w9GV.s:893    .text.vApplicationStackOverflowHook:00000000 $t
+     /tmp/ccj9w9GV.s:898    .text.vApplicationStackOverflowHook:00000000 vApplicationStackOverflowHook
+     /tmp/ccj9w9GV.s:926    .text.assert_failed:00000000 $t
+     /tmp/ccj9w9GV.s:931    .text.assert_failed:00000000 assert_failed
+     /tmp/ccj9w9GV.s:960    .bss.ulLastRegTest1Value.7813:00000000 $d
+     /tmp/ccj9w9GV.s:966    .bss.ulLastRegTest2Value.7814:00000000 $d
+     /tmp/ccj9w9GV.s:972    .bss.lChangedTimerPeriodAlready.7812:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+vStartLEDFlashTasks
+vTaskStartScheduler
+xAreMathsTaskStillRunning
+xAreIntegerMathsTaskStillRunning
+xAreDynamicPriorityTasksStillRunning
+xAreBlockingQueuesStillRunning
+xAreBlockTimeTestTasksStillRunning
+xAreGenericQueueTasksStillRunning
+xAreRecursiveMutexTasksStillRunning
+xIsCreateTaskStillRunning
+xArePollingQueuesStillRunning
+xAreSemaphoreTasksStillRunning
+vParTestToggleLED
+xTimerGenericCommand
+ulPortSetInterruptMask
+xQueueGenericReceive
+SystemInit
+NVIC_PriorityGroupConfig
+vParTestInitialise
+NVIC_Init
+vStartIntegerMathTasks
+vStartDynamicPriorityTasks
+vStartBlockingQueueTasks
+vCreateBlockTimeTasks
+vStartCountingSemaphoreTasks
+vStartGenericQueueTasks
+vStartRecursiveMutexTasks
+vStartPolledQueueTasks
+vStartSemaphoreTasks
+vStartMathTasks
+xQueueGenericCreate
+xQueueGenericSend
+xTaskGenericCreate
+xTimerCreate
+xTaskGetTickCount
+vCreateSuicidalTasks
+EXTI_ClearITPendingBit
+xQueueGenericSendFromISR
